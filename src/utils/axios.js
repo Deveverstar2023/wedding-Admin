@@ -114,9 +114,23 @@ export const DeleteCate = async ({ id }) => {
 
 export const CreateQuestionCategory = async ({ content, created }) => {
   try {
-    const resp = await customFetch.post('create-question-category', {
+    const resp = await customFetch.post('/create-question-category', {
       content: content,
       created: created,
+    })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const CreateQuestionFAQ = async ({ title, description, created, categoryId }) => {
+  try {
+    const resp = await customFetch.post('/create-question', {
+      title: title,
+      description: description,
+      created: created,
+      categoryId: categoryId,
     })
     return resp.data.data
   } catch (error) {

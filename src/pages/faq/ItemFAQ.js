@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { AppBreadcrumb } from 'src/components'
-import { CreateQuestionCategory, DeleteCate, GetListCateGory, customFetch } from 'src/utils/axios'
-import Pagination from 'react-pagination-js'
+import { CreateQuestionFAQ, DeleteCate, GetListCateGory } from 'src/utils/axios'
 import 'react-pagination-js/dist/styles.css' // import css
 import {
   CCard,
@@ -14,35 +12,29 @@ import {
   CTable,
   CTableBody,
   CSpinner,
-  CDropdown,
-  CDropdownToggle,
-  CDropdownMenu,
-  CDropdownItem,
-  CModal,
-  CModalHeader,
-  CModalFooter,
   CAccordion,
   CAccordionItem,
   CAccordionHeader,
   CAccordionBody,
   CForm,
   CCol,
-  CFormLabel,
   CFormInput,
   CFormSelect,
+  CFormTextarea,
 } from '@coreui/react'
-import { cilOptions, cilPlus, cilTrash } from '@coreui/icons'
+import { cilSettings, cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { toast } from 'react-toastify'
-import { formatMoney } from 'src/utils/localStorage'
 import { useSelector } from 'react-redux'
 // import KolIcon from '../icons/everstarIcon/Kol'
 
 const ListCode = () => {
-  const [listCate, setListCate] = useState([])
+  const [listFAQ, setListFAQ] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   const [nameCate, setNameCate] = useState('')
+  const [content, setContent] = useState('')
+  const [sellect, setSellect] = useState('')
 
   const { user } = useSelector((store) => store.auth)
 
@@ -52,7 +44,7 @@ const ListCode = () => {
         const resp = await GetListCateGory({
           id: user?.username,
         })
-        setListCate(resp[0].data)
+        setListFAQ(resp[0].data)
         setIsLoading(false)
       } catch (error) {
         console.log(error)
@@ -82,7 +74,7 @@ const ListCode = () => {
   }
 
   const onHandleAddCate = async () => {
-    const resp = await CreateQuestionCategory({
+    const resp = await CreateQuestionFAQ({
       content: nameCate,
       created: user?.username,
     })
@@ -90,7 +82,7 @@ const ListCode = () => {
     const respdata = await GetListCateGory({
       id: user?.username,
     })
-    setListCate(respdata[0].data)
+    setListFAQ(respdata[0].data)
   }
 
   return (
@@ -106,24 +98,38 @@ const ListCode = () => {
             </CAccordionHeader>
             <CAccordionBody>
               <CForm className="row g-3">
-                <CCol md={6}>
+                <CCol md={8}>
                   <CFormInput
                     name="nameSearch"
                     type="text"
                     id="inputSearchCuser"
-                    placeholder="Tên danh mục"
+                    placeholder="Tên FAQ"
                     value={nameCate}
                     onChange={(e) => setNameCate(e.target.value)}
                   />
                 </CCol>
-                <CCol md={2}>
+                <CCol md={4}>
                   <CFormSelect
                     aria-label="Default select example"
                     name="isPayedSearch"
                     id="inputSearchCuserBanned"
+                    value={sellect}
+                    onChange={(e) => setSellect(e.target.value)}
                   >
-                    <option value="">Admin</option>
+                    {listFAQ?.map((item, i) => (
+                      <option value={i} key={i}>{item.content}</option>
+                    ))}
                   </CFormSelect>
+                </CCol>
+                <CCol md={12}>
+                  <CFormTextarea
+                    name="nameSearch"
+                    type="text"
+                    id="inputSearchCuser"
+                    placeholder="Nội dung"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                  />
                 </CCol>
                 <CCol md={4}>
                   <div className="d-grid">
@@ -148,28 +154,38 @@ const ListCode = () => {
             <CTableHead color="light">
               <CTableRow>
                 <CTableHeaderCell>Stt</CTableHeaderCell>
-                <CTableHeaderCell>Tên danh mục</CTableHeaderCell>
+                <CTableHeaderCell>FAQ</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Số lượng bài viết</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Danh mục</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Xóa</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Chỉnh sửa</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
-              {listCate?.map((item, index) => (
-                <CTableRow v-for="item in tableItems" key={index}>
-                  <CTableDataCell>{index + 1}</CTableDataCell>
-                  <CTableDataCell>{item.content}</CTableDataCell>
-                  <CTableDataCell className="text-center">Hiển thị</CTableDataCell>
-
-                  <CTableDataCell className="text-center">{item.questions.length}</CTableDataCell>
-
-                  <CTableDataCell className="text-center" style={{ cursor: 'pointer' }}>
-                    <div className="icon_hanlde" onClick={() => onHandleDelte(item._id)}>
-                      <CIcon icon={cilTrash} customClassName="nav-icon" />
-                    </div>
-                  </CTableDataCell>
-                </CTableRow>
-              ))}
+              {listFAQ?.map((item) =>
+                item?.questions.map((items, index) => (
+                  <CTableRow v-for="item in tableItems" key={index}>
+                    <CTableDataCell>{index + 1}</CTableDataCell>
+                    <CTableDataCell width={800}>
+                      <strong>{items.title}</strong>
+                      <br />
+                      {items.description}
+                    </CTableDataCell>
+                    <CTableDataCell className="text-center">Hiển thị</CTableDataCell>
+                    <CTableDataCell className="text-center">{item.content}</CTableDataCell>
+                    <CTableDataCell className="text-center" style={{ cursor: 'pointer' }}>
+                      <div className="icon_hanlde" onClick={() => onHandleDelte(items._id)}>
+                        <CIcon icon={cilTrash} customClassName="nav-icon" />
+                      </div>
+                    </CTableDataCell>
+                    <CTableDataCell className="text-center" style={{ cursor: 'pointer' }}>
+                      <div className="icon_hanlde" onClick={() => onHandleDelte(items._id)}>
+                        <CIcon icon={cilSettings} customClassName="nav-icon" />
+                      </div>
+                    </CTableDataCell>
+                  </CTableRow>
+                )),
+              )}
             </CTableBody>
           </CTable>
         </CCardBody>

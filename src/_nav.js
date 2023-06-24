@@ -28,7 +28,7 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Thông tin công ti',
+    name: 'Thông tin công ty',
     to: '/thong-tin-cong-ti',
     icon: <CIcon icon={cilHome} customClassName="nav-icon" />,
     badge: {

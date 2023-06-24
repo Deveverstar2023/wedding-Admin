@@ -71,7 +71,7 @@ const Information = () => {
       {/* <AppBreadcrumb /> */}
       {isLoading && <CSpinner />}
       <div className="row-align title_table">
-        <h5 style={{ margin: '0' }}>Information</h5>
+        <h5 style={{ margin: '0' }}>Cấu hình thông tin</h5>
       </div>
     </div>
   )
