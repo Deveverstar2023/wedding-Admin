@@ -2,18 +2,12 @@ import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
   cilBell,
-  cilCalculator,
-  cilChartPie,
-  cilCursor,
   cilDescription,
-  cilDrop,
-  cilNotes,
-  cilPencil,
-  cilPuzzle,
-  cilCreditCard,
   cilSpeedometer,
-  cilStar,
   cilPeople,
+  cilEnvelopeOpen,
+  cilSitemap,
+  cilHome,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -34,7 +28,16 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Customers',
+    name: 'Thông tin công ti',
+    to: '/thong-tin-cong-ti',
+    icon: <CIcon icon={cilHome} customClassName="nav-icon" />,
+    badge: {
+      color: 'info',
+    },
+  },
+  {
+    component: CNavItem,
+    name: 'Tài khoản',
     to: '/customers',
     icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
     badge: {
@@ -43,21 +46,48 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Invitations',
+    name: 'Thiệp',
     to: '/invitations',
-    icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilEnvelopeOpen} customClassName="nav-icon" />,
     badge: {
       color: 'info',
     },
   },
   {
-    component: CNavItem,
-    name: 'Subscriptions',
-    to: '/subs',
-    icon: <CIcon icon={cilCreditCard} customClassName="nav-icon" />,
-    badge: {
-      color: 'info',
-    },
+    component: CNavGroup,
+    name: 'Mã giới thiệu',
+    to: '/referral-code',
+    icon: <CIcon icon={cilSitemap} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Tạo mã giới thiệu',
+        to: '/referral-code',
+      },
+      {
+        component: CNavItem,
+        name: 'Danh sách mã giới thiệu',
+        to: '/list-referral-code',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'FAQ',
+    to: '/referral-code',
+    icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Danh mục',
+        to: '/category-faq',
+      },
+      {
+        component: CNavItem,
+        name: 'Danh sách',
+        to: '/item-category',
+      },
+    ],
   },
   {
     component: CNavTitle,

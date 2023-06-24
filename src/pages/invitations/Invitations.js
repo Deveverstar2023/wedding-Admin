@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { AppBreadcrumb } from 'src/components'
 import { customFetch } from 'src/utils/axios'
 import Pagination from 'react-pagination-js'
@@ -40,6 +40,7 @@ import { dataFetchingPaginate } from 'src/utils/dataFetchingPaginate'
 import { cilOptions } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { toast } from 'react-toastify'
+import { formatMoney } from 'src/utils/localStorage'
 // import KolIcon from '../icons/everstarIcon/Kol'
 
 const initialSearchFields = {
@@ -51,7 +52,7 @@ const initialSearchFields = {
 const initialStatePage = {
   currentPage: 1,
   totalSize: 30,
-  sizePerPage: 4,
+  sizePerPage: 15,
   addMorePage: true,
 }
 const CUsers = () => {
@@ -119,20 +120,30 @@ const CUsers = () => {
       toast.error('Active Invitation failed')
     }
   }
-  console.log(usersList)
+
+  const renderStatus = useCallback((value) => {
+    if (value === 1) return 'Đã thanh toán'
+    else if (value === 2) return 'Miễn phí'
+    else if (value === 3) return 'Bản nháp'
+    else if (value === 4) return 'Miễn phí'
+    else if (value === 5) return 'Hết hạn'
+    else if (value === 6) return 'Đang yêu cầu'
+    else return 'Miễn phí'
+  }, [])
+
   return (
     <div>
       {/* <AppBreadcrumb /> */}
       {isLoading && <CSpinner />}
-      <div className="row-align ">
-        <h5 style={{ margin: '0' }}>Invitations</h5>
+      <div className="row-align title_table">
+        <h5 style={{ margin: '0' }}>Danh sách thiệp đã tạo</h5>
       </div>
       <CCard>
         <CCardBody style={{ overflowY: 'visible' }}>
-          <CAccordion className="accordion-normal">
+          <CAccordion className="accordion-normal" style={{ display: 'none' }}>
             <CAccordionItem itemKey={1}>
               <CAccordionHeader>
-                <h5>Search form</h5>
+                <h5>Tìm kiếm</h5>
               </CAccordionHeader>
               <CAccordionBody>
                 <CForm className="row g-3">
@@ -201,15 +212,17 @@ const CUsers = () => {
               </CAccordionBody>
             </CAccordionItem>
           </CAccordion>
-
           <CTable align="middle " className="mb-0 border" hover responsive>
             <CTableHead color="light">
               <CTableRow>
                 <CTableHeaderCell>Stt</CTableHeaderCell>
+                <CTableHeaderCell>Invitation Id</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Name</CTableHeaderCell>
                 <CTableHeaderCell>Email</CTableHeaderCell>
-                <CTableHeaderCell>Invitation Id</CTableHeaderCell>
                 <CTableHeaderCell>Phone number</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Package</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Total Amount</CTableHeaderCell>
                 <CTableHeaderCell>More</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
@@ -217,13 +230,21 @@ const CUsers = () => {
               {usersList?.map((item, index) => (
                 <CTableRow v-for="item in tableItems" key={index}>
                   <CTableDataCell>{index + 1}</CTableDataCell>
-
+                  <CTableDataCell>{item._id}</CTableDataCell>
                   <CTableDataCell className="text-center">{item.userName}</CTableDataCell>
                   <CTableDataCell>
                     <div>{item.email}</div>
                   </CTableDataCell>
-                  <CTableDataCell>{item._id}</CTableDataCell>
                   <CTableDataCell>+{item.phoneNumber}</CTableDataCell>
+                  <CTableDataCell className="text-center">
+                    <div>{renderStatus(item.status)}</div>
+                  </CTableDataCell>
+                  <CTableDataCell className="text-center">
+                    <div>{item.productName}</div>
+                  </CTableDataCell>
+                  <CTableDataCell className="text-center">
+                    <div>{formatMoney(item.amount)}</div>
+                  </CTableDataCell>
                   <CTableDataCell className="text-center" style={{ cursor: 'pointer' }}>
                     <CDropdown>
                       <CDropdownToggle>
@@ -245,6 +266,7 @@ const CUsers = () => {
               ))}
             </CTableBody>
           </CTable>
+          <br />
           <div className="float-end margin-container">
             <Pagination
               currentPage={paginate.currentPage}

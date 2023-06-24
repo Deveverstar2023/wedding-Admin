@@ -3,6 +3,12 @@ import React from 'react'
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Customers = React.lazy(() => import('./pages/customers/Customers'))
 const Invitations = React.lazy(() => import('./pages/invitations/Invitations'))
+const SalseCode = React.lazy(() => import('./pages/saleCode/SaleCode'))
+const ListCode = React.lazy(() => import('./pages/saleCode/List'))
+const DetailsCode = React.lazy(() => import('./pages/saleCode/Details'))
+const CategoryFaq = React.lazy(() => import('./pages/faq/CategoryFAQ'))
+const ListFaq = React.lazy(() => import('./pages/faq/ItemFAQ'))
+const Information = React.lazy(() => import('./pages/information/Information'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 
@@ -53,10 +59,16 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 const routes = [
-  { path: '/', exact: true, name: 'Home' },
+  { path: '/', exact: true, name: 'Trang chủ' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-  { path: '/customers', name: 'Customers', element: Customers },
-  { path: '/invitations', name: 'Invitations', element: Invitations },
+  { path: '/customers', name: 'Tài khoản', element: Customers },
+  { path: '/thong-tin-cong-ti', name: 'Mã giới thiệu', element: Information },
+  { path: '/invitations', name: 'Danh sách thiệp', element: Invitations },
+  { path: '/referral-code', name: 'Tạo mã giới thiệu', element: SalseCode },
+  { path: '/list-referral-code', name: 'Mã giới thiệu', element: ListCode },
+  { path: '/chi-tiet-ma-giam-gia/:id', name: 'Chi Tiết Mã giới thiệu', element: DetailsCode },
+  { path: '/category-faq', name: 'Danh mục', element: CategoryFaq },
+  { path: '/item-category', name: 'Danh sách', element: ListFaq },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },

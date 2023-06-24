@@ -53,7 +53,7 @@ const initialSearchFields = {
 const initialStatePage = {
   currentPage: 1,
   totalSize: 30,
-  sizePerPage: 4,
+  sizePerPage: 20,
   addMorePage: true,
 }
 const CUsers = () => {
@@ -114,12 +114,12 @@ const CUsers = () => {
   return (
     <div>
       {isLoading && <CSpinner />}
-      <div className="row-align ">
-        <h5 style={{ margin: '0' }}>Customers</h5>
+      <div className="row-align title_table">
+        <h5 style={{ margin: '0' }}>Tài khoản</h5>
       </div>
       <CCard>
         <CCardBody style={{ overflowY: 'visible' }}>
-          <CAccordion className="accordion-normal">
+          <CAccordion className="accordion-normal" style={{ display: 'none' }}>
             <CAccordionItem itemKey={1}>
               <CAccordionHeader>
                 <h5>Search form</h5>
@@ -127,7 +127,7 @@ const CUsers = () => {
               <CAccordionBody>
                 <CForm className="row g-3">
                   <CCol md={4}>
-                    <CFormLabel htmlFor="inputSearchCuser">Name</CFormLabel>
+                    <CFormLabel htmlFor="inputSearchCuser">tên</CFormLabel>
                     <CFormInput
                       name="nameSearch"
                       type="text"
@@ -138,7 +138,7 @@ const CUsers = () => {
                     />
                   </CCol>
                   <CCol md={4}>
-                    <CFormLabel htmlFor="inputSearchCuserEmail">Search by email</CFormLabel>
+                    <CFormLabel htmlFor="inputSearchCuserEmail">email</CFormLabel>
                     <CFormInput
                       name="emailSearch"
                       type="text"
@@ -149,7 +149,7 @@ const CUsers = () => {
                     />
                   </CCol>
                   <CCol md={4}>
-                    <CFormLabel htmlFor="inputSearchCuserBanned">Payed</CFormLabel>
+                    <CFormLabel htmlFor="inputSearchCuserBanned">Đã thanh toán</CFormLabel>
                     <CFormSelect
                       aria-label="Default select example"
                       name="isPayedSearch"
@@ -157,12 +157,12 @@ const CUsers = () => {
                       onChange={handleChangeSearchField}
                       value={searchFields.isPayededSearch}
                     >
-                      <option value="">None</option>
-                      <option value={true}>Yes</option>
+                      <option value="">Không</option>
+                      <option value={true}>Có</option>
                     </CFormSelect>
                   </CCol>
                   <CCol md={4}>
-                    <CFormLabel>Clear search fields</CFormLabel>
+                    <CFormLabel>Xóa tất cả</CFormLabel>
                     <div className="d-grid">
                       <CButton
                         color="danger"
@@ -170,7 +170,7 @@ const CUsers = () => {
                         // size="sm"
                         className="normal"
                       >
-                        Clear fields
+                        Xóa
                       </CButton>
                     </div>
                   </CCol>
@@ -183,7 +183,7 @@ const CUsers = () => {
                         // size="sm"
                         className="normal"
                       >
-                        Submit
+                        Gửi
                       </CButton>
                     </div>
                   </CCol>
@@ -191,16 +191,15 @@ const CUsers = () => {
               </CAccordionBody>
             </CAccordionItem>
           </CAccordion>
-
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
               <CTableRow>
                 <CTableHeaderCell>Stt</CTableHeaderCell>
-                <CTableHeaderCell>User name</CTableHeaderCell>
-                <CTableHeaderCell>User email</CTableHeaderCell>
-                <CTableHeaderCell>UserId</CTableHeaderCell>
-                <CTableHeaderCell>Phone Number</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
+                <CTableHeaderCell>Tên người dùng</CTableHeaderCell>
+                <CTableHeaderCell>email</CTableHeaderCell>
+                <CTableHeaderCell>Mã</CTableHeaderCell>
+                <CTableHeaderCell>Số điện thoại</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Trang thái</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -224,6 +223,7 @@ const CUsers = () => {
               ))}
             </CTableBody>
           </CTable>
+          <br />
           <div className="float-end margin-container">
             <Pagination
               currentPage={paginate.currentPage}
