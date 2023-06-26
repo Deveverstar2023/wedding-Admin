@@ -13,13 +13,21 @@ import {
   CTable,
   CTableBody,
   CSpinner,
+  CButton,
+  CModal,
+  CModalHeader,
+  CModalFooter,
+  CFormInput,
+  CFormLabel,
+  CFormCheck,
 } from '@coreui/react'
-import { cilCheckCircle, cilXCircle } from '@coreui/icons'
+import { cilCheckCircle, cilPlus, cilXCircle } from '@coreui/icons'
 
 import CIcon from '@coreui/icons-react'
 // import KolIcon from '../icons/everstarIcon/Kol'
 
 const PackageList = () => {
+  const [isModalActive, setIsModalActive] = useState(false)
   const [packageList, setPackageList] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -46,6 +54,15 @@ const PackageList = () => {
       {isLoading && <CSpinner />}
       <div className="row-align title_table">
         <h5 style={{ margin: '0' }}>Các gói sản phẩm</h5>
+        <CButton
+          color="primary"
+          shape="rounded-pill"
+          variant="outline"
+          onClick={() => setIsModalActive(true)}
+        >
+          <span className="margin-left">Tạo thêm gói</span>
+          <CIcon icon={cilPlus} />
+        </CButton>
       </div>
       <CCard>
         <CTable align="middle " className="mb-0 border" hover responsive>
@@ -82,6 +99,29 @@ const PackageList = () => {
             })}
           </CTableBody>
         </CTable>
+        <CModal visible={isModalActive} onClose={() => setIsModalActive(false)} alignment="center">
+          <CModalHeader className="font-bold">
+            <strong>Tạo gói mới</strong>
+          </CModalHeader>
+          <form className=" p-4">
+            <CFormLabel htmlFor="packageName" className=" font-bold">
+              Tên gói
+            </CFormLabel>
+            <CFormInput placeholder="Tên gói" aria-label="packageName" />
+            <CFormLabel htmlFor="basic-url" className="font-bold pt-4">
+              Gán gói tương ứng
+            </CFormLabel>
+            <CFormCheck type="radio" name="" id="mobileInvitation" label="Mobile Invitation" />
+            <CFormCheck type="radio" name="" id="videoClip" label="Video Clip" />
+            <CFormCheck type="radio" name="" id="nftQrCode" label="NFT QR Code" />
+            <CModalFooter>
+              <CButton color="secondary" onClick={() => setIsModalActive(false)}>
+                Close
+              </CButton>
+              <CButton color="primary">Confirm</CButton>
+            </CModalFooter>
+          </form>
+        </CModal>
       </CCard>
     </div>
   )
