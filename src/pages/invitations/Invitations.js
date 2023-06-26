@@ -25,12 +25,8 @@ import {
 import { getInvitations } from 'src/utils/axios'
 import { dataFetchingPaginate } from 'src/utils/dataFetchingPaginate'
 import { formatMoney } from 'src/utils/localStorage'
-<<<<<<< HEAD
 import moment from "moment";
-=======
 import { getSubPackages } from 'src/utils/axios'
-// import KolIcon from '../icons/everstarIcon/Kol'
->>>>>>> 08b59e7837dd946ecf4f55d74b793fbea6dcd7cc
 
 const initialSearchFields = {
   nameSearch: '',
