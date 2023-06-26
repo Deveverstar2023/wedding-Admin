@@ -32,7 +32,18 @@ export const getUser = async ({ keyword, page, pageSize }) => {
     throw new Error(error)
   }
 }
-// ----------------------------------------------------------------
+//
+//
+export const getPackages = async () => {
+  try {
+    const resp = await customFetch.get('/list-product')
+    console.log(resp)
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+//----------------------------------------------------------------
 export const getInvitations = async ({ keyword, page, pageSize }) => {
   try {
     const resp = await customFetch.get(

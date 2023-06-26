@@ -5,9 +5,11 @@ import {
   cilDescription,
   cilSpeedometer,
   cilPeople,
+  cilBadge,
   cilEnvelopeOpen,
   cilSitemap,
   cilHome,
+  cilApps,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -40,6 +42,15 @@ const _nav = [
     name: 'Tài khoản',
     to: '/customers',
     icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
+    badge: {
+      color: 'info',
+    },
+  },
+  {
+    component: CNavItem,
+    name: 'Các gói sản phẩm',
+    to: '/packages',
+    icon: <CIcon icon={cilApps} customClassName="nav-icon" />,
     badge: {
       color: 'info',
     },
