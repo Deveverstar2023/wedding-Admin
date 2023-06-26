@@ -3,6 +3,7 @@ import React from 'react'
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Customers = React.lazy(() => import('./pages/customers/Customers'))
 const Invitations = React.lazy(() => import('./pages/invitations/Invitations'))
+const Packages = React.lazy(() => import('./pages/packages/PackageList'))
 const SalseCode = React.lazy(() => import('./pages/saleCode/SaleCode'))
 const ListCode = React.lazy(() => import('./pages/saleCode/List'))
 const DetailsCode = React.lazy(() => import('./pages/saleCode/Details'))
@@ -62,6 +63,7 @@ const routes = [
   { path: '/', exact: true, name: 'Trang chủ' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/customers', name: 'Tài khoản', element: Customers },
+  { path: '/packages', name: 'Tài khoản', element: Packages },
   { path: '/thong-tin-cong-ti', name: 'Mã giới thiệu', element: Information },
   { path: '/invitations', name: 'Danh sách thiệp', element: Invitations },
   { path: '/referral-code', name: 'Tạo mã giới thiệu', element: SalseCode },
