@@ -65,7 +65,7 @@ const PackageList = () => {
         </CButton>
       </div>
       <CCard>
-        <CTable align="middle " className="mb-0 border" hover responsive>
+        <CTable align="middle" className="mb-0 border" hover responsive>
           <CTableHead color="light">
             <CTableRow>
               <CTableHeaderCell>Package Name</CTableHeaderCell>
@@ -118,7 +118,7 @@ const PackageList = () => {
               <CButton color="secondary" onClick={() => setIsModalActive(false)}>
                 Close
               </CButton>
-              <CButton color="primary">Confirm</CButton>
+              <CButton color="primary">Đồng ý</CButton>
             </CModalFooter>
           </form>
         </CModal>

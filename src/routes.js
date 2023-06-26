@@ -3,12 +3,16 @@ import React from 'react'
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Customers = React.lazy(() => import('./pages/customers/Customers'))
 const Invitations = React.lazy(() => import('./pages/invitations/Invitations'))
+const InvitationsFree = React.lazy(() => import('./pages/invitations/InvitationsFree'))
+const InvitationsPaid = React.lazy(() => import('./pages/invitations/InvitationsPaid'))
 const Packages = React.lazy(() => import('./pages/packages/PackageList'))
+const AnotherProduct = React.lazy(() => import('./pages/packages/AnotherProduct'))
 const SalseCode = React.lazy(() => import('./pages/saleCode/SaleCode'))
 const ListCode = React.lazy(() => import('./pages/saleCode/List'))
 const DetailsCode = React.lazy(() => import('./pages/saleCode/Details'))
 const CategoryFaq = React.lazy(() => import('./pages/faq/CategoryFAQ'))
 const ListFaq = React.lazy(() => import('./pages/faq/ItemFAQ'))
+const Notification = React.lazy(() => import('./pages/faq/Notification'))
 const Information = React.lazy(() => import('./pages/information/Information'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
@@ -62,14 +66,18 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 const routes = [
   { path: '/', exact: true, name: 'Trang chủ' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-  { path: '/customers', name: 'Tài khoản', element: Customers },
+  { path: '/customers', name: 'Package', element: Customers },
   { path: '/packages', name: 'Tài khoản', element: Packages },
+  { path: '/san-pham-khac', name: 'Tài khoản', element: AnotherProduct },
   { path: '/thong-tin-cong-ti', name: 'Mã giới thiệu', element: Information },
   { path: '/invitations', name: 'Danh sách thiệp', element: Invitations },
+  { path: '/list-invitations-free', name: 'Danh sách thiệp', element: InvitationsFree },
+  { path: '/list-invitations-paid', name: 'Danh sách thiệp', element: InvitationsPaid },
   { path: '/referral-code', name: 'Tạo mã giới thiệu', element: SalseCode },
   { path: '/list-referral-code', name: 'Mã giới thiệu', element: ListCode },
   { path: '/chi-tiet-ma-giam-gia/:id', name: 'Chi Tiết Mã giới thiệu', element: DetailsCode },
   { path: '/category-faq', name: 'Danh mục', element: CategoryFaq },
+  { path: '/thong-bao', name: 'Danh mục', element: Notification },
   { path: '/item-category', name: 'Danh sách', element: ListFaq },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },

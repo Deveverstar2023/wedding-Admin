@@ -52,7 +52,7 @@ const ListCode = () => {
         const resp = await GetListCateGory({
           id: user?.username,
         })
-        setListCate(resp[0].data)
+        setListCate(resp.filter(item => item.content != "undefined"))
         setIsLoading(false)
       } catch (error) {
         console.log(error)
@@ -82,7 +82,7 @@ const ListCode = () => {
   }
 
   const onHandleAddCate = async () => {
-    const resp = await CreateQuestionCategory({
+    await CreateQuestionCategory({
       content: nameCate,
       created: user?.username,
     })
@@ -90,7 +90,7 @@ const ListCode = () => {
     const respdata = await GetListCateGory({
       id: user?.username,
     })
-    setListCate(respdata[0].data)
+    setListCate(respdata.data.filter(item => item.content != "undefined"))
   }
 
   return (
@@ -122,7 +122,7 @@ const ListCode = () => {
                     name="isPayedSearch"
                     id="inputSearchCuserBanned"
                   >
-                    <option value="">Admin</option>
+                    <option value="643d0497d04d231dc24a2765">Admin</option>
                   </CFormSelect>
                 </CCol>
                 <CCol md={4}>

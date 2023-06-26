@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { customFetch } from 'src/utils/axios'
 import Pagination from 'react-pagination-js'
 import 'react-pagination-js/dist/styles.css' // import css
 import {
@@ -20,12 +21,22 @@ import {
   CAccordion,
   CAccordionBody,
   CAccordionHeader,
-  CAccordionItem
+  CAccordionItem,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
+  CModal,
+  CModalHeader,
+  CModalFooter,
 } from '@coreui/react'
 import { getInvitations } from 'src/utils/axios'
 import { dataFetchingPaginate } from 'src/utils/dataFetchingPaginate'
+import { cilOptions } from '@coreui/icons'
+import CIcon from '@coreui/icons-react'
+import { toast } from 'react-toastify'
 import { formatMoney } from 'src/utils/localStorage'
-import moment from "moment";
+// import KolIcon from '../icons/everstarIcon/Kol'
 
 const initialSearchFields = {
   nameSearch: '',
@@ -39,7 +50,7 @@ const initialStatePage = {
   sizePerPage: 15,
   addMorePage: true,
 }
-const CUsers = () => {
+const invitationsPaid = () => {
   // const dispatch = useDispatch()
   // const columnsControl = useSelector((store) => store.cusers.columnsControl)
   // const { userId, userName, status } = columnsControl
@@ -48,6 +59,8 @@ const CUsers = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [filterName, setFilterName] = useState('')
   const [searchFields, setSearchFields] = useState(initialSearchFields)
+  const [isModalActive, setIsModalActive] = useState(false)
+  const [invitationActiveId, setInvitationActiveId] = useState('')
   // handle pagination for pagination updates
   const changeCurrentPage = (numPage) => {
     setPaginate((prev) => ({ ...prev, currentPage: numPage }))
@@ -82,8 +95,7 @@ const CUsers = () => {
         const newPaginate = dataFetchingPaginate(paginate, resp.length)
         setPaginate(newPaginate)
         // -------------------------------------
-        setUsersList(resp.filter(item => item.status === 1))
-        console.log(resp.filter(item => item.status === 1))
+        setUsersList(resp.filter(item => item.status === 6))
         setIsLoading(false)
       } catch (error) {
         console.log(error)
@@ -92,6 +104,17 @@ const CUsers = () => {
 
     getUserList()
   }, [paginate.currentPage, filterName])
+  const handleActiveInvitations = async () => {
+    const data = { _id: invitationActiveId }
+    try {
+      const resp = await customFetch.post('/active-invitation', data)
+      toast.success('Active Invitation successfully')
+      setIsModalActive(false)
+    } catch (error) {
+      console.log(error)
+      toast.error('Active Invitation failed')
+    }
+  }
 
   const renderStatus = useCallback((value) => {
     if (value === 1) return 'Đã thanh toán'
@@ -108,7 +131,7 @@ const CUsers = () => {
       {/* <AppBreadcrumb /> */}
       {isLoading && <CSpinner />}
       <div className="row-align title_table">
-        <h5 style={{ margin: '0' }}>Danh sách thiệp hoạt động</h5>
+        <h5 style={{ margin: '0' }}>Danh sách thiệp đã thanh toán</h5>
       </div>
       <CCard>
         <CCardBody style={{ overflowY: 'visible' }}>
@@ -195,8 +218,8 @@ const CUsers = () => {
                 <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Package</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Total Amount</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Ngày tạo</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Ngày kích hoạt</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">OrderID</CTableHeaderCell>
+                <CTableHeaderCell>More</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -219,13 +242,25 @@ const CUsers = () => {
                     <div>{formatMoney(item.amount)}</div>
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
-                    <div>{moment(item.createTime).format("DD-MM-YYYY")}</div>
+                    <div>{formatMoney(item.amount)}</div>
                   </CTableDataCell>
-
-                  <CTableDataCell className="text-center">
-                    <div>{moment(item.createTime).format("DD-MM-YYYY")}</div>
+                  <CTableDataCell className="text-center" style={{ cursor: 'pointer' }}>
+                    <CDropdown>
+                      <CDropdownToggle>
+                        <CIcon icon={cilOptions} />
+                      </CDropdownToggle>
+                      <CDropdownMenu>
+                        <CDropdownItem
+                          onClick={() => {
+                            setIsModalActive(true)
+                            setInvitationActiveId(item._id)
+                          }}
+                        >
+                          Active Invitation
+                        </CDropdownItem>
+                      </CDropdownMenu>
+                    </CDropdown>
                   </CTableDataCell>
-
                 </CTableRow>
               ))}
             </CTableBody>
@@ -242,8 +277,18 @@ const CUsers = () => {
           </div>
         </CCardBody>
       </CCard>
-
+      <CModal visible={isModalActive} onClose={() => setIsModalActive(false)} alignment="center">
+        <CModalHeader>Are you sure to active this invitation?</CModalHeader>
+        <CModalFooter>
+          <CButton color="secondary" onClick={() => setIsModalActive(false)}>
+            Close
+          </CButton>
+          <CButton color="primary" onClick={handleActiveInvitations}>
+            Confirm
+          </CButton>
+        </CModalFooter>
+      </CModal>
     </div>
   )
 }
-export default CUsers
+export default invitationsPaid

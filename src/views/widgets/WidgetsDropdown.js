@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   CRow,
   CCol,
@@ -11,9 +11,86 @@ import {
 import { getStyle } from '@coreui/utils'
 import { CChartBar, CChartLine } from '@coreui/react-chartjs'
 import CIcon from '@coreui/icons-react'
-import { cilArrowBottom, cilArrowTop, cilOptions } from '@coreui/icons'
+import { cilOptions } from '@coreui/icons'
+import { ListSaleCode, getInvitations, getUser } from 'src/utils/axios'
+
 
 const WidgetsDropdown = () => {
+
+  const [usersList, setUsersList] = useState([])
+  const [letter, setLetter] = useState([])
+  const [letterPaid, setLetterPaid] = useState([])
+  const [codeData, setCodeData] = useState([])
+
+  useEffect(() => {
+    const getUserList = async () => {
+      try {
+        const resp = await getUser({
+          pageSize: '',
+          page: '',
+          keyword: '',
+        })
+        setUsersList(resp)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    getUserList()
+
+  }, [])
+
+  useEffect(() => {
+
+    const getLeter = async () => {
+      try {
+        const resp = await getInvitations({
+          pageSize: 10000,
+          page: 1,
+        })
+        setLetter(resp)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    
+    getLeter()
+
+  }, [])
+
+  useEffect(() => {
+
+    const getLeterPaid = async () => {
+      try {
+        const resp = await getInvitations({
+          pageSize: 10000,
+          page: 1,
+        })
+        setLetterPaid(resp.filter(item => item.status === 1))
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    
+    getLeterPaid()
+
+  }, [])
+
+  useEffect(() => {
+
+    const getCode = async () => {
+      try {
+        const resp = await ListSaleCode()
+        setCodeData(resp)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    
+    getCode()
+
+  }, [])
+
   return (
     <CRow>
       <CCol sm={6} lg={3}>
@@ -22,7 +99,7 @@ const WidgetsDropdown = () => {
           color="primary"
           value={
             <>
-              26K{' '}
+              {usersList?.length}
             </>
           }
           title="Người dùng"
@@ -31,14 +108,14 @@ const WidgetsDropdown = () => {
               className="mt-3 mx-3"
               style={{ height: '70px' }}
               data={{
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: ['', '', '', '', '', '', ''],
                 datasets: [
                   {
-                    label: 'My First dataset',
+                    label: 'Người dùng',
                     backgroundColor: 'transparent',
                     borderColor: 'rgba(255,255,255,.55)',
                     pointBackgroundColor: getStyle('--cui-primary'),
-                    data: [65, 59, 84, 84, 51, 55, 40],
+                    data: [65, 59, 84, 84, 51, 55, 40]
                   },
                 ],
               }}
@@ -46,7 +123,7 @@ const WidgetsDropdown = () => {
                 plugins: {
                   legend: {
                     display: false,
-                  },
+                  }
                 },
                 maintainAspectRatio: false,
                 scales: {
@@ -93,7 +170,7 @@ const WidgetsDropdown = () => {
           color="info"
           value={
             <>
-              $6.200{' '}
+              {letter.length}
             </>
           }
           title="Tổng số thiệp"
@@ -102,10 +179,10 @@ const WidgetsDropdown = () => {
               className="mt-3 mx-3"
               style={{ height: '70px' }}
               data={{
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: ['', '', '', '', '', '', ''],
                 datasets: [
                   {
-                    label: 'My First dataset',
+                    label: 'Tổng số thiệp',
                     backgroundColor: 'transparent',
                     borderColor: 'rgba(255,255,255,.55)',
                     pointBackgroundColor: getStyle('--cui-info'),
@@ -163,36 +240,23 @@ const WidgetsDropdown = () => {
           color="warning"
           value={
             <>
-              2.49{' '}
+              {letterPaid.length}
             </>
           }
           title="Thiệp đã thanh toán"
-          action={
-            <CDropdown alignment="end">
-              <CDropdownToggle color="transparent" caret={false} className="p-0">
-                <CIcon icon={cilOptions} className="text-high-emphasis-inverse" />
-              </CDropdownToggle>
-              <CDropdownMenu>
-                <CDropdownItem>Action</CDropdownItem>
-                <CDropdownItem>Another action</CDropdownItem>
-                <CDropdownItem>Something else here...</CDropdownItem>
-                <CDropdownItem disabled>Disabled action</CDropdownItem>
-              </CDropdownMenu>
-            </CDropdown>
-          }
           chart={
             <CChartLine
               className="mt-3"
               style={{ height: '70px' }}
               data={{
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                labels: ['', '', '', '', '', '', ''],
                 datasets: [
                   {
-                    label: 'My First dataset',
+                    label: 'Thiệp đã thanh toán',
                     backgroundColor: 'rgba(255,255,255,.2)',
                     borderColor: 'rgba(255,255,255,.55)',
                     data: [78, 81, 80, 45, 34, 12, 40],
-                    fill: true,
+                    fill: true
                   },
                 ],
               }}
@@ -233,7 +297,7 @@ const WidgetsDropdown = () => {
           color="danger"
           value={
             <>
-              44K{' '}
+              {codeData.length}
             </>
           }
           title="Tổng mã giảm giá"
@@ -243,26 +307,26 @@ const WidgetsDropdown = () => {
               style={{ height: '70px' }}
               data={{
                 labels: [
-                  'January',
-                  'February',
-                  'March',
-                  'April',
-                  'May',
-                  'June',
-                  'July',
-                  'August',
-                  'September',
-                  'October',
-                  'November',
-                  'December',
-                  'January',
-                  'February',
-                  'March',
-                  'April',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
+                  '',
                 ],
                 datasets: [
                   {
-                    label: 'My First dataset',
+                    label: 'Tổng mã giảm giá',
                     backgroundColor: 'rgba(255,255,255,.2)',
                     borderColor: 'rgba(255,255,255,.55)',
                     data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],

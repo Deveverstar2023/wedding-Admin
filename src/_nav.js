@@ -5,11 +5,12 @@ import {
   cilDescription,
   cilSpeedometer,
   cilPeople,
-  cilBadge,
   cilEnvelopeOpen,
   cilSitemap,
   cilHome,
   cilApps,
+  cilBasket,
+  cilClipboard,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -47,6 +48,29 @@ const _nav = [
     },
   },
   {
+    component: CNavGroup,
+    name: 'Thiệp',
+    to: '/invitations',
+    icon: <CIcon icon={cilEnvelopeOpen} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Danh sách hoạt động',
+        to: '/invitations',
+      },
+      {
+        component: CNavItem,
+        name: 'Thiệp chưa thanh toán',
+        to: '/list-invitations-free',
+      },
+      {
+        component: CNavItem,
+        name: 'Thiệp đang oder',
+        to: '/list-invitations-paid',
+      }
+    ],
+  },
+  {
     component: CNavItem,
     name: 'Các gói sản phẩm',
     to: '/packages',
@@ -57,9 +81,9 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Thiệp',
-    to: '/invitations',
-    icon: <CIcon icon={cilEnvelopeOpen} customClassName="nav-icon" />,
+    name: 'Sản phẩm khác',
+    to: '/san-pham-khac',
+    icon: <CIcon icon={cilClipboard} customClassName="nav-icon" />,
     badge: {
       color: 'info',
     },
@@ -86,7 +110,7 @@ const _nav = [
     component: CNavGroup,
     name: 'FAQ',
     to: '/referral-code',
-    icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilBasket} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
@@ -99,6 +123,15 @@ const _nav = [
         to: '/item-category',
       },
     ],
+  },
+  {
+    component: CNavItem,
+    name: 'Thông báo',
+    to: '/thong-bao',
+    icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
+    badge: {
+      color: 'info',
+    },
   },
   {
     component: CNavTitle,

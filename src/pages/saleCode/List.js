@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { DeleteSaleCode, ListSaleCode } from 'src/utils/axios'
+import React, { useState, useEffect, useCallback } from 'react'
+import { DeleteSaleCode, ListSaleCode, UpdateSaleCode } from 'src/utils/axios'
 import 'react-pagination-js/dist/styles.css' // import css
 import {
-  CContainer,
   CCard,
   CCardBody,
   CCol,
-  CAvatar,
   CForm,
   CFormInput,
   CButton,
@@ -27,12 +25,11 @@ import {
   CDropdownToggle,
   CDropdownMenu,
   CDropdownItem,
-  CModal,
-  CModalHeader,
-  CModalFooter,
+  CFormSwitch,
 } from '@coreui/react'
 import { cilOptions, cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
+import { useNavigate } from 'react-router-dom'
 const ListCode = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [data, setData] = useState([])
@@ -40,7 +37,6 @@ const ListCode = () => {
   useEffect(() => {
     const getDataCode = async () => {
       try {
-        setIsLoading(true)
         const resp = await ListSaleCode()
         setData(resp)
         setIsLoading(false)
@@ -49,7 +45,7 @@ const ListCode = () => {
       }
     }
     getDataCode()
-  }, [])
+  }, [data])
 
   const convertNumber = (data) => {
     return parseInt(data)
@@ -66,6 +62,22 @@ const ListCode = () => {
       setIsLoading(false)
     }
   }
+  const onChangeStatusCode = useCallback(async (id, status) => {
+
+    let value = '';
+    if (status === "ON") value = "OFF"
+    else value = "ON"
+    await UpdateSaleCode({
+      id: id,
+      status: value
+    })
+
+  }, [])
+
+  const navigate = useNavigate();
+
+  const onNavigate = (id) => navigate('/chi-tiet-ma-giam-gia/' + id)
+
   return (
     <div>
       {/* <AppBreadcrumb /> */}
@@ -149,6 +161,7 @@ const ListCode = () => {
                 <CTableHeaderCell className="text-center">Tên code</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Số lượng sử dụng</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Người tạo</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Trạng thái</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Xóa</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Chi tiết</CTableHeaderCell>
               </CTableRow>
@@ -164,9 +177,12 @@ const ListCode = () => {
                   <CTableDataCell className="text-center">
                     <div>{item.name}</div>
                   </CTableDataCell>
-                  <CTableDataCell className="text-center">{item.count}</CTableDataCell>
+                  <CTableDataCell className="text-center">{item?.invitations && item?.invitations?.length}</CTableDataCell>
                   <CTableDataCell className="text-center">
                     <div>Admin</div>
+                  </CTableDataCell>
+                  <CTableDataCell className="text-center">
+                    <CFormSwitch style={{ float: 'none' }} id="formSwitchCheckDefault" type="checkbox" valid={true} onChange={() => onChangeStatusCode(item._id, item.status)} checked={item.status === "ON" ? true : false} />
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
                     <div className="icon_hanlde" onClick={() => onHandleDelte(item._id)}>
@@ -179,8 +195,8 @@ const ListCode = () => {
                         <CIcon icon={cilOptions} />
                       </CDropdownToggle>
                       <CDropdownMenu>
-                        <CDropdownItem href={`/chi-tiet-ma-giam-gia/${item._id}`}>
-                          Active Invitation
+                        <CDropdownItem onClick={() => onNavigate(item.code)}>
+                          Chi tiết mã code
                         </CDropdownItem>
                       </CDropdownMenu>
                     </CDropdown>

@@ -26,7 +26,6 @@ export const getUser = async ({ keyword, page, pageSize }) => {
     const resp = await customFetch.get(
       `search-users?${keyword ? `keyword=${keyword}&` : ''}page=${page}&pageSize=${pageSize}`,
     )
-    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -49,7 +48,6 @@ export const getInvitations = async ({ keyword, page, pageSize }) => {
     const resp = await customFetch.get(
       `admin/list-all-invitation?page=${page}&pageSize=${pageSize}`,
     )
-    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -87,6 +85,17 @@ export const ListSaleCode = async () => {
   }
 }
 
+export const DetailsSaleCode = async ({ code }) => {
+  try {
+    const resp = await customFetch.post('/check-sale-code', {
+      code: code
+    })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export const DeleteSaleCode = async ({ id }) => {
   try {
     const resp = await customFetch.delete('/delete-sale-code', {
@@ -94,7 +103,18 @@ export const DeleteSaleCode = async ({ id }) => {
         _id: id,
       },
     })
-    console.log(id, resp)
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const UpdateSaleCode = async ({ id, status }) => {
+  try {
+    const resp = await customFetch.put('/update-sale-code', {
+      _id: id,
+      status: status
+    })
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -106,6 +126,28 @@ export const GetListCateGory = async ({ id }) => {
     const resp = await customFetch.get('/get-list-question', {
       created: id,
     })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const GetListNotification = async ({ id }) => {
+  try {
+    const resp = await customFetch.get('get-list-question-category', {
+      data: {
+        created: id
+      }
+    })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const GetInfomationBase = async () => {
+  try {
+    const resp = await customFetch.get('/get-information-base')
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -127,8 +169,9 @@ export const CreateQuestionCategory = async ({ content, created }) => {
   try {
     const resp = await customFetch.post('/create-question-category', {
       content: content,
-      created: created,
+      created: "643d0497d04d231dc24a2765",
     })
+    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -143,6 +186,48 @@ export const CreateQuestionFAQ = async ({ title, description, created, categoryI
       created: created,
       categoryId: categoryId,
     })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const CreateInformationBase = async ({ zaloNumber, numberPhone, nameBank, numberBank, ceoPeople, companyNumber, emailCompany, adressCompany, timeWork }) => {
+  try {
+    const resp = await customFetch.post('/create-information-base', {
+      zaloNumber: zaloNumber,
+      numberPhone: numberPhone,
+      created: "643d0497d04d231dc24a2765",
+      nameBank: nameBank,
+      numberBank: numberBank,
+      ceoPeople: ceoPeople,
+      companyNumber: companyNumber,
+      emailCompany: emailCompany,
+      adressCompany: adressCompany,
+      timeWork: timeWork
+    })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const GetListAnotherProduct = async () => {
+  try {
+    const resp = await customFetch.get('/list-other-product')
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const CreateAnotherProduct = async ({ name, amount }) => {
+  try {
+    const resp = await customFetch.post('/create-other-product', {
+      name: name,
+      amount: amount
+    })
+    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)
