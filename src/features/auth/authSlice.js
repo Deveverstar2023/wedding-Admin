@@ -14,7 +14,6 @@ const initialState = {
 export const loginUser = createAsyncThunk('auth/loginUser', async (user, thunkAPI) => {
   try {
     const resp = await customFetch.post('/admin/sign-in', user)
-    console.log(resp)
     return resp.data
   } catch (error) {
     const wrongPass = error.response.status === 400 ? true : false
@@ -23,11 +22,7 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (user, thunkAP
   }
 })
 
-export const logoutUser = createAsyncThunk('auth/logoutUser', async (_, thunkAPI) => {
-  try {
-    await customFetch.delete('/logout')
-  } catch (error) {}
-})
+
 
 // export const profileUser = createAsyncThunk('auth/profileUser', async (_, thunkAPI) => {
 //   try {
@@ -47,6 +42,10 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    logoutUser: (state) => {
+      state.user = null
+      removeUserFromLocalStorage()
+    },
     refreshToken: (state, { payload }) => {
       state.user.tokens.accessToken = payload
     },
@@ -63,15 +62,7 @@ const authSlice = createSlice({
     },
     [loginUser.pending]: (state) => {
       state.isLoading = true
-    },
-    [logoutUser.pending]: (state) => {
-      state.isLoading = true
-    },
-    [logoutUser.fulfilled]: (state) => {
-      state.isLoading = false
-      state.user = null
-      removeUserFromLocalStorage()
-    },
+    }
     // [profileUser.pending]: (state) => {
     //   state.isLoading = true
     // },
@@ -88,5 +79,5 @@ const authSlice = createSlice({
     // },
   },
 })
-export const { refreshToken } = authSlice.actions
+export const { logoutUser, refreshToken } = authSlice.actions
 export default authSlice.reducer

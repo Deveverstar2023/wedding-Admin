@@ -26,6 +26,7 @@ import { cilCheckCircle, cilPlus, cilXCircle } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 // import KolIcon from '../icons/everstarIcon/Kol'
 import { getSubPackages } from 'src/utils/axios'
+import { formatMoney } from 'src/utils/localStorage'
 
 const PackageList = () => {
   const [isModalActive, setIsModalActive] = useState(false)
@@ -88,6 +89,7 @@ const PackageList = () => {
               {subPackages.map((sub) => {
                 return <CTableHeaderCell className="text-center">{sub.name}</CTableHeaderCell>
               })}
+              <CTableHeaderCell>Giá</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
@@ -110,6 +112,7 @@ const PackageList = () => {
                       )
                     }
                   })}
+                  <CTableDataCell>{formatMoney(item.amount)}</CTableDataCell>
                 </CTableRow>
               )
             })}
