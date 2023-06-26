@@ -43,6 +43,15 @@ export const getPackages = async () => {
     throw new Error(error)
   }
 }
+export const getSubPackages = async () => {
+  try {
+    const resp = await customFetch.get('/list-sub-product')
+    console.log(resp)
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
 //----------------------------------------------------------------
 export const getInvitations = async ({ keyword, page, pageSize }) => {
   try {

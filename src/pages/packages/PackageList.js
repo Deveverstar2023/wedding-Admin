@@ -25,9 +25,11 @@ import { cilCheckCircle, cilPlus, cilXCircle } from '@coreui/icons'
 
 import CIcon from '@coreui/icons-react'
 // import KolIcon from '../icons/everstarIcon/Kol'
+import { getSubPackages } from 'src/utils/axios'
 
 const PackageList = () => {
   const [isModalActive, setIsModalActive] = useState(false)
+  const [subPackages, setSubPackages] = useState([])
   const [packageList, setPackageList] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
@@ -48,10 +50,24 @@ const PackageList = () => {
 
     getPackageList()
   }, [])
-  console.log(packageList)
+  useEffect(() => {
+    const getSubPackageList = async () => {
+      try {
+        setIsLoading(true)
+        const resp = await getSubPackages()
+        // update paginate after data fetching
+        // -------------------------------------
+        setSubPackages(resp)
+        setIsLoading(false)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    getSubPackageList()
+  }, [])
   return (
     <div>
-      {isLoading && <CSpinner />}
       <div className="row-align title_table">
         <h5 style={{ margin: '0' }}>Các gói sản phẩm</h5>
         <CButton
@@ -69,18 +85,18 @@ const PackageList = () => {
           <CTableHead color="light">
             <CTableRow>
               <CTableHeaderCell>Package Name</CTableHeaderCell>
-              <CTableHeaderCell className="text-center">Mobile invitation</CTableHeaderCell>
-              <CTableHeaderCell className="text-center">Video Clip</CTableHeaderCell>
-              <CTableHeaderCell className="text-center">NFT QR Code</CTableHeaderCell>
+              {subPackages.map((sub) => {
+                return <CTableHeaderCell className="text-center">{sub.name}</CTableHeaderCell>
+              })}
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {packageList.map((item, index) => {
+            {packageList?.map((item, index) => {
               return (
                 <CTableRow v-for="item in tableItems">
                   <CTableDataCell>{item.name}</CTableDataCell>
-                  {['Mobile Invitation', 'Video Clip', 'NFT QR Code'].map((subName, indexName) => {
-                    if (item.subProduct[indexName]?.name === subName) {
+                  {subPackages.map((sub, indexName) => {
+                    if (item.subProduct[indexName]?.name === sub.name) {
                       return (
                         <CTableHeaderCell className="text-center">
                           <CIcon icon={cilCheckCircle} />
@@ -122,6 +138,38 @@ const PackageList = () => {
             </CModalFooter>
           </form>
         </CModal>
+      </CCard>
+      <div className="row-align title_table">
+        <h5 style={{ margin: '0' }}>Các gói sản phẩm nhỏ</h5>
+        <CButton
+          color="primary"
+          shape="rounded-pill"
+          variant="outline"
+          onClick={() => setIsModalActive(true)}
+        >
+          <span className="margin-left">Tạo thêm gói</span>
+          <CIcon icon={cilPlus} />
+        </CButton>
+      </div>
+      <CCard>
+        <CTable align="middle " className="mb-0 border" hover responsive>
+          <CTableHead color="light">
+            <CTableRow>
+              <CTableHeaderCell>Stt</CTableHeaderCell>
+              <CTableHeaderCell>Name</CTableHeaderCell>
+              <CTableHeaderCell>Sub package Id</CTableHeaderCell>
+            </CTableRow>
+          </CTableHead>
+          <CTableBody>
+            {subPackages?.map((item, index) => (
+              <CTableRow v-for="item in tableItems" key={index}>
+                <CTableDataCell>{index + 1}</CTableDataCell>
+                <CTableDataCell>{item.name}</CTableDataCell>
+                <CTableDataCell>{item._id}</CTableDataCell>
+              </CTableRow>
+            ))}
+          </CTableBody>
+        </CTable>
       </CCard>
     </div>
   )
