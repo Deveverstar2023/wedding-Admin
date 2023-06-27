@@ -44,6 +44,7 @@ const ListCode = () => {
         const resp = await GetListCateGory({
           id: user?.username,
         })
+        console.log(resp)
         setListFAQ(resp)
         setIsLoading(false)
       } catch (error) {

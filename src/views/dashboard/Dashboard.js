@@ -77,7 +77,7 @@ const Dashboard = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {usersList.length === 0 ? <p style={{marginLeft: 10, marginBottom: 0}}>Chưa có thiệp nào chờ kích hoạt</p> : usersList?.map((item, index) => (
+                  {usersList?.map((item, index) => (
                     <CTableRow v-for="item in tableItems" key={index}>
                       <CTableDataCell>{index + 1}</CTableDataCell>
                       <CTableDataCell>{item._id}</CTableDataCell>
@@ -103,6 +103,7 @@ const Dashboard = () => {
                 </CTableBody>
               </CTable>
             </CCardBody>
+            {usersList.length === 0 && <p className="text-center" style={{ marginLeft: 10, marginBottom: 10 }}>Chưa có thiệp nào chờ kích hoạt</p>}
           </CCard>
         </div>
         <div className='col-xs-12 col-sm-4 col-md-4'>

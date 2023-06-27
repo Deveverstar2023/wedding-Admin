@@ -143,11 +143,10 @@ export const GetListCateGory = async ({ id }) => {
 
 export const GetListNotification = async ({ id }) => {
   try {
-    const resp = await customFetch.get('get-list-question-category', {
-      data: {
-        created: id
-      }
+    const resp = await customFetch.get('/get-list-question-category', {
+      created: id
     })
+    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)

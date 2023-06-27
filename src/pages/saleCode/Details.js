@@ -66,7 +66,7 @@ const ListCode = () => {
             <CTableBody>
               <CTableRow v-for="item in tableItems">
                 <CTableDataCell>{data.code}</CTableDataCell>
-                <CTableDataCell className="text-center">{convertNumber(data.percentOff * 100)} %
+                <CTableDataCell className="text-center">{convertNumber(data.percentOff * 100)}%
                 </CTableDataCell>
                 <CTableDataCell className="text-center">
                   <div>{data.name}</div>
