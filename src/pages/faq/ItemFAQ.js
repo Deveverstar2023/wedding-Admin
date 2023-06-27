@@ -38,6 +38,8 @@ const ListCode = () => {
 
   const { user } = useSelector((store) => store.auth)
 
+  var count = 0;
+
   useEffect(() => {
     const getListCate = async () => {
       try {
@@ -45,7 +47,7 @@ const ListCode = () => {
           id: user?.username,
         })
         console.log(resp)
-        setListFAQ(resp)
+        setListFAQ(resp.filter(item => item.content !== "undefined"))
         setIsLoading(false)
       } catch (error) {
         console.log(error)
@@ -67,10 +69,12 @@ const ListCode = () => {
       await DeleteCate({
         id: id,
       })
-      // setIsLoading(true)
-      // const resp = await ListSaleCode()
-      // setData(resp)
-      // setIsLoading(false)
+      setIsLoading(true)
+      const resp = await GetListCateGory({
+        id: user?.username,
+      })
+      setListFAQ(resp)
+      setIsLoading(false)
     }
   }
 
@@ -83,7 +87,7 @@ const ListCode = () => {
     const respdata = await GetListCateGory({
       id: user?.username,
     })
-    setListFAQ(respdata)
+    setListFAQ(respdata.filter(item => item.content !== "undefined"))
   }
 
   return (
@@ -166,7 +170,7 @@ const ListCode = () => {
               {listFAQ?.map((item) =>
                 item?.questions.map((items, index) => (
                   <CTableRow v-for="item in tableItems" key={index}>
-                    <CTableDataCell>{index + 1}</CTableDataCell>
+                    <CTableDataCell>{count += 1}</CTableDataCell>
                     <CTableDataCell width={800}>
                       <strong>{items.title}</strong>
                       <br />

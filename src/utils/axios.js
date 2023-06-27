@@ -189,7 +189,9 @@ export const GetInfomationBase = async () => {
 export const DeleteCate = async ({ id }) => {
   try {
     const resp = await customFetch.delete('/delete-question/id', {
-      _id: id,
+      data: {
+        _id: id
+      }
     })
     return resp.data.data
   } catch (error) {
