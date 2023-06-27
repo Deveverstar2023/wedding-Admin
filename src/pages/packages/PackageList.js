@@ -26,14 +26,23 @@ import { cilCheckCircle, cilPlus, cilXCircle } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 // import KolIcon from '../icons/everstarIcon/Kol'
 import { getSubPackages } from 'src/utils/axios'
-import { formatMoney } from 'src/utils/localStorage'
-
+import { formatMoney, getUserFromLocalStorage } from 'src/utils/localStorage'
+import { createSubProduct } from 'src/utils/axios'
+import { CreateProduct } from 'src/utils/axios'
+import { toast } from 'react-toastify'
+const initialProduct = {
+  name: '',
+  amount: '',
+}
 const PackageList = () => {
   const [isModalActive, setIsModalActive] = useState(false)
+  const [isModalSubActive, setIsModalSubActive] = useState(false)
   const [subPackages, setSubPackages] = useState([])
   const [packageList, setPackageList] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-
+  const [subName, setSubName] = useState('')
+  const [product, setProduct] = useState(initialProduct)
+  const [subChoose, setSubChoose] = useState([])
   // handle fetching data --------------------------------
   useEffect(() => {
     const getPackageList = async () => {
@@ -51,22 +60,62 @@ const PackageList = () => {
 
     getPackageList()
   }, [])
-  useEffect(() => {
-    const getSubPackageList = async () => {
-      try {
-        setIsLoading(true)
-        const resp = await getSubPackages()
-        // update paginate after data fetching
-        // -------------------------------------
-        setSubPackages(resp)
-        setIsLoading(false)
-      } catch (error) {
-        console.log(error)
-      }
+  const getSubPackageList = async () => {
+    try {
+      setIsLoading(true)
+      const resp = await getSubPackages()
+      // update paginate after data fetching
+      // -------------------------------------
+      setSubPackages(resp)
+      setIsLoading(false)
+    } catch (error) {
+      console.log(error)
     }
-
+  }
+  useEffect(() => {
     getSubPackageList()
   }, [])
+  const handleChangeSub = (e) => {
+    const value = e.target.value
+    setSubName(value)
+  }
+  const onCreateSubSubmit = (e) => {
+    e.preventDefault()
+    const createApi = async () => {
+      try {
+        const resp = await createSubProduct({ name: subName, userId: '6432604a29058115c6736c45' })
+        console.log(resp)
+        toast.success('Tạo gói con thành công')
+      } catch (error) {
+        toast.error(error.message)
+      }
+    }
+    createApi()
+  }
+  const handleChangePackage = (e) => {
+    const name = e.target.name
+    const value = e.target.value
+    setProduct((prev) => ({ ...prev, [name]: value }))
+  }
+  const handleChangeSubChoose = (e) => {
+    const value = e.target.id
+    const exists = subChoose.includes(value)
+    if (exists) return
+    setSubChoose((prev) => [...prev, value])
+  }
+  const handleSubmitProduct = (e) => {
+    e.preventDefault()
+    const createProductApi = async () => {
+      try {
+        const resp = await CreateProduct({ ...product, subProduct: subChoose })
+        setPackageList((prev) => [...prev, resp])
+        toast.success('Tạo gói con thành công')
+      } catch (error) {
+        toast.error(error.message)
+      }
+    }
+    createProductApi()
+  }
   return (
     <div>
       <div className="row-align title_table">
@@ -122,22 +171,36 @@ const PackageList = () => {
           <CModalHeader className="font-bold">
             <strong>Tạo gói mới</strong>
           </CModalHeader>
-          <form className=" p-4">
-            <CFormLabel htmlFor="packageName" className=" font-bold">
-              Tên gói
-            </CFormLabel>
-            <CFormInput placeholder="Tên gói" aria-label="packageName" />
+          <form className=" p-4" onSubmit={handleSubmitProduct}>
+            <CFormLabel className=" font-bold">Tên gói</CFormLabel>
+            <CFormInput
+              name="name"
+              placeholder="Tên gói"
+              aria-label="packageName"
+              value={product.name}
+              onChange={handleChangePackage}
+            />
+            <CFormLabel className=" font-bold pt-2">Số tiền</CFormLabel>
+            <CFormInput
+              name="amount"
+              placeholder="Số tiền"
+              aria-label="packageName"
+              value={product.amount}
+              onChange={handleChangePackage}
+            />
             <CFormLabel htmlFor="basic-url" className="font-bold pt-4">
               Gán gói tương ứng
             </CFormLabel>
-            <CFormCheck type="radio" name="" id="mobileInvitation" label="Mobile Invitation" />
-            <CFormCheck type="radio" name="" id="videoClip" label="Video Clip" />
-            <CFormCheck type="radio" name="" id="nftQrCode" label="NFT QR Code" />
+            {subPackages.map((sub) => {
+              return <CFormCheck id={sub._id} label={sub.name} onChange={handleChangeSubChoose} />
+            })}
             <CModalFooter>
               <CButton color="secondary" onClick={() => setIsModalActive(false)}>
                 Close
               </CButton>
-              <CButton color="primary">Đồng ý</CButton>
+              <CButton color="primary" onClick={handleSubmitProduct}>
+                Tạo gói mới
+              </CButton>
             </CModalFooter>
           </form>
         </CModal>
@@ -148,7 +211,7 @@ const PackageList = () => {
           color="primary"
           shape="rounded-pill"
           variant="outline"
-          onClick={() => setIsModalActive(true)}
+          onClick={() => setIsModalSubActive(true)}
         >
           <span className="margin-left">Tạo thêm gói</span>
           <CIcon icon={cilPlus} />
@@ -173,6 +236,35 @@ const PackageList = () => {
             ))}
           </CTableBody>
         </CTable>
+        <CModal
+          visible={isModalSubActive}
+          onClose={() => setIsModalSubActive(false)}
+          alignment="center"
+        >
+          <CModalHeader className="font-bold">
+            <strong>Tạo gói sản phẩm con</strong>
+          </CModalHeader>
+          <form className=" p-4" onSubmit={onCreateSubSubmit}>
+            <CFormLabel htmlFor="packageName" className=" font-bold">
+              Tên gói sản phẩm con
+            </CFormLabel>
+            <CFormInput
+              placeholder="Tên gói"
+              aria-label="packageName"
+              onChange={handleChangeSub}
+              value={subName}
+            />
+
+            <CModalFooter>
+              <CButton color="secondary" onClick={() => setIsModalSubActive(false)}>
+                Close
+              </CButton>
+              <CButton color="primary" onClick={onCreateSubSubmit}>
+                Tạo gói
+              </CButton>
+            </CModalFooter>
+          </form>
+        </CModal>
       </CCard>
     </div>
   )
