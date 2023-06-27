@@ -71,7 +71,31 @@ export const getGenerateCode = async () => {
     throw new Error(error)
   }
 }
-
+export const createSubProduct = async ({ name, userId }) => {
+  try {
+    const resp = await customFetch.post('/create-sub-product', {
+      name: name,
+      userId: userId,
+    })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+export const CreateProduct = async ({ name, amount, subProduct }) => {
+  try {
+    const resp = await customFetch.post('/create-product', {
+      name: name,
+      amount: amount,
+      subProduct: subProduct,
+      createByUser: '643d0497d04d231dc24a2765',
+    })
+    console.log(resp)
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
 export const CreateSaleCode = async ({ name, code, percentOff }) => {
   try {
     const resp = await customFetch.post('/create-sale-code', {
@@ -97,7 +121,7 @@ export const ListSaleCode = async () => {
 export const DetailsSaleCode = async ({ code }) => {
   try {
     const resp = await customFetch.post('/check-sale-code', {
-      code: code
+      code: code,
     })
     return resp.data.data
   } catch (error) {
@@ -122,7 +146,7 @@ export const UpdateSaleCode = async ({ id, status }) => {
   try {
     const resp = await customFetch.put('/update-sale-code', {
       _id: id,
-      status: status
+      status: status,
     })
     return resp.data.data
   } catch (error) {
@@ -177,7 +201,7 @@ export const CreateQuestionCategory = async ({ content, created }) => {
   try {
     const resp = await customFetch.post('/create-question-category', {
       content: content,
-      created: "643d0497d04d231dc24a2765",
+      created: '643d0497d04d231dc24a2765',
     })
     console.log(resp)
     return resp.data.data
@@ -200,19 +224,29 @@ export const CreateQuestionFAQ = async ({ title, description, created, categoryI
   }
 }
 
-export const CreateInformationBase = async ({ zaloNumber, numberPhone, nameBank, numberBank, ceoPeople, companyNumber, emailCompany, adressCompany, timeWork }) => {
+export const CreateInformationBase = async ({
+  zaloNumber,
+  numberPhone,
+  nameBank,
+  numberBank,
+  ceoPeople,
+  companyNumber,
+  emailCompany,
+  adressCompany,
+  timeWork,
+}) => {
   try {
     const resp = await customFetch.post('/create-information-base', {
       zaloNumber: zaloNumber,
       numberPhone: numberPhone,
-      created: "643d0497d04d231dc24a2765",
+      created: '643d0497d04d231dc24a2765',
       nameBank: nameBank,
       numberBank: numberBank,
       ceoPeople: ceoPeople,
       companyNumber: companyNumber,
       emailCompany: emailCompany,
       adressCompany: adressCompany,
-      timeWork: timeWork
+      timeWork: timeWork,
     })
     return resp.data.data
   } catch (error) {
@@ -233,7 +267,7 @@ export const CreateAnotherProduct = async ({ name, amount }) => {
   try {
     const resp = await customFetch.post('/create-other-product', {
       name: name,
-      amount: amount
+      amount: amount,
     })
     console.log(resp)
     return resp.data.data
