@@ -41,10 +41,10 @@ const Notification = () => {
     useEffect(() => {
         const getListCate = async () => {
             try {
-                const resp = await GetListNotification({
+                const resp = await GetListCateGory({
                     id: user?.username,
                 })
-                setListFAQ(resp)
+                setListFAQ(resp.filter(item => item.content === "undefined"))
                 setIsLoading(false)
             } catch (error) {
                 console.log(error)

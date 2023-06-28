@@ -168,7 +168,9 @@ export const GetListCateGory = async ({ id }) => {
 export const GetListNotification = async ({ id }) => {
   try {
     const resp = await customFetch.get('/get-list-question-category', {
-      created: id
+      data: {
+        created: id
+      }
     })
     console.log(resp)
     return resp.data.data
