@@ -47,6 +47,7 @@ const ListCode = () => {
           id: user?.username,
         })
         setListFAQ(resp.filter(item => item.content !== "undefined"))
+        console.log(resp.filter(item => item.content !== "undefined"))
         setIsLoading(false)
       } catch (error) {
         console.log(error)
@@ -62,7 +63,7 @@ const ListCode = () => {
     //   clearInterval(interval)
     // }
   }, [])
-
+ 
   const onHandleDelte = async (id) => {
     if (window.confirm('Bạn có chắc chắc muốn xóa')) {
       await DeleteCate({

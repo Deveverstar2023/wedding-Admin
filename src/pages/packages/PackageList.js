@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
-import { customFetch, getPackages } from 'src/utils/axios'
+import { DeleteProduct, customFetch, getPackages } from 'src/utils/axios'
 import Pagination from 'react-pagination-js'
 import 'react-pagination-js/dist/styles.css' // import css
 import {
@@ -84,8 +84,9 @@ const PackageList = () => {
     const createApi = async () => {
       try {
         const resp = await createSubProduct({ name: subName, userId: '6432604a29058115c6736c45' })
-        console.log(resp)
         toast.success('Tạo gói con thành công')
+        const respSub = await getSubPackages()
+        setSubPackages(respSub)
       } catch (error) {
         toast.error(error.message)
       }
@@ -109,13 +110,24 @@ const PackageList = () => {
       try {
         const resp = await CreateProduct({ ...product, subProduct: subChoose })
         setPackageList((prev) => [...prev, resp])
-        toast.success('Tạo gói con thành công')
+        console.log(resp)
+        toast.success('Tạo gói sản phẩm thành công')
       } catch (error) {
         toast.error(error.message)
       }
     }
     createProductApi()
   }
+
+  const onHandleDelete = useCallback(async (id) => {
+
+    const resp = await DeleteProduct({
+      id: id
+    })
+    console.log(resp)
+
+  }, [])
+
   return (
     <div>
       <div className="row-align title_table">
@@ -135,8 +147,8 @@ const PackageList = () => {
           <CTableHead color="light">
             <CTableRow>
               <CTableHeaderCell>Package Name</CTableHeaderCell>
-              {subPackages.map((sub) => {
-                return <CTableHeaderCell className="text-center">{sub.name}</CTableHeaderCell>
+              {subPackages.map((sub, i) => {
+                return <CTableHeaderCell key={i} className="text-center">{sub.name}</CTableHeaderCell>
               })}
               <CTableHeaderCell>Giá</CTableHeaderCell>
               <CTableHeaderCell className="text-center">Xóa</CTableHeaderCell>
@@ -145,18 +157,18 @@ const PackageList = () => {
           <CTableBody>
             {packageList?.map((item, index) => {
               return (
-                <CTableRow v-for="item in tableItems">
+                <CTableRow v-for="item in tableItems" key={index}>
                   <CTableDataCell>{item.name}</CTableDataCell>
                   {subPackages.map((sub, indexName) => {
                     if (item.subProduct[indexName]?.name === sub.name) {
                       return (
-                        <CTableHeaderCell className="text-center">
+                        <CTableHeaderCell className="text-center" key={indexName}>
                           <CIcon icon={cilCheckCircle} />
                         </CTableHeaderCell>
                       )
                     } else {
                       return (
-                        <CTableHeaderCell className="text-center">
+                        <CTableHeaderCell className="text-center" key={indexName}>
                           <CIcon icon={cilXCircle} />
                         </CTableHeaderCell>
                       )
@@ -164,7 +176,7 @@ const PackageList = () => {
                   })}
                   <CTableDataCell>{formatMoney(item.amount)}</CTableDataCell>
                   <CTableDataCell className="text-center">
-                    <div className="icon_hanlde" >
+                    <div className="icon_hanlde" onClick={() => onHandleDelete(item._id)}>
                       <CIcon icon={cilTrash} customClassName="nav-icon" />
                     </div>
                   </CTableDataCell>
@@ -197,8 +209,8 @@ const PackageList = () => {
             <CFormLabel htmlFor="basic-url" className="font-bold pt-4">
               Gán gói tương ứng
             </CFormLabel>
-            {subPackages.map((sub) => {
-              return <CFormCheck id={sub._id} label={sub.name} onChange={handleChangeSubChoose} />
+            {subPackages.map((sub, i) => {
+              return <CFormCheck key={i} id={sub._id} label={sub.name} onChange={handleChangeSubChoose} />
             })}
             <CModalFooter>
               <CButton color="secondary" onClick={() => setIsModalActive(false)}>
@@ -224,7 +236,7 @@ const PackageList = () => {
         </CButton>
       </div>
       <CCard>
-        <CTable align="middle " className="mb-0 border" hover responsive>
+        <CTable align="middle" className="mb-0 border" hover responsive>
           <CTableHead color="light">
             <CTableRow>
               <CTableHeaderCell>Stt</CTableHeaderCell>

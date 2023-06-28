@@ -41,10 +41,11 @@ const Notification = () => {
     useEffect(() => {
         const getListCate = async () => {
             try {
-                const resp = await GetListCateGory({
+                const resp = await GetListNotification({
                     id: user?.username,
                 })
-                setListFAQ(resp.filter(item => item.content === "undefined"))
+                console.log(resp)
+                setListFAQ(resp)
                 setIsLoading(false)
             } catch (error) {
                 console.log(error)
@@ -162,23 +163,23 @@ const Notification = () => {
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
-                            {listFAQ?.map((item) =>
+                            {listFAQ?.map((item, index) =>
                                 <CTableRow v-for="item in tableItems" key={index}>
                                     <CTableDataCell>{index + 1}</CTableDataCell>
                                     <CTableDataCell width={800}>
-                                        <strong>{items.title}</strong>
+                                        <strong>{item.title}</strong>
                                         <br />
-                                        {items.description}
+                                        {item.description}
                                     </CTableDataCell>
                                     <CTableDataCell className="text-center">Hiển thị</CTableDataCell>
                                     <CTableDataCell className="text-center">{item.content}</CTableDataCell>
                                     <CTableDataCell className="text-center" style={{ cursor: 'pointer' }}>
-                                        <div className="icon_hanlde" onClick={() => onHandleDelte(items._id)}>
+                                        <div className="icon_hanlde" onClick={() => onHandleDelte(item._id)}>
                                             <CIcon icon={cilTrash} customClassName="nav-icon" />
                                         </div>
                                     </CTableDataCell>
                                     <CTableDataCell className="text-center" style={{ cursor: 'pointer' }}>
-                                        <div className="icon_hanlde" onClick={() => onHandleDelte(items._id)}>
+                                        <div className="icon_hanlde" onClick={() => onHandleDelte(item._id)}>
                                             <CIcon icon={cilSettings} customClassName="nav-icon" />
                                         </div>
                                     </CTableDataCell>

@@ -167,7 +167,7 @@ export const GetListCateGory = async ({ id }) => {
 
 export const GetListNotification = async ({ id }) => {
   try {
-    const resp = await customFetch.get('/get-list-question-category', {
+    const resp = await customFetch.get('/get-list-notification', {
       data: {
         created: id
       }
@@ -200,6 +200,21 @@ export const DeleteCate = async ({ id }) => {
     throw new Error(error)
   }
 }
+
+export const DeleteProduct = async ({ id }) => {
+  try {
+    const resp = await customFetch.delete('/delete-sub-product', {
+      data: {
+        _id: id
+      }
+    })
+    console.log(resp)
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 
 export const CreateQuestionCategory = async ({ content, created }) => {
   try {

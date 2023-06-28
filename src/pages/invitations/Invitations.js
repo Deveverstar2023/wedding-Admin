@@ -185,7 +185,7 @@ const CUsers = () => {
               </CAccordionBody>
             </CAccordionItem>
           </CAccordion>
-          <CTable align="middle " className="mb-0 border" hover responsive>
+          <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
               <CTableRow>
                 <CTableHeaderCell>Stt</CTableHeaderCell>
@@ -197,7 +197,8 @@ const CUsers = () => {
                 <CTableHeaderCell className="text-center">Package</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Total Amount</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Ngày tạo</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Ngày kích hoạt</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Mã giới thiệu</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Mã ODID</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -222,11 +223,12 @@ const CUsers = () => {
                   <CTableDataCell className="text-center">
                     <div>{moment(item.createTime).format("DD-MM-YYYY")}</div>
                   </CTableDataCell>
-
                   <CTableDataCell className="text-center">
-                    <div>{moment(item.createTime).format("DD-MM-YYYY")}</div>
+                    <div>{item.codeInvite}</div>
                   </CTableDataCell>
-
+                  <CTableDataCell className="text-center">
+                    <div>{item.OID}</div>
+                  </CTableDataCell>
                 </CTableRow>
               ))}
             </CTableBody>
