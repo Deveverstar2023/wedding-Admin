@@ -168,7 +168,9 @@ export const GetListCateGory = async ({ id }) => {
 export const GetListNotification = async ({ id }) => {
   try {
     const resp = await customFetch.get('/get-list-question-category', {
-      created: id
+      data: {
+        created: id
+      }
     })
     console.log(resp)
     return resp.data.data
@@ -270,6 +272,7 @@ export const CreateAnotherProduct = async ({ name, amount }) => {
     const resp = await customFetch.post('/create-other-product', {
       name: name,
       amount: amount,
+      userId: '643d0497d04d231dc24a2765'
     })
     console.log(resp)
     return resp.data.data

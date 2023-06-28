@@ -21,7 +21,7 @@ import {
     CFormLabel,
     CFormCheck,
 } from '@coreui/react'
-import { cilCheckCircle, cilPlus, cilXCircle } from '@coreui/icons'
+import { cilCheckCircle, cilPlus, cilTrash, cilXCircle } from '@coreui/icons'
 
 import CIcon from '@coreui/icons-react'
 import { toast } from 'react-toastify'
@@ -59,11 +59,13 @@ const PackageList = () => {
         } else if (!price) {
             toast.error('Nhập giá sản phẩm')
         } else {
-            const resp = await CreateAnotherProduct({
+            await CreateAnotherProduct({
                 name: name,
                 amount: price
             })
-            console.log(resp)
+            const resp = await GetListAnotherProduct()
+            setPackageList(resp)
+            setIsModalActive(false)
         }
     }, [name, price])
 
@@ -88,6 +90,7 @@ const PackageList = () => {
                         <CTableRow>
                             <CTableHeaderCell>Tên gói</CTableHeaderCell>
                             <CTableHeaderCell className="text-center">Giá</CTableHeaderCell>
+                            <CTableHeaderCell className="text-center">Xóa</CTableHeaderCell>
                         </CTableRow>
                     </CTableHead>
                     <CTableBody>
@@ -96,6 +99,11 @@ const PackageList = () => {
                                 <CTableRow v-for="item in tableItems" key={index}>
                                     <CTableDataCell>{item.name}</CTableDataCell>
                                     <CTableDataCell className="text-center">{formatMoney(item.amount)}</CTableDataCell>
+                                    <CTableDataCell className="text-center">
+                                        <div className="icon_hanlde" >
+                                            <CIcon icon={cilTrash} customClassName="nav-icon" />
+                                        </div>
+                                    </CTableDataCell>
                                 </CTableRow>
                             )
                         })}

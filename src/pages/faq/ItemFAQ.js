@@ -46,7 +46,6 @@ const ListCode = () => {
         const resp = await GetListCateGory({
           id: user?.username,
         })
-        console.log(resp)
         setListFAQ(resp.filter(item => item.content !== "undefined"))
         setIsLoading(false)
       } catch (error) {
@@ -122,7 +121,7 @@ const ListCode = () => {
                     onChange={(e) => setSellect(e.target.value)}
                   >
                     {listFAQ?.map((item, i) => (
-                      <option value={i._id} key={i}>{item.content}</option>
+                      <option value={item.categoryId} key={i}>{item.content}</option>
                     ))}
                   </CFormSelect>
                 </CCol>

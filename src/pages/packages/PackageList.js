@@ -21,7 +21,7 @@ import {
   CFormLabel,
   CFormCheck,
 } from '@coreui/react'
-import { cilCheckCircle, cilPlus, cilXCircle } from '@coreui/icons'
+import { cilCheckCircle, cilPlus, cilTrash, cilXCircle } from '@coreui/icons'
 
 import CIcon from '@coreui/icons-react'
 // import KolIcon from '../icons/everstarIcon/Kol'
@@ -139,6 +139,7 @@ const PackageList = () => {
                 return <CTableHeaderCell className="text-center">{sub.name}</CTableHeaderCell>
               })}
               <CTableHeaderCell>Giá</CTableHeaderCell>
+              <CTableHeaderCell className="text-center">Xóa</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
@@ -162,6 +163,11 @@ const PackageList = () => {
                     }
                   })}
                   <CTableDataCell>{formatMoney(item.amount)}</CTableDataCell>
+                  <CTableDataCell className="text-center">
+                    <div className="icon_hanlde" >
+                      <CIcon icon={cilTrash} customClassName="nav-icon" />
+                    </div>
+                  </CTableDataCell>
                 </CTableRow>
               )
             })}
@@ -224,6 +230,7 @@ const PackageList = () => {
               <CTableHeaderCell>Stt</CTableHeaderCell>
               <CTableHeaderCell>Name</CTableHeaderCell>
               <CTableHeaderCell>Sub package Id</CTableHeaderCell>
+              <CTableHeaderCell className="text-center">Xóa</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
@@ -232,6 +239,11 @@ const PackageList = () => {
                 <CTableDataCell>{index + 1}</CTableDataCell>
                 <CTableDataCell>{item.name}</CTableDataCell>
                 <CTableDataCell>{item._id}</CTableDataCell>
+                <CTableDataCell className="text-center">
+                  <div className="icon_hanlde" >
+                    <CIcon icon={cilTrash} customClassName="nav-icon" />
+                  </div>
+                </CTableDataCell>
               </CTableRow>
             ))}
           </CTableBody>
