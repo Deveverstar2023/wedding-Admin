@@ -119,12 +119,14 @@ const PackageList = () => {
     createProductApi()
   }
 
-  const onHandleDelete = useCallback(async (id) => {
+  const onHandleDelete = useCallback(async (id, name) => {
 
-    const resp = await DeleteProduct({
+    await DeleteProduct({
       id: id
     })
-    console.log(resp)
+    const resp = await getSubPackages()
+    setSubPackages(resp)
+    toast.success('Đã xóa gói ' + name)
 
   }, [])
 
@@ -251,7 +253,7 @@ const PackageList = () => {
                 <CTableDataCell>{index + 1}</CTableDataCell>
                 <CTableDataCell>{item.name}</CTableDataCell>
                 <CTableDataCell>{item._id}</CTableDataCell>
-                <CTableDataCell className="text-center">
+                <CTableDataCell className="text-center" onClick={() => onHandleDelete(item._id, item.name)}>
                   <div className="icon_hanlde" >
                     <CIcon icon={cilTrash} customClassName="nav-icon" />
                   </div>

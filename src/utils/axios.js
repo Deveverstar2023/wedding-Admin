@@ -165,14 +165,13 @@ export const GetListCateGory = async ({ id }) => {
   }
 }
 
-export const GetListNotification = async ({ id }) => {
+export const GetListNotification = async () => {
   try {
     const resp = await customFetch.get('/get-list-notification', {
-      data: {
-        created: id
+      params: {
+        created: "643d0497d04d231dc24a2765"
       }
     })
-    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -208,7 +207,6 @@ export const DeleteProduct = async ({ id }) => {
         _id: id
       }
     })
-    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -222,7 +220,6 @@ export const CreateQuestionCategory = async ({ content, created }) => {
       content: content,
       created: '643d0497d04d231dc24a2765',
     })
-    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -234,9 +231,10 @@ export const CreateQuestionFAQ = async ({ title, description, created, categoryI
     const resp = await customFetch.post('/create-question', {
       title: title,
       description: description,
-      created: created,
-      categoryId: categoryId,
+      created: "643d0497d04d231dc24a2765",
+      categoryId: categoryId
     })
+    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -295,6 +293,7 @@ export const CreateAnotherProduct = async ({ name, amount }) => {
     throw new Error(error)
   }
 }
+
 // const del = async (url, data, config) => {
 //   try {
 //       const headers = {

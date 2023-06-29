@@ -52,7 +52,7 @@ const ListCode = () => {
         const resp = await GetListCateGory({
           id: user?.username,
         })
-        setListCate(resp.filter(item => item.content != "undefined"))
+        setListCate(resp)
         setIsLoading(false)
       } catch (error) {
         console.log(error)
@@ -82,15 +82,16 @@ const ListCode = () => {
   }
 
   const onHandleAddCate = async () => {
-    await CreateQuestionCategory({
+    const re = await CreateQuestionCategory({
       content: nameCate,
       created: user?.username,
     })
+    console.log(re)
     toast.success('Thêm danh mục thành công... Hệ thông cập nhật dữ liệu sau 30s')
     const respdata = await GetListCateGory({
       id: user?.username,
     })
-    setListCate(respdata.data.filter(item => item.content != "undefined"))
+    setListCate(respdata.data)
   }
 
   return (

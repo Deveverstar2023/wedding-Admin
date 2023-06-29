@@ -46,8 +46,8 @@ const ListCode = () => {
         const resp = await GetListCateGory({
           id: user?.username,
         })
-        setListFAQ(resp.filter(item => item.content !== "undefined"))
-        console.log(resp.filter(item => item.content !== "undefined"))
+        setListFAQ(resp)
+        console.log(resp)
         setIsLoading(false)
       } catch (error) {
         console.log(error)
@@ -63,7 +63,7 @@ const ListCode = () => {
     //   clearInterval(interval)
     // }
   }, [])
- 
+
   const onHandleDelte = async (id) => {
     if (window.confirm('Bạn có chắc chắc muốn xóa')) {
       await DeleteCate({
@@ -80,14 +80,17 @@ const ListCode = () => {
 
   const onHandleAddCate = async () => {
     const resp = await CreateQuestionFAQ({
-      content: nameCate,
+      title: nameCate,
+      description: content,
       created: user?.username,
+      categoryId: sellect
+
     })
     toast.success('Thêm danh mục thành công... Hệ thông cập nhật dữ liệu sau 30s')
     const respdata = await GetListCateGory({
       id: user?.username,
     })
-    setListFAQ(respdata.filter(item => item.content !== "undefined"))
+    setListFAQ(respdata)
   }
 
   return (
@@ -163,7 +166,6 @@ const ListCode = () => {
                 <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Danh mục</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Xóa</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Chỉnh sửa</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -181,11 +183,6 @@ const ListCode = () => {
                     <CTableDataCell className="text-center" style={{ cursor: 'pointer' }}>
                       <div className="icon_hanlde" onClick={() => onHandleDelte(items._id)}>
                         <CIcon icon={cilTrash} customClassName="nav-icon" />
-                      </div>
-                    </CTableDataCell>
-                    <CTableDataCell className="text-center" style={{ cursor: 'pointer' }}>
-                      <div className="icon_hanlde" onClick={() => onHandleDelte(items._id)}>
-                        <CIcon icon={cilSettings} customClassName="nav-icon" />
                       </div>
                     </CTableDataCell>
                   </CTableRow>

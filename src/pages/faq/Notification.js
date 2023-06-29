@@ -41,11 +41,8 @@ const Notification = () => {
     useEffect(() => {
         const getListCate = async () => {
             try {
-                const resp = await GetListNotification({
-                    id: user?.username,
-                })
-                console.log(resp)
-                setListFAQ(resp)
+                const resp = await GetListNotification()
+                setListFAQ(resp[0].data)
                 setIsLoading(false)
             } catch (error) {
                 console.log(error)
@@ -91,15 +88,15 @@ const Notification = () => {
             {/* <AppBreadcrumb /> */}
             {isLoading && <CSpinner />}
             <div className="row-align title_table">
-                <h5 style={{ margin: '0' }}>Danh sách Faq</h5>
+                <h5 style={{ margin: '0' }}>Danh sách thông báo</h5>
                 <CAccordion className="accordion-normal" style={{ width: 800 }}>
                     <CAccordionItem itemKey={1}>
                         <CAccordionHeader>
-                            <div className="icon_button_add icon_hanlde">Thêm danh sách FAQ </div>
+                            <div className="icon_button_add icon_hanlde">Thêm danh sách thông báo </div>
                         </CAccordionHeader>
                         <CAccordionBody>
                             <CForm className="row g-3">
-                                <CCol md={8}>
+                                <CCol md={12}>
                                     <CFormInput
                                         name="nameSearch"
                                         type="text"
@@ -108,19 +105,6 @@ const Notification = () => {
                                         value={nameCate}
                                         onChange={(e) => setNameCate(e.target.value)}
                                     />
-                                </CCol>
-                                <CCol md={4}>
-                                    <CFormSelect
-                                        aria-label="Default select example"
-                                        name="isPayedSearch"
-                                        id="inputSearchCuserBanned"
-                                        value={sellect}
-                                        onChange={(e) => setSellect(e.target.value)}
-                                    >
-                                        {listFAQ?.map((item, i) => (
-                                            <option value={i} key={i}>{item.content}</option>
-                                        ))}
-                                    </CFormSelect>
                                 </CCol>
                                 <CCol md={12}>
                                     <CFormTextarea
@@ -155,7 +139,7 @@ const Notification = () => {
                         <CTableHead color="light">
                             <CTableRow>
                                 <CTableHeaderCell>Stt</CTableHeaderCell>
-                                <CTableHeaderCell>FAQ</CTableHeaderCell>
+                                <CTableHeaderCell>Tiêu đề</CTableHeaderCell>
                                 <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
                                 <CTableHeaderCell className="text-center">Danh mục</CTableHeaderCell>
                                 <CTableHeaderCell className="text-center">Xóa</CTableHeaderCell>
@@ -172,7 +156,7 @@ const Notification = () => {
                                         {item.description}
                                     </CTableDataCell>
                                     <CTableDataCell className="text-center">Hiển thị</CTableDataCell>
-                                    <CTableDataCell className="text-center">{item.content}</CTableDataCell>
+                                    <CTableDataCell className="text-center">Thông báo</CTableDataCell>
                                     <CTableDataCell className="text-center" style={{ cursor: 'pointer' }}>
                                         <div className="icon_hanlde" onClick={() => onHandleDelte(item._id)}>
                                             <CIcon icon={cilTrash} customClassName="nav-icon" />
