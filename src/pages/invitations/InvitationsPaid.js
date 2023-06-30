@@ -207,44 +207,25 @@ const invitationsPaid = () => {
               </CAccordionBody>
             </CAccordionItem>
           </CAccordion>
-          <CTable align="middle " className="mb-0 border" hover responsive>
+          <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
               <CTableRow>
                 <CTableHeaderCell>Stt</CTableHeaderCell>
-                <CTableHeaderCell>Invitation Id</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Name</CTableHeaderCell>
+                <CTableHeaderCell>Trạng thái</CTableHeaderCell>
+                <CTableHeaderCell>Mã thiệp</CTableHeaderCell>
                 <CTableHeaderCell>Email</CTableHeaderCell>
-                <CTableHeaderCell>Phone number</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Package</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Total Amount</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">OrderID</CTableHeaderCell>
-                <CTableHeaderCell>More</CTableHeaderCell>
+                <CTableHeaderCell>Số điện thoại</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Trạng thái</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Dịch vụ</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Tổng tiền</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Mã giao dịch</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
               {usersList?.map((item, index) => (
                 <CTableRow v-for="item in tableItems" key={index}>
                   <CTableDataCell>{index + 1}</CTableDataCell>
-                  <CTableDataCell>{item._id}</CTableDataCell>
-                  <CTableDataCell className="text-center">{item.userName}</CTableDataCell>
-                  <CTableDataCell>
-                    <div>{item.email}</div>
-                  </CTableDataCell>
-                  <CTableDataCell>+{item.phoneNumber}</CTableDataCell>
-                  <CTableDataCell className="text-center">
-                    <div>{renderStatus(item.status)}</div>
-                  </CTableDataCell>
-                  <CTableDataCell className="text-center">
-                    <div>{item.productName}</div>
-                  </CTableDataCell>
-                  <CTableDataCell className="text-center">
-                    <div>{formatMoney(item.amount)}</div>
-                  </CTableDataCell>
-                  <CTableDataCell className="text-center">
-                    <div>{formatMoney(item.amount)}</div>
-                  </CTableDataCell>
-                  <CTableDataCell className="text-center" style={{ cursor: 'pointer' }}>
+                  <CTableDataCell style={{ cursor: 'pointer' }}>
                     <CDropdown>
                       <CDropdownToggle>
                         <CIcon icon={cilOptions} />
@@ -256,11 +237,29 @@ const invitationsPaid = () => {
                             setInvitationActiveId(item._id)
                           }}
                         >
-                          Active Invitation
+                          Kích hoạt
                         </CDropdownItem>
                       </CDropdownMenu>
                     </CDropdown>
                   </CTableDataCell>
+                  <CTableDataCell>{item._id}</CTableDataCell>
+                  <CTableDataCell>
+                    <div>{item.email}</div>
+                  </CTableDataCell>
+                  <CTableDataCell>+{item.phoneNumber}</CTableDataCell>
+                  <CTableDataCell className="text-center">
+                    <div>{renderStatus(item.status)}</div>
+                  </CTableDataCell>
+                  <CTableDataCell className="text-center">
+                    <div>{item.productName}</div>
+                  </CTableDataCell>
+                  <CTableDataCell className="text-center">
+                    <div>{formatMoney(item.totalAmount)}</div>
+                  </CTableDataCell>
+                  <CTableDataCell className="text-center">
+                    <div>{item.OID}</div>
+                  </CTableDataCell>
+
                 </CTableRow>
               ))}
             </CTableBody>
@@ -281,10 +280,10 @@ const invitationsPaid = () => {
         <CModalHeader>Are you sure to active this invitation?</CModalHeader>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setIsModalActive(false)}>
-            Close
+            Thêm
           </CButton>
           <CButton color="primary" onClick={handleActiveInvitations}>
-            Confirm
+            Đồng ý
           </CButton>
         </CModalFooter>
       </CModal>

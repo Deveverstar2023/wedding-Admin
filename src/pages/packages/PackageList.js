@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
-import { DeleteProduct, customFetch, getPackages } from 'src/utils/axios'
+import { DeleteProduct, DeleteProductMain, customFetch, getPackages } from 'src/utils/axios'
 import Pagination from 'react-pagination-js'
 import 'react-pagination-js/dist/styles.css' // import css
 import {
@@ -130,6 +130,17 @@ const PackageList = () => {
 
   }, [])
 
+  const onHandleDeleteMain = useCallback(async (id, name) => {
+
+    await DeleteProductMain({
+      id: id
+    })
+    const resp = await getPackages()
+    setPackageList(resp)
+    toast.success('Đã xóa gói ' + name)
+
+  }, [])
+
   return (
     <div>
       <div className="row-align title_table">
@@ -178,7 +189,7 @@ const PackageList = () => {
                   })}
                   <CTableDataCell>{formatMoney(item.amount)}</CTableDataCell>
                   <CTableDataCell className="text-center">
-                    <div className="icon_hanlde" onClick={() => onHandleDelete(item._id)}>
+                    <div className="icon_hanlde" onClick={() => onHandleDeleteMain(item._id, item?.name)}>
                       <CIcon icon={cilTrash} customClassName="nav-icon" />
                     </div>
                   </CTableDataCell>
@@ -187,8 +198,8 @@ const PackageList = () => {
             })}
           </CTableBody>
         </CTable>
-        <CModal visible={isModalActive} onClose={() => setIsModalActive(false)} alignment="center">
-          <CModalHeader className="font-bold">
+        <CModal visible={isModalActive} alignment="center">
+          <CModalHeader onClick={() => setIsModalActive(false)} className="font-bold" >
             <strong>Tạo gói mới</strong>
           </CModalHeader>
           <form className=" p-4" onSubmit={handleSubmitProduct}>
@@ -292,6 +303,7 @@ const PackageList = () => {
           </form>
         </CModal>
       </CCard>
+      <br />
     </div>
   )
 }

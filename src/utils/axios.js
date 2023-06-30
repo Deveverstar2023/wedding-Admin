@@ -1,8 +1,12 @@
 // import axios from 'axios'
 import axios from 'axios'
 import { getLocalAccessToken } from './localStorage'
+
+const TIMEOUT_API = 10000;
+const BaseUrl = 'http://14.225.254.190:3000/api'
+
 export const customFetch = axios.create({
-  baseURL: 'http://14.225.254.190:3000/api',
+  baseURL: BaseUrl,
 })
 customFetch.interceptors.request.use(
   (config) => {
@@ -17,8 +21,29 @@ customFetch.interceptors.request.use(
     return Promise.reject(error)
   },
 )
+
+export const csv = axios.create({
+  baseURL: BaseUrl,
+  responseType: 'blob',
+  timeout: TIMEOUT_API
+});
+
+csv.interceptors.request.use(
+  (config) => {
+    const token = getLocalAccessToken()
+    if (token) {
+      config.headers['Authorization'] = 'Bearer ' + token
+      // config.headers['x-access-token'] = token
+    }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  },
+)
+
 export const normalFetch = axios.create({
-  baseURL: 'http://14.225.254.190:3000/api',
+  baseURL: BaseUrl,
 })
 // ----------------------------------------------------------------
 export const getUser = async ({ keyword, page, pageSize }) => {
@@ -36,7 +61,6 @@ export const getUser = async ({ keyword, page, pageSize }) => {
 export const getPackages = async () => {
   try {
     const resp = await customFetch.get('/list-product')
-    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -45,7 +69,6 @@ export const getPackages = async () => {
 export const getSubPackages = async () => {
   try {
     const resp = await customFetch.get('/list-sub-product')
-    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -90,7 +113,6 @@ export const CreateProduct = async ({ name, amount, subProduct }) => {
       subProduct: subProduct,
       createByUser: '643d0497d04d231dc24a2765',
     })
-    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -142,11 +164,35 @@ export const DeleteSaleCode = async ({ id }) => {
   }
 }
 
+export const DeleteCateFAQ = async ({ id }) => {
+  try {
+    const resp = await customFetch.delete('/admin-delete-list-question', {
+      data: {
+        _id: id,
+      },
+    })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export const UpdateSaleCode = async ({ id, status }) => {
   try {
     const resp = await customFetch.put('/update-sale-code', {
       _id: id,
       status: status,
+    })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const GetListCateGoryFAQ = async ({ id }) => {
+  try {
+    const resp = await customFetch.get('/admin-get-list-question', {
+      created: id,
     })
     return resp.data.data
   } catch (error) {
@@ -181,6 +227,19 @@ export const GetListNotification = async () => {
 export const GetInfomationBase = async () => {
   try {
     const resp = await customFetch.get('/get-information-base')
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const DeleteProductMain = async ({ id }) => {
+  try {
+    const resp = await customFetch.delete('/delete-product', {
+      data: {
+        _id: id
+      }
+    })
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -233,6 +292,33 @@ export const CreateQuestionFAQ = async ({ title, description, created, categoryI
       description: description,
       created: "643d0497d04d231dc24a2765",
       categoryId: categoryId
+    })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const CreateNotification = async ({ title, description, created }) => {
+  try {
+    const resp = await customFetch.post('/create-notification', {
+      title: title,
+      description: description,
+      created: created,
+      isNotification: 1
+    })
+    console.log(resp)
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const UpdateInvitation = async ({ id, status }) => {
+  try {
+    const resp = await customFetch.post('/update-invitation', {
+      _id: id,
+      status: status,
     })
     console.log(resp)
     return resp.data.data
@@ -287,8 +373,22 @@ export const CreateAnotherProduct = async ({ name, amount }) => {
       amount: amount,
       userId: '643d0497d04d231dc24a2765'
     })
-    console.log(resp)
     return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const ExportInvitation = async ({ page, pageSize, status }) => {
+  try {
+    const resp = await csv.get('/admin/list-all-invitation', {
+      params: {
+        page: page,
+        pageSize: pageSize,
+        status: status
+      }
+    })
+    return resp
   } catch (error) {
     throw new Error(error)
   }

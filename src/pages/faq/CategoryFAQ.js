@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { AppBreadcrumb } from 'src/components'
-import { CreateQuestionCategory, DeleteCate, GetListCateGory, customFetch } from 'src/utils/axios'
+import { CreateQuestionCategory, DeleteCate, DeleteCateFAQ, GetListCateGory, GetListCateGoryFAQ, customFetch } from 'src/utils/axios'
 import Pagination from 'react-pagination-js'
 import 'react-pagination-js/dist/styles.css' // import css
 import {
@@ -49,7 +49,7 @@ const ListCode = () => {
   useEffect(() => {
     const getListCate = async () => {
       try {
-        const resp = await GetListCateGory({
+        const resp = await GetListCateGoryFAQ({
           id: user?.username,
         })
         setListCate(resp)
@@ -71,13 +71,15 @@ const ListCode = () => {
 
   const onHandleDelte = async (id) => {
     if (window.confirm('Bạn có chắc chắc muốn xóa')) {
-      await DeleteCate({
+      await DeleteCateFAQ({
         id: id,
       })
-      // setIsLoading(true)
-      // const resp = await ListSaleCode()
-      // setData(resp)
-      // setIsLoading(false)
+      setIsLoading(true)
+      const resp = await GetListCateGoryFAQ({
+        id: user?.username,
+      })
+      setListCate(resp)
+      setIsLoading(false)
     }
   }
 
@@ -88,7 +90,7 @@ const ListCode = () => {
     })
     console.log(re)
     toast.success('Thêm danh mục thành công... Hệ thông cập nhật dữ liệu sau 30s')
-    const respdata = await GetListCateGory({
+    const respdata = await GetListCateGoryFAQ({
       id: user?.username,
     })
     setListCate(respdata.data)
@@ -151,7 +153,6 @@ const ListCode = () => {
                 <CTableHeaderCell>Stt</CTableHeaderCell>
                 <CTableHeaderCell>Tên danh mục</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Số lượng bài viết</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Xóa</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
@@ -161,9 +162,6 @@ const ListCode = () => {
                   <CTableDataCell>{index + 1}</CTableDataCell>
                   <CTableDataCell>{item.content}</CTableDataCell>
                   <CTableDataCell className="text-center">Hiển thị</CTableDataCell>
-
-                  <CTableDataCell className="text-center">{item.questions.length}</CTableDataCell>
-
                   <CTableDataCell className="text-center" style={{ cursor: 'pointer' }}>
                     <div className="icon_hanlde" onClick={() => onHandleDelte(item._id)}>
                       <CIcon icon={cilTrash} customClassName="nav-icon" />

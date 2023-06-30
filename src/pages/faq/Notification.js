@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { CreateQuestionFAQ, DeleteCate, GetListCateGory, GetListNotification } from 'src/utils/axios'
+import { CreateNotification, CreateQuestionFAQ, DeleteCate, GetListCateGory, GetListNotification } from 'src/utils/axios'
 import 'react-pagination-js/dist/styles.css' // import css
 import {
     CCard,
@@ -42,6 +42,7 @@ const Notification = () => {
         const getListCate = async () => {
             try {
                 const resp = await GetListNotification()
+                console.log(resp)
                 setListFAQ(resp[0].data)
                 setIsLoading(false)
             } catch (error) {
@@ -72,12 +73,14 @@ const Notification = () => {
     }
 
     const onHandleAddCate = async () => {
-        const resp = await CreateQuestionFAQ({
-            content: nameCate,
-            created: user?.username,
+        const resp = await CreateNotification({
+            title: nameCate,
+            description: content,
+            created: "643d0497d04d231dc24a2765"
         })
+        console.log(resp)
         toast.success('Thêm danh mục thành công... Hệ thông cập nhật dữ liệu sau 30s')
-        const respdata = await GetListCateGory({
+        const respdata = await GetListNotification({
             id: user?.username,
         })
         setListFAQ(respdata[0].data)
@@ -143,7 +146,6 @@ const Notification = () => {
                                 <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
                                 <CTableHeaderCell className="text-center">Danh mục</CTableHeaderCell>
                                 <CTableHeaderCell className="text-center">Xóa</CTableHeaderCell>
-                                <CTableHeaderCell className="text-center">Chỉnh sửa</CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
@@ -160,11 +162,6 @@ const Notification = () => {
                                     <CTableDataCell className="text-center" style={{ cursor: 'pointer' }}>
                                         <div className="icon_hanlde" onClick={() => onHandleDelte(item._id)}>
                                             <CIcon icon={cilTrash} customClassName="nav-icon" />
-                                        </div>
-                                    </CTableDataCell>
-                                    <CTableDataCell className="text-center" style={{ cursor: 'pointer' }}>
-                                        <div className="icon_hanlde" onClick={() => onHandleDelte(item._id)}>
-                                            <CIcon icon={cilSettings} customClassName="nav-icon" />
                                         </div>
                                     </CTableDataCell>
                                 </CTableRow>

@@ -20,13 +20,22 @@ import {
   CAccordion,
   CAccordionBody,
   CAccordionHeader,
-  CAccordionItem
+  CAccordionItem,
+  CDropdownItem,
+  CDropdownToggle,
+  CDropdown,
+  CDropdownMenu,
+  CModal,
+  CModalFooter
 } from '@coreui/react'
-import { getInvitations } from 'src/utils/axios'
+import { ExportInvitation, UpdateInvitation, getInvitations } from 'src/utils/axios'
 import { dataFetchingPaginate } from 'src/utils/dataFetchingPaginate'
 import { formatMoney } from 'src/utils/localStorage'
 import moment from "moment";
 import { getSubPackages } from 'src/utils/axios'
+import { cilOptions, cilPlus } from '@coreui/icons'
+import CIcon from '@coreui/icons-react'
+import fileDownload from 'js-file-download'
 
 const initialSearchFields = {
   nameSearch: '',
@@ -49,6 +58,12 @@ const CUsers = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [filterName, setFilterName] = useState('')
   const [searchFields, setSearchFields] = useState(initialSearchFields)
+  const [isModalActive, setIsModalActive] = useState(false)
+  const [isModalActiveStatus, setIsModalActiveStatus] = useState(false)
+  const [addCount, setAddCount] = useState(0)
+  const [sellectStatus, setSellectStatus] = useState('3')
+  const [id, setId] = useState(0)
+
   // handle pagination for pagination updates
   const changeCurrentPage = (numPage) => {
     setPaginate((prev) => ({ ...prev, currentPage: numPage }))
@@ -84,7 +99,6 @@ const CUsers = () => {
         setPaginate(newPaginate)
         // -------------------------------------
         setUsersList(resp.filter(item => item.status === 1))
-        console.log(resp.filter(item => item.status === 1))
         setIsLoading(false)
       } catch (error) {
         console.log(error)
@@ -104,12 +118,65 @@ const CUsers = () => {
     else return 'Miễn phí'
   }, [])
 
+  const onHandleExport = useCallback(async () => {
+    const { sizePerPage, currentPage } = paginate
+    const response = await ExportInvitation({
+      page: currentPage,
+      pageSize: sizePerPage,
+      status: 6
+    })
+    fileDownload(response.data, `Danh sách thiệp đang hoạt động.xlsx`)
+  }, [paginate])
+
+  const setModalActive = (id) => {
+    setIsModalActive(true)
+    setId(id)
+  }
+
+  const setModalActiveStatus = (id) => {
+    setIsModalActiveStatus(true)
+    setId(id)
+  }
+
+  const handleSubmitProduct = () => console.log(0)
+  const handleChangeStatus = useCallback(async () => {
+
+    await UpdateInvitation({
+      id: id,
+      status: sellectStatus
+    })
+    try {
+      const { sizePerPage, currentPage } = paginate
+      const resp = await getInvitations({
+        pageSize: sizePerPage,
+        page: currentPage,
+      })
+      const newPaginate = dataFetchingPaginate(paginate, resp.length)
+      setPaginate(newPaginate)
+      setUsersList(resp.filter(item => item.status === 1))
+    } catch (error) {
+      console.log(error)
+    }
+
+  }, [id])
+
   return (
     <div>
       {/* <AppBreadcrumb /> */}
       {isLoading && <CSpinner />}
       <div className="row-align title_table">
         <h5 style={{ margin: '0' }}>Danh sách thiệp hoạt động</h5>
+        <div className="row-align title_table">
+          <CButton
+            color="primary"
+            shape="rounded-pill"
+            variant="outline"
+            onClick={onHandleExport}
+          >
+            <span className="margin-left">Xuất Excel</span>
+            <CIcon icon={cilPlus} />
+          </CButton>
+        </div>
       </div>
       <CCard>
         <CCardBody style={{ overflowY: 'visible' }}>
@@ -190,15 +257,15 @@ const CUsers = () => {
               <CTableRow>
                 <CTableHeaderCell>Stt</CTableHeaderCell>
                 <CTableHeaderCell>Invitation Id</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Name</CTableHeaderCell>
                 <CTableHeaderCell>Email</CTableHeaderCell>
                 <CTableHeaderCell>Phone number</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Package</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Total Amount</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Trạng thái</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Dịch vụ</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Tổng tiền</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Ngày tạo</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Mã giới thiệu</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Mã ODID</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Mã giao dịch</CTableHeaderCell>
+                <CTableHeaderCell>Chức năng</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -206,7 +273,6 @@ const CUsers = () => {
                 <CTableRow v-for="item in tableItems" key={index}>
                   <CTableDataCell>{index + 1}</CTableDataCell>
                   <CTableDataCell>{item._id}</CTableDataCell>
-                  <CTableDataCell className="text-center">{item.userName}</CTableDataCell>
                   <CTableDataCell>
                     <div>{item.email}</div>
                   </CTableDataCell>
@@ -218,7 +284,7 @@ const CUsers = () => {
                     <div>{item.productName}</div>
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
-                    <div>{formatMoney(item.amount)}</div>
+                    <div>{formatMoney(item.totalAmount)}</div>
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
                     <div>{moment(item.createTime).format("DD-MM-YYYY")}</div>
@@ -228,6 +294,25 @@ const CUsers = () => {
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
                     <div>{item.OID}</div>
+                  </CTableDataCell>
+                  <CTableDataCell style={{ cursor: 'pointer' }}>
+                    <CDropdown>
+                      <CDropdownToggle>
+                        <CIcon icon={cilOptions} />
+                      </CDropdownToggle>
+                      <CDropdownMenu>
+                        <CDropdownItem
+                          onClick={() => setModalActive(item?._id)}
+                        >
+                          Thêm ngày hoạt động
+                        </CDropdownItem>
+                        <CDropdownItem
+                          onClick={() => setModalActiveStatus(item?._id)}
+                        >
+                          Chỉnh sửa trạng thái
+                        </CDropdownItem>
+                      </CDropdownMenu>
+                    </CDropdown>
                   </CTableDataCell>
                 </CTableRow>
               ))}
@@ -244,6 +329,53 @@ const CUsers = () => {
             />
           </div>
         </CCardBody>
+        <CModal visible={isModalActive} onClose={() => setIsModalActive(false)} alignment="center">
+          <form className=" p-4" onSubmit={handleSubmitProduct}>
+            <CFormLabel className=" font-bold">Số ngày cần thêm</CFormLabel>
+            <div className='form' style={{ display: 'flex', gap: 10 }}>
+              <CFormInput
+                name="name"
+                placeholder="Nhập số ngày"
+                aria-label="packageName"
+                value={addCount}
+                onChange={(e) => setAddCount(e.target.value)}
+                type='number'
+                style={{ flex: 1 }}
+              />
+              <CButton color="secondary" onClick={() => setIsModalActive(false)}>
+                Đóng
+              </CButton>
+              <CButton color="primary" onClick={handleSubmitProduct}>
+                Thêm
+              </CButton>
+            </div>
+          </form>
+        </CModal>
+        <CModal visible={isModalActiveStatus} onClose={() => setIsModalActiveStatus(false)} alignment="center">
+          <form className=" p-4" onSubmit={handleSubmitProduct}>
+            <CFormLabel className=" font-bold">Cập nhật lại trạng thái thiệp</CFormLabel>
+            <div className='form' style={{ display: 'flex', gap: 10 }}>
+              <CFormSelect
+                aria-label="Default select example"
+                name="isPayedSearch"
+                id="inputSearchCuserBanned"
+                value={sellectStatus}
+                onChange={(e) => setSellectStatus(e.target.value)}
+                style={{ flex: 1 }}
+              >
+                <option value={3}>Miễn Phí</option>
+                <option value={5}>Hết hạn</option>
+
+              </CFormSelect>
+              <CButton color="secondary" onClick={() => setIsModalActiveStatus(false)}>
+                Đóng
+              </CButton>
+              <CButton color="primary" onClick={handleChangeStatus}>
+                Thay đổi
+              </CButton>
+            </div>
+          </form>
+        </CModal>
       </CCard>
 
     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { CreateQuestionFAQ, DeleteCate, GetListCateGory } from 'src/utils/axios'
+import { CreateQuestionFAQ, DeleteCate, GetListCateGory, GetListCateGoryFAQ } from 'src/utils/axios'
 import 'react-pagination-js/dist/styles.css' // import css
 import {
   CCard,
@@ -33,6 +33,7 @@ const ListCode = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   const [nameCate, setNameCate] = useState('')
+  const [listCate, setListCate] = useState([])
   const [content, setContent] = useState('')
   const [sellect, setSellect] = useState('')
 
@@ -47,14 +48,27 @@ const ListCode = () => {
           id: user?.username,
         })
         setListFAQ(resp)
-        console.log(resp)
         setIsLoading(false)
       } catch (error) {
         console.log(error)
       }
     }
-    getListCate()
 
+    const getListCateFAQ = async () => {
+      try {
+        const resp = await GetListCateGoryFAQ({
+          id: user?.username,
+        })
+        console.log(resp)
+        setListCate(resp)
+        setIsLoading(false)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    getListCate()
+    getListCateFAQ()
     // const interval = setInterval(() => {
     //   getListCate()
     // }, 60000)
@@ -124,8 +138,8 @@ const ListCode = () => {
                     value={sellect}
                     onChange={(e) => setSellect(e.target.value)}
                   >
-                    {listFAQ?.map((item, i) => (
-                      <option value={item.categoryId} key={i}>{item.content}</option>
+                    {listCate?.map((item, i) => (
+                      <option value={item._id} key={i}>{item.content}</option>
                     ))}
                   </CFormSelect>
                 </CCol>

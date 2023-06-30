@@ -22,9 +22,12 @@ import {
     CAccordionHeader,
     CAccordionItem
 } from '@coreui/react'
-import { getInvitations } from 'src/utils/axios'
+import { ExportInvitation, getInvitations } from 'src/utils/axios'
 import { dataFetchingPaginate } from 'src/utils/dataFetchingPaginate'
 import { formatMoney } from 'src/utils/localStorage'
+import fileDownload from 'js-file-download'
+import CIcon from '@coreui/icons-react'
+import { cilPlus } from '@coreui/icons'
 // import KolIcon from '../icons/everstarIcon/Kol'
 
 const initialSearchFields = {
@@ -102,12 +105,33 @@ const invitationsFree = () => {
         else return 'Miễn phí'
     }, [])
 
+    const onHandleExport = useCallback(async () => {
+        const { sizePerPage, currentPage } = paginate
+        const response = await ExportInvitation({
+            page: currentPage,
+            pageSize: sizePerPage,
+            status: 7
+        })
+        fileDownload(response.data, `Danh sách thiệp đang hoạt động.xlsx`)
+    }, [paginate])
+
     return (
         <div>
             {/* <AppBreadcrumb /> */}
             {isLoading && <CSpinner />}
             <div className="row-align title_table">
                 <h5 style={{ margin: '0' }}>Danh sách thiệp chưa thanh toán</h5>
+                <div className="row-align title_table">
+                    <CButton
+                        color="primary"
+                        shape="rounded-pill"
+                        variant="outline"
+                        onClick={onHandleExport}
+                    >
+                        <span className="margin-left">Xuất Excel</span>
+                        <CIcon icon={cilPlus} />
+                    </CButton>
+                </div>
             </div>
             <CCard>
                 <CCardBody style={{ overflowY: 'visible' }}>
@@ -187,13 +211,12 @@ const invitationsFree = () => {
                         <CTableHead color="light">
                             <CTableRow>
                                 <CTableHeaderCell>Stt</CTableHeaderCell>
-                                <CTableHeaderCell>Invitation Id</CTableHeaderCell>
-                                <CTableHeaderCell className="text-center">Name</CTableHeaderCell>
+                                <CTableHeaderCell>Mã thiệp</CTableHeaderCell>
                                 <CTableHeaderCell>Email</CTableHeaderCell>
-                                <CTableHeaderCell>Phone number</CTableHeaderCell>
-                                <CTableHeaderCell className="text-center">Status</CTableHeaderCell>
-                                <CTableHeaderCell className="text-center">Package</CTableHeaderCell>
-                                <CTableHeaderCell className="text-center">Total Amount</CTableHeaderCell>
+                                <CTableHeaderCell>Số điện thoại</CTableHeaderCell>
+                                <CTableHeaderCell className="text-center">Trạng thái</CTableHeaderCell>
+                                <CTableHeaderCell className="text-center">Dịch vụ</CTableHeaderCell>
+                                <CTableHeaderCell className="text-center">Tổng tiền</CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
@@ -201,7 +224,6 @@ const invitationsFree = () => {
                                 <CTableRow v-for="item in tableItems" key={index}>
                                     <CTableDataCell>{index + 1}</CTableDataCell>
                                     <CTableDataCell>{item._id}</CTableDataCell>
-                                    <CTableDataCell className="text-center">{item.userName}</CTableDataCell>
                                     <CTableDataCell>
                                         <div>{item.email}</div>
                                     </CTableDataCell>
@@ -213,7 +235,7 @@ const invitationsFree = () => {
                                         <div>{item.productName}</div>
                                     </CTableDataCell>
                                     <CTableDataCell className="text-center">
-                                        <div>{formatMoney(item.amount)}</div>
+                                        <div>{formatMoney(item.totalAmount)}</div>
                                     </CTableDataCell>
                                 </CTableRow>
                             ))}

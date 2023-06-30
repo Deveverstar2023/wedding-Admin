@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
-import { ListSaleCode, getInvitations } from 'src/utils/axios'
+import { ListSaleCode, UpdateSaleCode, getInvitations } from 'src/utils/axios'
 import { CCard, CCardBody, CFormSwitch, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
@@ -54,6 +54,19 @@ const Dashboard = () => {
     else return 'Miễn phí'
   }, [])
 
+  const onChangeStatusCode = useCallback(async (id, status) => {
+
+    let value = '';
+    if (status === "ON") value = "OFF"
+    else value = "ON"
+    await UpdateSaleCode({
+      id: id,
+      status: value
+    })
+    const resp = await ListSaleCode()
+    setData(resp)
+  }, [])
+
   return (
     <>
       <WidgetsDropdown />
@@ -64,7 +77,7 @@ const Dashboard = () => {
           </div>
           <CCard>
             <CCardBody style={{ overflowY: 'visible' }}>
-              <CTable align="middle " className="mb-0 border" hover responsive>
+              <CTable align="middle" className="mb-0 border" hover responsive>
                 <CTableHead color="light">
                   <CTableRow>
                     <CTableHeaderCell>Stt</CTableHeaderCell>
@@ -91,7 +104,7 @@ const Dashboard = () => {
                         <div>{item.productName}</div>
                       </CTableDataCell>
                       <CTableDataCell className="text-center">
-                        <div>{formatMoney(item.amount)}</div>
+                        <div>{formatMoney(item.totalAmount)}</div>
                       </CTableDataCell>
 
                       <CTableDataCell className="text-center">

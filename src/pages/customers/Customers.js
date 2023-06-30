@@ -195,7 +195,6 @@ const CUsers = () => {
             <CTableHead color="light">
               <CTableRow>
                 <CTableHeaderCell>Stt</CTableHeaderCell>
-                <CTableHeaderCell>Tên người dùng</CTableHeaderCell>
                 <CTableHeaderCell>email</CTableHeaderCell>
                 <CTableHeaderCell>Mã</CTableHeaderCell>
                 <CTableHeaderCell>Số điện thoại</CTableHeaderCell>
@@ -207,12 +206,7 @@ const CUsers = () => {
                 <CTableRow v-for="item in tableItems" key={index}>
                   <CTableDataCell>{index + 1}</CTableDataCell>
 
-                  <CTableDataCell>
-                    <div>{item.fullName}</div>
-                    {/* <div className="small text-medium-emphasis">
-                      Registered: {item.user.registered}
-                    </div> */}
-                  </CTableDataCell>
+                  
                   <CTableDataCell>
                     <div>{item.email}</div>
                   </CTableDataCell>
