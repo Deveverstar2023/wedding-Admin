@@ -3,7 +3,7 @@ import axios from 'axios'
 import { getLocalAccessToken } from './localStorage'
 
 const TIMEOUT_API = 10000;
-const BaseUrl = 'http://14.225.254.190:3000/api'
+const BaseUrl = 'https://api.cuoithoi.com.vn/api'
 
 export const customFetch = axios.create({
   baseURL: BaseUrl,
@@ -259,6 +259,19 @@ export const DeleteCate = async ({ id }) => {
   }
 }
 
+export const DeleteCateNotification = async ({ id }) => {
+  try {
+    const resp = await customFetch.delete('/delete-notification/id', {
+      data: {
+        _id: id
+      }
+    })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export const DeleteProduct = async ({ id }) => {
   try {
     const resp = await customFetch.delete('/delete-sub-product', {
@@ -266,6 +279,18 @@ export const DeleteProduct = async ({ id }) => {
         _id: id
       }
     })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const DeleteProductOther = async ({ id }) => {
+  try {
+    const resp = await customFetch.post('/delete-other-product', {
+      _id: id
+    })
+    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -379,15 +404,35 @@ export const CreateAnotherProduct = async ({ name, amount }) => {
   }
 }
 
+export const ExtendsDate = async ({ id, extendsDate }) => {
+  try {
+    const resp = await customFetch.post('/extends-date-invitation', {
+      _id: id,
+      extendsDate: extendsDate
+    })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export const ExportInvitation = async ({ page, pageSize, status }) => {
   try {
-    const resp = await csv.get('/admin/list-all-invitation', {
+    const resp = await csv.get('/admin/export-list-invitation', {
       params: {
         page: page,
-        pageSize: pageSize,
-        status: status
+        pageSize: pageSize
       }
     })
+    return resp
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const ExportUser = async () => {
+  try {
+    const resp = await csv.get('/export-excel/list-users')
     return resp
   } catch (error) {
     throw new Error(error)

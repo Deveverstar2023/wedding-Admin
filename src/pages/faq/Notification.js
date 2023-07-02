@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { CreateNotification, CreateQuestionFAQ, DeleteCate, GetListCateGory, GetListNotification } from 'src/utils/axios'
+import { CreateNotification, DeleteCateNotification, GetListNotification } from 'src/utils/axios'
 import 'react-pagination-js/dist/styles.css' // import css
 import {
     CCard,
@@ -22,7 +22,7 @@ import {
     CFormSelect,
     CFormTextarea,
 } from '@coreui/react'
-import { cilSettings, cilTrash } from '@coreui/icons'
+import { cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
@@ -42,7 +42,6 @@ const Notification = () => {
         const getListCate = async () => {
             try {
                 const resp = await GetListNotification()
-                console.log(resp)
                 setListFAQ(resp[0].data)
                 setIsLoading(false)
             } catch (error) {
@@ -62,13 +61,11 @@ const Notification = () => {
 
     const onHandleDelte = async (id) => {
         if (window.confirm('Bạn có chắc chắc muốn xóa')) {
-            await DeleteCate({
+            await DeleteCateNotification({
                 id: id,
             })
-            // setIsLoading(true)
-            // const resp = await ListSaleCode()
-            // setData(resp)
-            // setIsLoading(false)
+            const resp = await GetListNotification()
+            setListFAQ(resp[0].data)
         }
     }
 
@@ -79,11 +76,15 @@ const Notification = () => {
             created: "643d0497d04d231dc24a2765"
         })
         console.log(resp)
-        toast.success('Thêm danh mục thành công... Hệ thông cập nhật dữ liệu sau 30s')
+        toast.success('Thêm danh mục thành công... Hệ thông cập nhật dữ liệu sau 30s', {
+            autoClose: 1000
+        })
         const respdata = await GetListNotification({
             id: user?.username,
         })
         setListFAQ(respdata[0].data)
+        setNameCate('')
+        setContent('')
     }
 
     return (

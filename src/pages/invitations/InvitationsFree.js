@@ -110,9 +110,9 @@ const invitationsFree = () => {
         const response = await ExportInvitation({
             page: currentPage,
             pageSize: sizePerPage,
-            status: 7
+            status: 6
         })
-        fileDownload(response.data, `Danh sách thiệp đang hoạt động.xlsx`)
+        fileDownload(response.data, `Danh sách thiệp.xlsx`)
     }, [paginate])
 
     return (

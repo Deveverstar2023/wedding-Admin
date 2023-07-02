@@ -100,11 +100,15 @@ const ListCode = () => {
       categoryId: sellect
 
     })
-    toast.success('Thêm danh mục thành công... Hệ thông cập nhật dữ liệu sau 30s')
+    toast.success('Thêm danh mục thành công... Hệ thông cập nhật dữ liệu sau 30s', {
+      autoClose: 1000
+    })
     const respdata = await GetListCateGory({
       id: user?.username,
     })
     setListFAQ(respdata)
+    setNameCate('')
+    setContent('')
   }
 
   return (
