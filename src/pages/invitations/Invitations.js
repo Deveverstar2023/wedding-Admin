@@ -138,7 +138,9 @@ const CUsers = () => {
     setId(id)
   }
 
-  const handleSubmitProduct = () => console.log(0)
+  const handleSubmitProduct = () => {
+    console.log(id)
+  }
   const handleChangeStatus = useCallback(async () => {
 
     await UpdateInvitation({
@@ -352,7 +354,7 @@ const CUsers = () => {
           </form>
         </CModal>
         <CModal visible={isModalActiveStatus} onClose={() => setIsModalActiveStatus(false)} alignment="center">
-          <form className=" p-4" onSubmit={handleSubmitProduct}>
+          <form className=" p-4" onSubmit={handleChangeStatus}>
             <CFormLabel className=" font-bold">Cập nhật lại trạng thái thiệp</CFormLabel>
             <div className='form' style={{ display: 'flex', gap: 10 }}>
               <CFormSelect
