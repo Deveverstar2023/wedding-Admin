@@ -125,7 +125,7 @@ const CUsers = () => {
       pageSize: sizePerPage,
       status: 6
     })
-    fileDownload(response.data, `Danh sách thiệp đang hoạt động.xlsx`)
+    fileDownload(response.data, `Danh sách thiệp.xlsx`)
   }, [paginate])
 
   const setModalActive = (id) => {

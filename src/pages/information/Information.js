@@ -27,15 +27,17 @@ const Information = () => {
       try {
         setIsLoading(true)
         const resp = await GetInfomationBase()
-        setZaloNumber(resp[0].data[resp[0].data.length - 1].zaloNumber)
-        setNumberPhone(resp[0].data[resp[0].data.length - 1].numberPhone)
-        setNameBank(resp[0].data[resp[0].data.length - 1].nameBank)
-        setNumberBank(resp[0].data[resp[0].data.length - 1].numberBank)
-        setCeoPeople(resp[0].data[resp[0].data.length - 1].ceoPeople)
-        setCompanyNumber(resp[0].data[resp[0].data.length - 1].companyNumber)
-        setEmailCompany(resp[0].data[resp[0].data.length - 1].emailCompany)
-        setAdressCompany(resp[0].data[resp[0].data.length - 1].adressCompany)
-        setTimeWork(resp[0].data[resp[0].data.length - 1].timeWork)
+        if (resp[0].data.length > 0) {
+          setZaloNumber(resp[0].data[resp[0].data.length - 1].zaloNumber)
+          setNumberPhone(resp[0].data[resp[0].data.length - 1].numberPhone)
+          setNameBank(resp[0].data[resp[0].data.length - 1].nameBank)
+          setNumberBank(resp[0].data[resp[0].data.length - 1].numberBank)
+          setCeoPeople(resp[0].data[resp[0].data.length - 1].ceoPeople)
+          setCompanyNumber(resp[0].data[resp[0].data.length - 1].companyNumber)
+          setEmailCompany(resp[0].data[resp[0].data.length - 1].emailCompany)
+          setAdressCompany(resp[0].data[resp[0].data.length - 1].adressCompany)
+          setTimeWork(resp[0].data[resp[0].data.length - 1].timeWork)
+        }
         setIsLoading(false)
       } catch (error) {
         console.log(error)

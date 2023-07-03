@@ -1,21 +1,8 @@
-import React, { useState, useEffect } from 'react'
-// import { useDispatch, useSelector } from 'react-redux'
-// import { useState } from 'react'
-// import { cusersList, updateCurrentPage, setAddMMorePage } from 'src/features/cusers/cusersSlice'
-// import Pagination from 'react-pagination-js'
-// import 'react-pagination-js/dist/styles.css' // import css
-// import { showModal } from 'src/features/uiSlice'
-// import SetToKolModal from './SetToKolModal'
-// import ToggleBannedCuser from './ToggleBannedCuser'
-// import NoSearchFound from '../myui/NoSearchFound'
-// import FilterHideShowCtable from '../myui/FilterHideShowCtable'
-// import FilterCtable from './FilterCtable'
+import React, { useState, useEffect, useCallback } from 'react'
 import { AppBreadcrumb } from 'src/components'
-// import { Link } from 'react-router-dom'
-// import { avatarLink } from 'src/utils/helpers'
-import { customFetch } from 'src/utils/axios'
+import { ExportUser, customFetch } from 'src/utils/axios'
 import Pagination from 'react-pagination-js'
-import 'react-pagination-js/dist/styles.css' // import css
+import 'react-pagination-js/dist/styles.css'
 import {
   CContainer,
   CCard,
@@ -42,13 +29,14 @@ import {
 import { getUser } from 'src/utils/axios'
 import { Api } from 'src/common/constant'
 import { dataFetchingPaginate } from 'src/utils/dataFetchingPaginate'
-// import KolIcon from '../icons/everstarIcon/Kol'
+import CIcon from '@coreui/icons-react'
+import { cilPlus } from '@coreui/icons'
+import fileDownload from 'js-file-download'
 
 const initialSearchFields = {
   nameSearch: '',
   emailSearch: '',
   isPayedSearch: '',
-  // titleSearch: '',
 }
 const initialStatePage = {
   currentPage: 1,
@@ -57,9 +45,6 @@ const initialStatePage = {
   addMorePage: true,
 }
 const CUsers = () => {
-  // const dispatch = useDispatch()
-  // const columnsControl = useSelector((store) => store.cusers.columnsControl)
-  // const { userId, userName, status } = columnsControl
   const [paginate, setPaginate] = useState(initialStatePage)
   const [usersList, setUsersList] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -111,11 +96,27 @@ const CUsers = () => {
     getUserList()
   }, [paginate.currentPage, filterName])
 
+  const onHandleExport = useCallback(async () => {
+    const response = await ExportUser()
+    fileDownload(response.data, `Danh sách User.xlsx`)
+  }, [paginate])
+
   return (
     <div>
       {isLoading && <CSpinner />}
       <div className="row-align title_table">
         <h5 style={{ margin: '0' }}>Tài khoản</h5>
+        <div className="row-align title_table">
+          <CButton
+            color="primary"
+            shape="rounded-pill"
+            variant="outline"
+            onClick={onHandleExport}
+          >
+            <span className="margin-left">Xuất Excel</span>
+            <CIcon icon={cilPlus} />
+          </CButton>
+        </div>
       </div>
       <CCard>
         <CCardBody style={{ overflowY: 'visible' }}>
@@ -206,7 +207,7 @@ const CUsers = () => {
                 <CTableRow v-for="item in tableItems" key={index}>
                   <CTableDataCell>{index + 1}</CTableDataCell>
 
-                  
+
                   <CTableDataCell>
                     <div>{item.email}</div>
                   </CTableDataCell>

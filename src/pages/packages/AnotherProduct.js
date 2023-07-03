@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
-import { CreateAnotherProduct, GetListAnotherProduct, customFetch, getPackages } from 'src/utils/axios'
+import { CreateAnotherProduct, DeleteProductOther, GetListAnotherProduct, customFetch, getPackages } from 'src/utils/axios'
 import Pagination from 'react-pagination-js'
 import 'react-pagination-js/dist/styles.css' // import css
 import {
@@ -69,6 +69,17 @@ const PackageList = () => {
         }
     }, [name, price])
 
+    const onHandleDeleteMain = useCallback(async (id, name) => {
+
+        await DeleteProductOther({
+            id: id
+        })
+        const resp = await GetListAnotherProduct()
+        setPackageList(resp)
+        toast.success('Đã xóa gói ' + name)
+
+    }, [])
+
     return (
         <div>
             {isLoading && <CSpinner />}
@@ -90,7 +101,7 @@ const PackageList = () => {
                         <CTableRow>
                             <CTableHeaderCell>Tên gói</CTableHeaderCell>
                             <CTableHeaderCell className="text-center">Giá</CTableHeaderCell>
-                            <CTableHeaderCell className="text-center">Xóa</CTableHeaderCell>
+                            <CTableHeaderCell style={{ display: 'none' }} className="text-center">Xóa</CTableHeaderCell>
                         </CTableRow>
                     </CTableHead>
                     <CTableBody>
@@ -99,8 +110,8 @@ const PackageList = () => {
                                 <CTableRow v-for="item in tableItems" key={index}>
                                     <CTableDataCell>{item.name}</CTableDataCell>
                                     <CTableDataCell className="text-center">{formatMoney(item.amount)}</CTableDataCell>
-                                    <CTableDataCell className="text-center">
-                                        <div className="icon_hanlde" >
+                                    <CTableDataCell className="text-center" style={{ display: 'none' }}>
+                                        <div className="icon_hanlde" onClick={() => onHandleDeleteMain(item._id, item?.name)}>
                                             <CIcon icon={cilTrash} customClassName="nav-icon" />
                                         </div>
                                     </CTableDataCell>
