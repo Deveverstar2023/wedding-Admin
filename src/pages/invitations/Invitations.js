@@ -28,7 +28,7 @@ import {
   CModal,
   CModalFooter
 } from '@coreui/react'
-import { ExportInvitation, UpdateInvitation, getInvitations } from 'src/utils/axios'
+import { ExportInvitation, ExtendsDate, UpdateInvitation, getInvitations } from 'src/utils/axios'
 import { dataFetchingPaginate } from 'src/utils/dataFetchingPaginate'
 import { formatMoney } from 'src/utils/localStorage'
 import moment from "moment";
@@ -63,6 +63,7 @@ const CUsers = () => {
   const [addCount, setAddCount] = useState(0)
   const [sellectStatus, setSellectStatus] = useState('3')
   const [id, setId] = useState(0)
+  const [date, setDate] = useState(30)
 
   // handle pagination for pagination updates
   const changeCurrentPage = (numPage) => {
@@ -138,8 +139,12 @@ const CUsers = () => {
     setId(id)
   }
 
-  const handleSubmitProduct = () => {
-    console.log(id)
+  const handleSubmitProduct = async () => {
+    const resp = await ExtendsDate({
+      id: id,
+      extendsDate: addCount
+    })
+    setIsModalActive(false)
   }
   const handleChangeStatus = useCallback(async () => {
 
@@ -264,7 +269,7 @@ const CUsers = () => {
                 <CTableHeaderCell className="text-center">Trạng thái</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Dịch vụ</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Tổng tiền</CTableHeaderCell>
-                <CTableHeaderCell className="text-center">Ngày tạo</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Ngày thanh toán</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Mã giới thiệu</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Mã giao dịch</CTableHeaderCell>
                 <CTableHeaderCell>Chức năng</CTableHeaderCell>
@@ -289,7 +294,7 @@ const CUsers = () => {
                     <div>{formatMoney(item.totalAmount)}</div>
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
-                    <div>{moment(item.createTime).format("DD-MM-YYYY")}</div>
+                    <div>{moment(item.paymentTime).format("DD-MM-YYYY")}</div>
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
                     <div>{item.codeInvite}</div>

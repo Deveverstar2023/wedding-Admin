@@ -290,7 +290,6 @@ export const DeleteProductOther = async ({ id }) => {
     const resp = await customFetch.post('/delete-other-product', {
       _id: id
     })
-    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)

@@ -277,10 +277,10 @@ const invitationsPaid = () => {
         </CCardBody>
       </CCard>
       <CModal visible={isModalActive} onClose={() => setIsModalActive(false)} alignment="center">
-        <CModalHeader>Are you sure to active this invitation?</CModalHeader>
+        <CModalHeader>Bạn có chắc là có muốn kích hoạt thiệp này?</CModalHeader>
         <CModalFooter>
           <CButton color="secondary" onClick={() => setIsModalActive(false)}>
-            Thêm
+            Không
           </CButton>
           <CButton color="primary" onClick={handleActiveInvitations}>
             Đồng ý

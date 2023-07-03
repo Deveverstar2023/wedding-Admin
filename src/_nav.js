@@ -132,11 +132,7 @@ const _nav = [
     badge: {
       color: 'info',
     },
-  },
-  {
-    component: CNavTitle,
-    name: 'Document',
-  },
+  }
   // {
   //   component: CNavItem,
   //   name: 'Colors',
@@ -401,12 +397,7 @@ const _nav = [
   //     },
   //   ],
   // },
-  {
-    component: CNavItem,
-    name: 'Docs',
-    href: 'https://coreui.io/react/docs/templates/installation/',
-    icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
-  },
+
 ]
 
 export default _nav

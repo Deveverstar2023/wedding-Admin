@@ -71,12 +71,14 @@ const PackageList = () => {
 
     const onHandleDeleteMain = useCallback(async (id, name) => {
 
-        await DeleteProductOther({
-            id: id
-        })
-        const resp = await GetListAnotherProduct()
-        setPackageList(resp)
-        toast.success('Đã xóa gói ' + name)
+        if (window.confirm('Bạn có chắc chắc muốn xóa')) {
+            await DeleteProductOther({
+                id: id
+            })
+            const resp = await GetListAnotherProduct()
+            setPackageList(resp)
+            toast.success('Đã xóa gói ' + name)
+        }
 
     }, [])
 
@@ -101,7 +103,7 @@ const PackageList = () => {
                         <CTableRow>
                             <CTableHeaderCell>Tên gói</CTableHeaderCell>
                             <CTableHeaderCell className="text-center">Giá</CTableHeaderCell>
-                            <CTableHeaderCell style={{ display: 'none' }} className="text-center">Xóa</CTableHeaderCell>
+                            <CTableHeaderCell className="text-center">Xóa</CTableHeaderCell>
                         </CTableRow>
                     </CTableHead>
                     <CTableBody>
@@ -110,7 +112,7 @@ const PackageList = () => {
                                 <CTableRow v-for="item in tableItems" key={index}>
                                     <CTableDataCell>{item.name}</CTableDataCell>
                                     <CTableDataCell className="text-center">{formatMoney(item.amount)}</CTableDataCell>
-                                    <CTableDataCell className="text-center" style={{ display: 'none' }}>
+                                    <CTableDataCell className="text-center">
                                         <div className="icon_hanlde" onClick={() => onHandleDeleteMain(item._id, item?.name)}>
                                             <CIcon icon={cilTrash} customClassName="nav-icon" />
                                         </div>
@@ -144,7 +146,7 @@ const PackageList = () => {
                         />
                         <CModalFooter>
                             <CButton color="secondary" onClick={() => setIsModalActive(false)}>
-                                Close
+                                Hủy bỏ
                             </CButton>
                             <CButton color="primary" onClick={onHandleAddAnotherProduct}>Đồng ý</CButton>
                         </CModalFooter>
