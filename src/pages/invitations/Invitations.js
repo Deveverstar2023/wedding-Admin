@@ -153,6 +153,7 @@ const CUsers = () => {
       status: sellectStatus
     })
     try {
+      setIsModalActiveStatus(false)
       const { sizePerPage, currentPage } = paginate
       const resp = await getInvitations({
         pageSize: sizePerPage,

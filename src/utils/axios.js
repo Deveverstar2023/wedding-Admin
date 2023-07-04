@@ -343,6 +343,7 @@ export const UpdateInvitation = async ({ id, status }) => {
     const resp = await customFetch.post('/update-invitation', {
       _id: id,
       status: status,
+      isPaid: false
     })
     console.log(resp)
     return resp.data.data
