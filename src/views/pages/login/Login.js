@@ -24,6 +24,7 @@ const initialState = {
 const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [validated, setValidated] = useState(false)
   const [values, setValues] = useState(initialState)
   const { isLoading, user } = useSelector((store) => store.auth)
 
@@ -39,10 +40,18 @@ const Login = () => {
   }, [user])
   const onSubmit = (e) => {
     e.preventDefault()
-    console.log(values)
+    // if (e.currentTarget.checkValidity() === false) {
+    //   e.preventDefault()
+    //   e.stopPropagation()
+    //   return
+    // }
+    e.currentTarget.checkValidity()
+
     const { username, password } = values
     if (!username || !password) {
+      return
     }
+    setValidated(true)
     dispatch(loginUser({ username, password }))
   }
   return (
@@ -63,6 +72,7 @@ const Login = () => {
                       <CFormInput
                         type="username"
                         name="username"
+                        id="validatedUserName"
                         placeholder="username"
                         value={values.username}
                         autoComplete="username"
@@ -77,6 +87,7 @@ const Login = () => {
                       <CFormInput
                         type="password"
                         name="password"
+                        id="validatedPassword"
                         placeholder="Password"
                         value={values.password}
                         autoComplete="current-password"

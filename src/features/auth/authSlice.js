@@ -6,6 +6,7 @@ import {
   addUserToLocalStorage,
   removeUserFromLocalStorage,
 } from 'src/utils/localStorage'
+import { toast } from 'react-toastify'
 const role = getUserFromLocalStorage()?.user?.roles[0].code
 const initialState = {
   isLoading: false,
@@ -18,11 +19,10 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (user, thunkAP
   } catch (error) {
     const wrongPass = error.response.status === 400 ? true : false
     const message = wrongPass ? 'Please check your email and password' : error.message
+    toast.error(message)
     return thunkAPI.rejectWithValue()
   }
 })
-
-
 
 // export const profileUser = createAsyncThunk('auth/profileUser', async (_, thunkAPI) => {
 //   try {
@@ -62,7 +62,7 @@ const authSlice = createSlice({
     },
     [loginUser.pending]: (state) => {
       state.isLoading = true
-    }
+    },
     // [profileUser.pending]: (state) => {
     //   state.isLoading = true
     // },
