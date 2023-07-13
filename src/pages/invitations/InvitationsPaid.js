@@ -47,7 +47,7 @@ const initialSearchFields = {
 const initialStatePage = {
   currentPage: 1,
   totalSize: 30,
-  sizePerPage: 15,
+  sizePerPage: 1000,
   addMorePage: true,
 }
 const invitationsPaid = () => {
@@ -94,7 +94,9 @@ const invitationsPaid = () => {
         // update paginate after data fetching
         const newPaginate = dataFetchingPaginate(paginate, resp.length)
         setPaginate(newPaginate)
-        // -------------------------------------
+
+        const arrayNew = resp.filter(item => item.status === 6)
+
         setUsersList(resp.filter(item => item.status === 6))
         setIsLoading(false)
       } catch (error) {
@@ -131,7 +133,7 @@ const invitationsPaid = () => {
       {/* <AppBreadcrumb /> */}
       {isLoading && <CSpinner />}
       <div className="row-align title_table">
-        <h5 style={{ margin: '0' }}>Danh sách thiệp đã thanh toán</h5>
+        <h5 style={{ margin: '0' }}>Danh sách thiệp chờ thanh toán</h5>
       </div>
       <CCard>
         <CCardBody style={{ overflowY: 'visible' }}>

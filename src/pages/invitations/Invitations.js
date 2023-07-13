@@ -46,7 +46,7 @@ const initialSearchFields = {
 const initialStatePage = {
   currentPage: 1,
   totalSize: 30,
-  sizePerPage: 15,
+  sizePerPage: 1000,
   addMorePage: true,
 }
 const CUsers = () => {

@@ -42,7 +42,11 @@ const AppHeader = () => {
             </CNavLink>
           </CNavItem>
         </CHeaderNav>
-        <CHeaderNav></CHeaderNav>
+        <CHeaderNav>
+          <a href='https://cuoithoi.com.vn/' target='_blank'>
+            Chuyển đến website
+          </a>
+        </CHeaderNav>
         <CHeaderNav className="ms-3">
           <AppHeaderDropdown />
         </CHeaderNav>
