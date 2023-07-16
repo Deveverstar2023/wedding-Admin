@@ -15,10 +15,17 @@ const initialState = {
 export const loginUser = createAsyncThunk('auth/loginUser', async (user, thunkAPI) => {
   try {
     const resp = await customFetch.post('/admin/sign-in', user)
+    console.log(resp.data.errorCode === -1)
+    if (resp.data.errorCode === -1) {
+      console.log(resp.data)
+      toast.error(resp.data.message)
+      throw new Error(resp.data.errorMessage)
+    }
     return resp.data
   } catch (error) {
     const wrongPass = error.response.status === 400 ? true : false
     const message = wrongPass ? 'Please check your email and password' : error.message
+    console.log(message)
     toast.error(message)
     return thunkAPI.rejectWithValue()
   }
@@ -63,20 +70,6 @@ const authSlice = createSlice({
     [loginUser.pending]: (state) => {
       state.isLoading = true
     },
-    // [profileUser.pending]: (state) => {
-    //   state.isLoading = true
-    // },
-    // [profileUser.fulfilled]: (state, { payload }) => {
-    //   state.isLoading = false
-    // },
-    // [updateProfile.pending]: (state) => {
-    //   state.isLoading = true
-    // },
-    // [updateProfile.fulfilled]: (state, { payload }) => {
-    //   state.isLoading = false
-    //   state.user.user = { ...payload.data }
-    //   addUserToLocalStorage(state.user)
-    // },
   },
 })
 export const { logoutUser, refreshToken } = authSlice.actions
