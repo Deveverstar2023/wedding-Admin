@@ -36,6 +36,7 @@ import { getSubPackages } from 'src/utils/axios'
 import { cilOptions, cilPlus } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import fileDownload from 'js-file-download'
+import { useNavigate } from 'react-router-dom'
 
 const initialSearchFields = {
   nameSearch: '',
@@ -64,6 +65,8 @@ const CUsers = () => {
   const [sellectStatus, setSellectStatus] = useState('3')
   const [id, setId] = useState(0)
   const [date, setDate] = useState(30)
+
+  const navigate = useNavigate()
 
   // handle pagination for pagination updates
   const changeCurrentPage = (numPage) => {
@@ -95,6 +98,7 @@ const CUsers = () => {
           pageSize: sizePerPage,
           page: currentPage,
         })
+        console.log(resp)
         // update paginate after data fetching
         const newPaginate = dataFetchingPaginate(paginate, resp.length)
         setPaginate(newPaginate)
@@ -167,6 +171,8 @@ const CUsers = () => {
     }
 
   }, [id])
+
+  const onNavigateDetails = (id) => navigate('/details-invitations/' + id)
 
   return (
     <div>
@@ -264,6 +270,7 @@ const CUsers = () => {
             <CTableHead color="light">
               <CTableRow>
                 <CTableHeaderCell>Stt</CTableHeaderCell>
+                <CTableHeaderCell>Chức năng</CTableHeaderCell>
                 <CTableHeaderCell>Invitation Id</CTableHeaderCell>
                 <CTableHeaderCell>Email</CTableHeaderCell>
                 <CTableHeaderCell>Phone number</CTableHeaderCell>
@@ -271,15 +278,40 @@ const CUsers = () => {
                 <CTableHeaderCell className="text-center">Dịch vụ</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Tổng tiền</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Ngày thanh toán</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Ngày hết hạn</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Mã giới thiệu</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Mã giao dịch</CTableHeaderCell>
-                <CTableHeaderCell>Chức năng</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
               {usersList?.map((item, index) => (
                 <CTableRow v-for="item in tableItems" key={index}>
                   <CTableDataCell>{index + 1}</CTableDataCell>
+                    <CTableDataCell style={{ cursor: 'pointer' }}>
+                    <CDropdown>
+                      <CDropdownToggle>
+                        <CIcon icon={cilOptions} />
+                      </CDropdownToggle>
+                      <CDropdownMenu>
+                        <CDropdownItem
+                          onClick={() => setModalActive(item?._id)}
+                        >
+                          Thêm ngày hoạt động
+                        </CDropdownItem>
+                        <CDropdownItem
+                          onClick={() => setModalActiveStatus(item?._id)}
+                        >
+                          Chỉnh sửa trạng thái
+                        </CDropdownItem>
+                        <CDropdownItem
+                          onClick={() => onNavigateDetails(item?._id)}
+                        >
+                          Chỉnh sửa thiệp
+                        </CDropdownItem>
+                      </CDropdownMenu>
+                    </CDropdown>
+                  </CTableDataCell>
+                  
                   <CTableDataCell>{item._id}</CTableDataCell>
                   <CTableDataCell>
                     <div>{item.email}</div>
@@ -298,30 +330,15 @@ const CUsers = () => {
                     <div>{moment(item.paymentTime).format("DD-MM-YYYY")}</div>
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
+                    <div>{moment(item.expiredTime).format("DD-MM-YYYY")}</div>
+                  </CTableDataCell>
+                  <CTableDataCell className="text-center">
                     <div>{item.codeInvite}</div>
                   </CTableDataCell>
                   <CTableDataCell className="text-center">
                     <div>{item.OID}</div>
                   </CTableDataCell>
-                  <CTableDataCell style={{ cursor: 'pointer' }}>
-                    <CDropdown>
-                      <CDropdownToggle>
-                        <CIcon icon={cilOptions} />
-                      </CDropdownToggle>
-                      <CDropdownMenu>
-                        <CDropdownItem
-                          onClick={() => setModalActive(item?._id)}
-                        >
-                          Thêm ngày hoạt động
-                        </CDropdownItem>
-                        <CDropdownItem
-                          onClick={() => setModalActiveStatus(item?._id)}
-                        >
-                          Chỉnh sửa trạng thái
-                        </CDropdownItem>
-                      </CDropdownMenu>
-                    </CDropdown>
-                  </CTableDataCell>
+                
                 </CTableRow>
               ))}
             </CTableBody>

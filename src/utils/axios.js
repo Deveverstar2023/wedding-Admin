@@ -345,7 +345,6 @@ export const UpdateInvitation = async ({ id, status }) => {
       status: status,
       isPaid: false
     })
-    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)
