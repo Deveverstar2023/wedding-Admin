@@ -86,6 +86,17 @@ export const getInvitations = async ({ keyword, page, pageSize }) => {
   }
 }
 
+export const getDetailsInvitations = async ({ id }) => {
+  try {
+    const resp = await customFetch.get(
+      `/invitation-detail?_id=${id}`,
+    )
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export const getGenerateCode = async () => {
   try {
     const resp = await customFetch.get('/generate-sale-code')
@@ -346,6 +357,17 @@ export const UpdateInvitation = async ({ id, status }) => {
       isPaid: false
     })
     return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const UpdateInvitationPage = async ({ data }) => {
+  try {
+    const resp = await customFetch.post('/update-invitation',
+      data
+    )
+    return resp
   } catch (error) {
     throw new Error(error)
   }
