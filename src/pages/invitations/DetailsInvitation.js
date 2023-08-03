@@ -413,6 +413,235 @@ const DetailsInvitation = () => {
         setIsDisplayCountDown(e)
     }, [isDisplayCountDown, value.timeAndLocationOfWedding.isDisplayCountDown])
 
+    const hanldeChangeIsUseDamNgo = (e) => {
+        setValue((prevValues) => ({
+            ...prevValues,
+            isUseDamNgo: e,
+        }))
+        value.isUseDamNgo = e
+    }
+
+    const hanldeChangeDateOfEventWedding = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            timeAndLocationOfWedding: {
+                ...prevValues.timeAndLocationOfWedding,
+                dateOfEventWedding: e
+            }
+        }));
+        value.timeAndLocationOfWedding.dateOfEventWedding = e
+    }
+
+    const handleChangeNamelocationOfWedding = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            timeAndLocationOfWedding: {
+                ...prevValues.timeAndLocationOfWedding,
+                namelocationOfWedding: e
+            }
+        }));
+        value.timeAndLocationOfWedding.namelocationOfWedding = e
+    }
+
+    const handleChangeLocationOfWedding = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            timeAndLocationOfWedding: {
+                ...prevValues.timeAndLocationOfWedding,
+                locationOfWedding: e
+            }
+        }));
+        value.timeAndLocationOfWedding.locationOfWedding = e
+    }
+
+    const handleChangeMapDirectLink = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            timeAndLocationOfWedding: {
+                ...prevValues.timeAndLocationOfWedding,
+                mapDirectLink: e
+            }
+        }));
+        value.timeAndLocationOfWedding.mapDirectLink = e
+    }
+
+    const handleChangeContentOfCountDown = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            timeAndLocationOfWedding: {
+                ...prevValues.timeAndLocationOfWedding,
+                contentOfCountDown: e
+            }
+        }));
+        value.timeAndLocationOfWedding.contentOfCountDown = e
+    }
+
+    //time and location dạm ngõ và ăn hỏi
+
+    const handleChangeDateOfEventEgagement = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            timeAndLocationOfEgagement: {
+                ...prevValues.timeAndLocationOfEgagement,
+                dateOfEventEgagement: e
+            }
+        }));
+        value.timeAndLocationOfEgagement.dateOfEventEgagement = e
+    }
+
+    const handleChangeTimeOfEventEgagement = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            timeAndLocationOfEgagement: {
+                ...prevValues.timeAndLocationOfEgagement,
+                timeOfEventEgagement: e
+            }
+        }));
+        value.timeAndLocationOfEgagement.timeOfEventEgagement = e
+    }
+
+    const handleChangeLocationOfEgagement = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            timeAndtimeAndLocationOfEgagementLocationOfWedding: {
+                ...prevValues.timeAndLocationOfEgagement,
+                locationOfEgagement: e
+            }
+        }));
+        value.timeAndLocationOfEgagement.locationOfEgagement = e
+    }
+
+    const handleChangeDateOfEventInterrogation = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            timeAndLocationOfInterrogation: {
+                ...prevValues.timeAndLocationOfInterrogation,
+                dateOfEventInterrogation: e
+            }
+        }));
+        value.timeAndLocationOfInterrogation.dateOfEventInterrogation = e
+    }
+
+    const handleChangeTimeOfEventInterrogation = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            timeAndLocationOfInterrogation: {
+                ...prevValues.timeAndLocationOfInterrogation,
+                timeOfEventInterrogation: e
+            }
+        }));
+        value.timeAndLocationOfInterrogation.timeOfEventInterrogation = e
+    }
+
+    const handleChangeLocationOfInterrogation = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            timeAndLocationOfInterrogation: {
+                ...prevValues.timeAndLocationOfInterrogation,
+                locationOfInterrogation: e
+            }
+        }));
+        value.timeAndLocationOfInterrogation.locationOfInterrogation = e
+    }
+
+    //event
+
+    const hanldeChangeIsUseEvent = (e) => {
+        setValue((prevValues) => ({
+            ...prevValues,
+            isUseEvent: e,
+        }))
+        value.isUseEvent = e
+    }
+
+    const hanldeChangeEventOfProgramEditOne = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            eventOfProgram: {
+                ...prevValues.eventOfProgram,
+                eventOfProgramEditOne: e
+            }
+        }));
+        value.eventOfProgram.eventOfProgramEditOne = e
+    }
+
+    const hanldeChangeEventOfProgramEditTwo = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            eventOfProgram: {
+                ...prevValues.eventOfProgram,
+                eventOfProgramEditTwo: e
+            }
+        }));
+        value.eventOfProgram.eventOfProgramEditTwo = e
+    }
+
+    const hanldeChangeEventOfProgramEditThree = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            eventOfProgram: {
+                ...prevValues.eventOfProgram,
+                hanldeChangeEventOfProgramEditThree: e
+            }
+        }));
+        value.eventOfProgram.eventOfProgramEditThree = e
+    }
+
+    const hanldeChangeEventOfProgramEditFour = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            eventOfProgram: {
+                ...prevValues.eventOfProgram,
+                hanldeChangeEventOfProgramEditFour: e
+            }
+        }));
+        value.eventOfProgram.eventOfProgramEditFour = e
+    }
+
+    const hanldeChangeTimeToWellcome = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            eventOfProgram: {
+                ...prevValues.eventOfProgram,
+                timeToWellcome: e
+            }
+        }));
+        value.eventOfProgram.timeToWellcome = e
+    }
+
+    const hanldeChangeTimeToCelebrate = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            eventOfProgram: {
+                ...prevValues.eventOfProgram,
+                timeToCelebrate: e
+            }
+        }));
+        value.eventOfProgram.timeToCelebrate = e
+    }
+
+    const hanldeChangeTimeToDinner = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            eventOfProgram: {
+                ...prevValues.eventOfProgram,
+                timeToDinner: e
+            }
+        }));
+        value.eventOfProgram.timeToDinner = e
+    }
+
+    const hanldeChangeTimeToMusic = (e) => {
+        setValue(prevValues => ({
+            ...prevValues,
+            eventOfProgram: {
+                ...prevValues.eventOfProgram,
+                timeToMusic: e
+            }
+        }));
+        value.eventOfProgram.timeToMusic = e
+    }
+
     const handleChange = useCallback(async () => {
 
         const jsonData = {
@@ -1112,6 +1341,101 @@ const DetailsInvitation = () => {
                                     </CAccordionBody>
                                 </CAccordionItem>
                             </CAccordion>
+                            <CAccordion className="accordion-normal">
+                                <CAccordionItem itemKey={1}>
+                                    <CAccordionHeader>
+                                        <h5>Chương trình</h5>
+                                    </CAccordionHeader>
+                                    <CAccordionBody>
+                                        <CForm className=" g-8">
+                                            <div className='row'>
+                                                <CCol md={12} className="form-input">
+                                                    <div className='row'>
+                                                        <CCol md={12}>
+                                                            <div className='block_input'>
+                                                                <CFormLabel htmlFor="inputSearchCuser">Hiển thị tính năng chương trình</CFormLabel>
+                                                                <div className='text_box'>
+
+                                                                    <input
+                                                                        type='checkbox'
+                                                                        checked={value.isUseEvent}
+                                                                        onChange={(e) => hanldeChangeIsUseEvent(e.target.checked)}
+                                                                    />
+
+                                                                </div>
+                                                            </div>
+                                                        </CCol>
+                                                        <CCol md={12}>
+                                                            <div className='block_input flex_row_2'>
+                                                                <input
+                                                                    type='text'
+                                                                    className='form-control'
+                                                                    value={value.eventOfProgram.eventOfProgramEditOne}
+                                                                    onChange={(e) => hanldeChangeEventOfProgramEditOne(e.target.value)}
+                                                                />
+                                                                <input
+                                                                    type='time'
+                                                                    className='form-control'
+                                                                    value={value.eventOfProgram.timeToWellcome}
+                                                                    onChange={(e) => hanldeChangeTimeToWellcome(e.target.value)}
+                                                                />
+                                                            </div>
+                                                        </CCol>
+                                                        <CCol md={12}>
+                                                            <div className='block_input flex_row_2'>
+                                                                <input
+                                                                    type='text'
+                                                                    className='form-control'
+                                                                    value={value.eventOfProgram.eventOfProgramEditTwo}
+                                                                    onChange={(e) => hanldeChangeEventOfProgramEditTwo(e.target.value)}
+                                                                />
+                                                                <input
+                                                                    type='time'
+                                                                    className='form-control'
+                                                                    value={value.eventOfProgram.timeToCelebrate}
+                                                                    onChange={(e) => hanldeChangeTimeToCelebrate(e.target.value)}
+                                                                />
+                                                            </div>
+                                                        </CCol>
+                                                        <CCol md={12}>
+                                                            <div className='block_input flex_row_2'>
+                                                                <input
+                                                                    type='text'
+                                                                    className='form-control'
+                                                                    value={value.eventOfProgram.eventOfProgramEditThree}
+                                                                    onChange={(e) => hanldeChangeEventOfProgramEditThree(e.target.value)}
+                                                                />
+                                                                <input
+                                                                    type='time'
+                                                                    className='form-control'
+                                                                    value={value.eventOfProgram.timeToMusic}
+                                                                    onChange={(e) => hanldeChangeTimeToMusic(e.target.value)}
+                                                                />
+                                                            </div>
+                                                        </CCol>
+                                                        <CCol md={12}>
+                                                            <div className='block_input flex_row_2'>
+                                                                <input
+                                                                    type='text'
+                                                                    className='form-control'
+                                                                    value={value.eventOfProgram.eventOfProgramEditFour}
+                                                                    onChange={(e) => hanldeChangeEventOfProgramEditFour(e.target.value)}
+                                                                />
+                                                                <input
+                                                                    type='time'
+                                                                    className='form-control'
+                                                                    value={value.eventOfProgram.timeToDinner}
+                                                                    onChange={(e) => hanldeChangeTimeToDinner(e.target.value)}
+                                                                />
+                                                            </div>
+                                                        </CCol>
+                                                    </div>
+                                                </CCol>
+                                            </div>
+                                        </CForm>
+                                    </CAccordionBody>
+                                </CAccordionItem>
+                            </CAccordion>
                         </div>
                         <div className='col-xs-12 col-sm-12 col-md-6 col-lg-6'>
                             <CAccordion className="accordion-normal">
@@ -1122,235 +1446,101 @@ const DetailsInvitation = () => {
                                     <CAccordionBody>
                                         <CForm className=" g-8">
                                             <div className='row'>
-                                                <CCol md={4} className="form-input">
+                                                <CCol md={12}>
                                                     <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Tên cô dâu</CFormLabel>
-                                                        <CFormInput
-                                                            name="name"
-                                                            type="text"
-                                                            placeholder="Nhập tên cô dâu"
-                                                            onChange={(e) => handleChangeNameBride(e.target.value)}
-                                                            value={value.informationOfBride?.name || ''}
-                                                        />
-                                                    </div>
-                                                    <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Số điện thoại</CFormLabel>
-                                                        <CFormInput
-                                                            name="name"
-                                                            type="text"
-                                                            placeholder="Nhập số điện thoại"
-                                                            onChange={(e) => handleChangePhoneNumberOfBride(e.target.value)}
-                                                            value={value.informationOfBride?.phoneNumberOfBride || ''}
-                                                        />
-                                                    </div>
-                                                    <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Thứ bậc gia đình</CFormLabel>
-                                                        <CFormSelect
-                                                            aria-label="Default select example"
-                                                            name="isPayedSearch"
-                                                            onChange={(e) => setSellectBride(e.target.value)}
-                                                        >
-                                                            <option value={true}>Trưởng nữ</option>
-                                                            <option value={false} >Thứ</option>
-                                                        </CFormSelect>
+                                                        <CFormLabel htmlFor="inputSearchCuser">Hiển thị tính năng Dặm ngõ và Ăn hỏi</CFormLabel>
+                                                        <div className='text_box'>
+
+                                                            <input
+                                                                type='checkbox'
+                                                                checked={value.isUseDamNgo}
+                                                                onChange={(e) => hanldeChangeIsUseDamNgo(e.target.checked)}
+                                                            />
+
+                                                        </div>
                                                     </div>
                                                 </CCol>
-
                                                 <CCol md={4} className="form-input">
-
                                                     <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Tên ngân hàng</CFormLabel>
+                                                        <CFormLabel htmlFor="inputSearchCuser">Ngày dạm ngõ</CFormLabel>
                                                         <CFormInput
                                                             name="name"
-                                                            type="text"
-                                                            placeholder="Nhập tên ngân hàng"
-                                                            onChange={(e) => handleChangeNameBankOfBride(e.target.value)}
-                                                            value={value.informationOfBride.nameBankOfBride || ''}
-                                                        />
-                                                    </div>
-                                                    <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Chủ tài khoản</CFormLabel>
-                                                        <CFormInput
-                                                            name="name"
-                                                            type="text"
-                                                            placeholder="Nhập chủ tài khoản"
-                                                            onChange={(e) => handleChangeOwnerBankOfBride(e.target.value)}
-                                                            value={value.informationOfBride.ownerBankOfBride || ''}
-                                                        />
-                                                    </div>
-                                                    <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Số tài khoản</CFormLabel>
-                                                        <CFormInput
-                                                            name="name"
-                                                            type="text"
-                                                            placeholder="Nhập số tài khoản"
-                                                            onChange={(e) => handleChangeBankOfNumberBride(e.target.value)}
-                                                            value={value.informationOfBride.bankOfNumberBride || ''}
+                                                            type="date"
+                                                            placeholder="Nhập ngày dạm ngõ"
+                                                            onChange={(e) => handleChangeDateOfEventEgagement(e.target.value)}
+                                                            value={value.timeAndLocationOfEgagement?.dateOfEventEgagement || ''}
                                                         />
                                                     </div>
                                                 </CCol>
                                                 <CCol md={4} className="form-input">
-
-                                                    <img src={value.informationOfBride.qrCodeBrideLink} />
-
-
+                                                    <div className='block_input'>
+                                                        <CFormLabel htmlFor="inputSearchCuser">Thời gian dạm ngõ</CFormLabel>
+                                                        <CFormInput
+                                                            name="name"
+                                                            type="time"
+                                                            placeholder="Nhập thời gian"
+                                                            onChange={(e) => handleChangeTimeOfEventEgagement(e.target.value)}
+                                                            value={value.timeAndLocationOfEgagement?.timeOfEventEgagement || ''}
+                                                        />
+                                                    </div>
                                                 </CCol>
-                                                <hr />
+                                                <CCol md={12} className="form-input">
+                                                    <div className='block_input'>
+                                                        <CFormLabel htmlFor="inputSearchCuser">Địa điểm dạm ngõ</CFormLabel>
+                                                        <CFormInput
+                                                            name="name"
+                                                            type="text"
+                                                            placeholder="Nhập địa điểm"
+                                                            value={value.timeAndLocationOfEgagement?.locationOfEgagement || ''}
+                                                            onChange={(e) => handleChangeLocationOfEgagement(e.target.value)}
+                                                        />
+                                                    </div>
+                                                </CCol>
                                             </div>
                                             <div className='row'>
                                                 <CCol md={4} className="form-input">
                                                     <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Tên Bố</CFormLabel>
+                                                        <CFormLabel htmlFor="inputSearchCuser">Ngày ăn hỏi</CFormLabel>
                                                         <CFormInput
                                                             name="name"
-                                                            type="text"
-                                                            placeholder="Nhập tên bố"
-                                                            onChange={(e) => handleChangeNameFatherOfBride(e.target.value)}
-                                                            value={value.informationOfBride.fatherNameOfBride || ''}
-                                                        />
-                                                    </div>
-                                                    <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Số điện thoại</CFormLabel>
-                                                        <CFormInput
-                                                            name="name"
-                                                            type="text"
-                                                            placeholder="Nhập số điện thoại"
-                                                            onChange={(e) => handleChangePhoneNumberOfFatherBride(e.target.value)}
-                                                            value={value.informationOfBride.phoneNumberOfFatherBride || ''}
-                                                        />
-                                                    </div>
-                                                    <div className='block_input'>
-                                                        <CFormCheck
-                                                            aria-label="Default select example"
-                                                            name="isPayedSearch"
-                                                            defaultChecked={value.informationOfBride?.isGoneFatherBride}
-                                                            onChange={onSellectIsGoneFatherBride}
-                                                            style={{ marginRight: 10 }}
-                                                        />
-
-                                                        <CFormLabel htmlFor="inputSearchCuser">Đã mất </CFormLabel>
-
-                                                    </div>
-                                                </CCol>
-                                                <CCol md={4} className="form-input">
-
-                                                    <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Tên ngân hàng</CFormLabel>
-                                                        <CFormInput
-                                                            name="name"
-                                                            type="text"
-                                                            placeholder="Nhập tên ngân hàng"
-                                                            onChange={(e) => handleChangeNameBankOfFatherBride(e.target.value)}
-                                                            value={value.informationOfBride.nameBankOfFatherBride || ''}
-                                                        />
-                                                    </div>
-                                                    <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Chủ tài khoản</CFormLabel>
-                                                        <CFormInput
-                                                            name="name"
-                                                            type="text"
-                                                            placeholder="Nhập chủ tài khoản"
-                                                            onChange={(e) => handleChangeOwnerBankOfFatherBride(e.target.value)}
-                                                            value={value.informationOfBride.ownerBankOfFatherBride || ''}
-                                                        />
-                                                    </div>
-                                                    <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Số tài khoản</CFormLabel>
-                                                        <CFormInput
-                                                            name="name"
-                                                            type="text"
-                                                            placeholder="Nhập số tài khoản"
-                                                            onChange={(e) => handleChangeBankOfNumberFatherBride(e.target.value)}
-                                                            value={value.informationOfBride.bankOfNumberFatherBride || ''}
+                                                            type="date"
+                                                            placeholder="Nhập ngày dạm ngõ"
+                                                            onChange={(e) => handleChangeDateOfEventInterrogation(e.target.value)}
+                                                            value={value.timeAndLocationOfInterrogation?.dateOfEventInterrogation || ''}
                                                         />
                                                     </div>
                                                 </CCol>
                                                 <CCol md={4} className="form-input">
-                                                    <img src={value.informationOfBride.qrCodeFatherBrideLink} />
+                                                    <div className='block_input'>
+                                                        <CFormLabel htmlFor="inputSearchCuser">Thời gian ăn hỏi</CFormLabel>
+                                                        <CFormInput
+                                                            name="name"
+                                                            type="time"
+                                                            placeholder="Nhập thời gian"
+                                                            onChange={(e) => handleChangeTimeOfEventInterrogation(e.target.value)}
+                                                            value={value.timeAndLocationOfInterrogation?.timeOfEventInterrogation || ''}
+                                                        />
+                                                    </div>
                                                 </CCol>
-                                                <hr />
+                                                <CCol md={12} className="form-input">
+                                                    <div className='block_input'>
+                                                        <CFormLabel htmlFor="inputSearchCuser">Địa điểm ăn hỏi</CFormLabel>
+                                                        <CFormInput
+                                                            name="name"
+                                                            type="text"
+                                                            placeholder="Nhập địa điểm"
+                                                            onChange={(e) => handleChangeLocationOfInterrogation(e.target.value)}
+                                                            value={value.timeAndLocationOfInterrogation?.locationOfInterrogation || ''}
+                                                        />
+                                                    </div>
+                                                </CCol>
                                             </div>
-
-                                            <div className='row'>
-                                                <CCol md={4} className="form-input">
-                                                    <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Tên Mẹ</CFormLabel>
-                                                        <CFormInput
-                                                            name="name"
-                                                            type="text"
-                                                            placeholder="Nhập tên mẹ"
-                                                            onChange={(e) => handleChangeMotherNameOfBride(e.target.value)}
-                                                            value={value.informationOfBride.motherNameOfBride || ''}
-                                                        />
-                                                    </div>
-                                                    <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Số điện thoại</CFormLabel>
-                                                        <CFormInput
-                                                            name="name"
-                                                            type="text"
-                                                            placeholder="Nhập số điện thoại"
-                                                            onChange={(e) => handleChangePhoneNumberOfMotherBride(e.target.value)}
-                                                            value={value.informationOfBride.phoneNumberOfMotherBride || ''}
-                                                        />
-                                                    </div>
-                                                    <div className='block_input'>
-                                                        <CFormCheck
-                                                            aria-label="Default select example"
-                                                            name="isPayedSearch"
-                                                            defaultChecked={value.informationOfBride?.isGoneMotherOfBride}
-                                                            onChange={onSellectIsGoneMotherOfBride}
-                                                            style={{ marginRight: 10 }}
-                                                        />
-
-                                                        <CFormLabel htmlFor="inputSearchCuser">Đã mất </CFormLabel>
-
-                                                    </div>
-                                                </CCol>
-                                                <CCol md={4} className="form-input">
-
-                                                    <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Tên ngân hàng</CFormLabel>
-                                                        <CFormInput
-                                                            name="name"
-                                                            type="text"
-                                                            id="inputSearchCuser"
-                                                            placeholder="Nhập tên ngân hàng"
-                                                            onChange={(e) => handleChangeNameBankOfMotherBride(e.target.value)}
-                                                            value={value.informationOfBride.nameBankOfMotherBride || ''}
-                                                        />
-                                                    </div>
-                                                    <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Chủ tài khoản</CFormLabel>
-                                                        <CFormInput
-                                                            name="name"
-                                                            type="text"
-                                                            placeholder="Nhập chủ tài khoản"
-                                                            onChange={(e) => handleChangeOwnerBankOfMotherBride(e.target.value)}
-                                                            value={value.informationOfBride.ownerBankOfMotherBride || ''}
-                                                        />
-                                                    </div>
-                                                    <div className='block_input'>
-                                                        <CFormLabel htmlFor="inputSearchCuser">Số tài khoản</CFormLabel>
-                                                        <CFormInput
-                                                            name="name"
-                                                            type="text"
-                                                            placeholder="Nhập số tài khoản"
-                                                            onChange={(e) => handleChangeBankOfNumberMotherBride(e.target.value)}
-                                                            value={value.informationOfBride.bankOfNumberMotherBride || ''}
-                                                        />
-                                                    </div>
-                                                </CCol>
-                                                <CCol md={4} className="form-input">
-                                                    <img src={value.informationOfBride.qrCodeMotherBrideLink} />
-                                                </CCol>
-                                                <hr />
-                                            </div>
-
                                         </CForm>
                                     </CAccordionBody>
                                 </CAccordionItem>
                             </CAccordion>
                         </div>
+
                     </div>
                     <br />
                     <CCol md={12}>
