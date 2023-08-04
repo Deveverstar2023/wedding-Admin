@@ -163,3 +163,8 @@ export const data = {
   "isUseDamNgo": false,
   "isUseBanking": false
 }
+
+export const dataLocal = {
+  'album': [],
+  'albumlocal': []
+}

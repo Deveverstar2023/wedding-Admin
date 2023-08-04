@@ -342,7 +342,6 @@ export const CreateNotification = async ({ title, description, created }) => {
       created: created,
       isNotification: 1
     })
-    console.log(resp)
     return resp.data.data
   } catch (error) {
     throw new Error(error)
@@ -459,7 +458,16 @@ export const ExportUser = async () => {
     throw new Error(error)
   }
 }
-
+export const uploadImage = (imageFile) => {
+  const formData = new FormData()
+  formData.append('files', imageFile)
+  return customFetch.post('/upload-images', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Access-Control-Allow-Origin': '*'
+    },
+  })
+}
 // const del = async (url, data, config) => {
 //   try {
 //       const headers = {

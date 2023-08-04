@@ -16,8 +16,9 @@ import {
     CSpinner
 } from '@coreui/react'
 import { useParams } from 'react-router-dom'
-import { UpdateInvitationPage, getDetailsInvitations } from 'src/utils/axios'
-import { data } from 'src/common/value'
+import { UpdateInvitationPage, customFetch, getDetailsInvitations, uploadImage } from 'src/utils/axios'
+import { data, dataLocal } from 'src/common/value'
+import { ImageUpload } from 'src/components/imageUpload'
 
 const DetailsInvitation = () => {
 
@@ -27,7 +28,29 @@ const DetailsInvitation = () => {
 
     const [value, setValue] = useState(data)
 
+    const [itemLocal] = useState(dataLocal)
+
     const [isDisplayCountDown, setIsDisplayCountDown] = useState(false)
+
+    const [imagesCover, setImagesCover] = useState([])
+    const [imagesCoverURL, setImagesCoverURL] = useState('')
+
+    const [imagesthumbnail, setImagesThumbnail] = useState([])
+    const [imagesthumbnailURL, setImagesThumbnailURL] = useState('')
+
+    const [album, setAlbum] = useState([])
+    const [albumlURL, setAlbumURL] = useState([])
+
+    const [dataBank, setDataBank] = useState([])
+
+    const [imagesQrGroom, setImagesQrGroom] = useState([])
+    const [imagesQrGroomFather, setImagesQrGroomFather] = useState([])
+    const [imagesQrGroomMother, setImagesQrGroomMother] = useState([])
+    const [imagesQrBride, setImagesQrBride] = useState([])
+    const [imagesQrBrideFather, setImagesQrBrideFather] = useState([])
+    const [imagesQrBrideMother, setImagesQrBrideMother] = useState([])
+
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
 
@@ -39,15 +62,198 @@ const DetailsInvitation = () => {
                 })
                 console.log(resp)
                 setIsDisplayCountDown(resp.timeAndLocationOfWedding.isDisplayCountDown)
+                setImagesCoverURL(resp.coverImage)
+                setImagesThumbnailURL(resp.thumbnailImage)
+                setAlbumURL(resp.album)
                 setValue(resp)
+                itemLocal.album = resp.album
                 setIsLoading(false)
             } catch (error) {
                 console.log(error)
             }
         }
-
         getDetails()
 
+    }, [])
+
+    useEffect(() => {
+
+        const asyncListBank = async () => {
+            const response = await customFetch.get('https://api.vietqr.io/v2/banks');
+            setDataBank(response.data.data)
+        };
+        asyncListBank();
+
+    }, [])
+
+    const onChangeCoverImage = (imageList) => {
+        setImagesCover(imageList)
+        if (imageList.length > 0) {
+            imageList.slice(-1).map(function (item) {
+                return uploadImage(item.file)
+                    .then((response) => {
+                        value.coverImage = response.data.data
+                    })
+                    .catch((error) => {
+                        toast.error(error)
+                    })
+            })
+        }
+    }
+
+    const onChangeThumbnail = (imageList) => {
+        setImagesThumbnail(imageList)
+        if (imageList.length > 0) {
+            imageList.slice(-1).map(function (item) {
+                return uploadImage(item.file)
+                    .then((response) => {
+                        value.thumbnailImage = response.data.data
+                    })
+                    .catch((error) => {
+                        toast.error(error)
+                    })
+            })
+        }
+    }
+
+    const onChangeAlbum = async (imageList) => {
+        setAlbum(imageList);
+        if (itemLocal.albumlocal.length === 0) {
+            itemLocal.albumlocal = itemLocal.album
+        }
+        itemLocal.album = []
+        const totalSize = imageList.reduce((accumulator, image) => accumulator + image.file.size, 0);
+
+        if (imageList.length > 0) {
+            if (totalSize < 900971520) {
+                try {
+                    await processImageList(imageList, 0);
+                } catch (error) {
+                    toast.error(error);
+                }
+            } else {
+                toast.warning('Quá tải dung lượng, xin hãy bỏ bớt ảnh', {
+                    autoClose: 1000
+                });
+            }
+        }
+    };
+
+    const processImageList = async (imageList, index) => {
+        if (index >= imageList.length) {
+            // Khi đã xử lý xong tất cả các phần tử trong danh sách, tiến hành các thao tác sau
+            setLoading(false);
+            return;
+        }
+
+        const imageUrl = imageList[index];
+
+        setLoading(true);
+        try {
+            const response = await uploadImage(imageUrl.file);
+            itemLocal.album.push(response.data.data);
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+            toast.error(error);
+        }
+
+        // Gọi đệ quy để xử lý phần tử tiếp theo sau khi đã hoàn thành phần tử hiện tại
+        await processImageList(imageList, index + 1);
+    };
+
+    const onChangeBankGroom = (imageList) => {
+        setImagesQrGroom(imageList)
+        if (imageList.length > 0) {
+            imageList.slice(-1).map(function (item) {
+                return uploadImage(item.file)
+                    .then((response) => {
+                        value.informationOfGroom.qrCodeGroomLink = response.data.data
+                    })
+                    .catch((error) => {
+                        toast.error(error)
+                    })
+            })
+        }
+    }
+
+    const onChangeBankFatherGroom = (imageList) => {
+        setImagesQrGroomFather(imageList)
+        if (imageList.length > 0) {
+            imageList.slice(-1).map(function (item) {
+                return uploadImage(item.file)
+                    .then((response) => {
+                        value.informationOfGroom.qrCodeFatherGroomLink = response.data.data
+                    })
+                    .catch((error) => {
+                        toast.error(error)
+                    })
+            })
+        }
+    }
+
+    const onChangeBankMotherGroom = (imageList) => {
+        setImagesQrGroomMother(imageList)
+        if (imageList.length > 0) {
+            imageList.slice(-1).map(function (item) {
+                return uploadImage(item.file)
+                    .then((response) => {
+                        value.informationOfGroom.qrCodeMotherGroomLink = response.data.data
+                    })
+                    .catch((error) => {
+                        toast.error(error)
+                    })
+            })
+        }
+    }
+
+    const onChangeBankBride = (imageList) => {
+        setImagesQrBride(imageList)
+        if (imageList.length > 0) {
+            imageList.slice(-1).map(function (item) {
+                return uploadImage(item.file)
+                    .then((response) => {
+                        value.informationOfBride.qrCodeBrideLink = response.data.data
+                    })
+                    .catch((error) => {
+                        toast.error(error)
+                    })
+            })
+        }
+    }
+
+    const onChangeBankFatherBride = (imageList) => {
+        setImagesQrBrideFather(imageList)
+        if (imageList.length > 0) {
+            imageList.slice(-1).map(function (item) {
+                return uploadImage(item.file)
+                    .then((response) => {
+                        value.informationOfBride.qrCodeFatherBrideLink = response.data.data
+                    })
+                    .catch((error) => {
+                        toast.error(error)
+                    })
+            })
+        }
+    }
+
+    const onChangeBankMotherBride = (imageList) => {
+        setImagesQrBrideMother(imageList)
+        if (imageList.length > 0) {
+            imageList.slice(-1).map(function (item) {
+                return uploadImage(item.file)
+                    .then((response) => {
+                        value.informationOfBride.qrCodeMotherBrideLink = response.data.data
+                    })
+                    .catch((error) => {
+                        toast.error(error)
+                    })
+            })
+        }
+    }
+
+    const onSortEnd = useCallback((oldIndex, newIndex) => {
+        setAlbum((array) => arrayMove(array, oldIndex, newIndex))
     }, [])
 
     //handle information Groom
@@ -642,6 +848,87 @@ const DetailsInvitation = () => {
         value.eventOfProgram.timeToMusic = e
     }
 
+    //other 
+    const handleChangeVideoLink = (e) => {
+        setValue((prevValues) => ({
+            ...prevValues,
+            videoLink: e,
+        }))
+        value.videoLink = e
+    }
+
+    const hanldeChangeIsUseVideo = (e) => {
+        setValue((prevValues) => ({
+            ...prevValues,
+            isUseVideo: e,
+        }))
+        value.isUseVideo = e
+    }
+
+    const hanldeChangeIsUseGuestBook = (e) => {
+        setValue((prevValues) => ({
+            ...prevValues,
+            isUseGuestBook: e,
+        }))
+        value.isUseGuestBook = e
+    }
+
+    const hanldeChangeIsUseConfirm = (e) => {
+        setValue((prevValues) => ({
+            ...prevValues,
+            isUseConfirm: e,
+        }))
+        value.isUseConfirm = e
+    }
+
+    const handleChangePassword = (e) => {
+        setValue((prevValues) => ({
+            ...prevValues,
+            password: e,
+        }))
+        value.password = e
+    }
+
+    const handleChangeNote = (e) => {
+        setValue((prevValues) => ({
+            ...prevValues,
+            note: e,
+        }))
+        value.note = e
+    }
+
+    const handleChangeSong = (e) => {
+        setValue((prevValues) => ({
+            ...prevValues,
+            song: e,
+        }))
+        value.song = e
+    }
+
+    const renderBank = useCallback((itemlocal, onChangeText) => {
+
+        return <div className='fullwidth_input_colum'>
+            <div className='single_hor_input man_inputStyle' style={{ marginBottom: 10 }}>
+                <select
+                    className='form_sellect_control form-control'
+                    name='form_sellect_stt'
+                    onChange={onChangeText}
+                    style={{ maxWidth: 'unset' }}
+                >
+                    <option value={itemlocal ? itemlocal : 'Chọn ngân hàng'}>{itemlocal ? itemlocal : 'Chọn ngân hàng'}</option>
+                    {
+                        dataBank.map(function (item, index) {
+
+                            return <option key={index} value={item?.amount}>{item?.name} </option>
+
+                        })
+                    }
+                </select>
+            </div>
+        </div>
+
+    }, [dataBank])
+
     const handleChange = useCallback(async () => {
 
         const jsonData = {
@@ -664,10 +951,10 @@ const DetailsInvitation = () => {
                 "nameBankOfMotherGroom": value.informationOfGroom.nameBankOfMotherGroom,
                 "ownerBankOfMotherGroom": value.informationOfGroom.ownerBankOfMotherGroom,
                 "bankOfNumberMotherGroom": value.informationOfGroom.bankOfNumberMotherGroom,
-                "qrCodeMotherGroomLink": value.informationOfBride.qrCodeMotherBrideLink,
+                "qrCodeMotherGroomLink": value.informationOfGroom.qrCodeMotherGroomLink,
                 "phoneNumberOfFatherGroom": value.informationOfGroom.phoneNumberOfFatherGroom,
                 "phoneNumberOfGroom": value.informationOfGroom.phoneNumberOfGroom,
-                "phoneNumberOfMotherGroom": value.informationOfBride.phoneNumberOfMotherBride,
+                "phoneNumberOfMotherGroom": value.informationOfGroom.phoneNumberOfMotherGroom,
             },
             "informationOfBride": {
                 "name": value.informationOfBride.name,
@@ -749,7 +1036,7 @@ const DetailsInvitation = () => {
             "thumbnailImage": value.thumbnailImage,
             "effectImage": value.effectImage,
             "contentOfInvitation": value.contentOfInvitation,
-            "album": value.album,
+            "album": [...new Set(itemLocal.album.concat(itemLocal.albumlocal))],
             "videoLink": value.videoLink,
             "song": value.song,
             "isUseConfirm": value.isUseConfirm,
@@ -762,7 +1049,7 @@ const DetailsInvitation = () => {
             "isUseEvent": value.isUseEvent,
             "isUseDamNgo": value.isUseDamNgo,
             "isUseBanking": value.isUseBanking,
-            "totalAmount": value.totalAmount,
+            "totalAmount": value.totalAmount
         }
 
         const resp = await UpdateInvitationPage({ data: jsonData })
@@ -777,6 +1064,66 @@ const DetailsInvitation = () => {
             </div>
             <div className="row flex-col">
                 <div className="col-xs-12 col-sm-12">
+                    <CAccordion className="accordion-normal">
+                        <CAccordionItem itemKey={1}>
+                            <CAccordionHeader>
+                                <h5>Ảnh và Album</h5>
+                            </CAccordionHeader>
+                            <CAccordionBody>
+                                <CForm className=" g-8">
+                                    <div className='row'>
+                                        <CCol md={7} className="form-input img_upload_box">
+                                            <CFormLabel htmlFor="inputSearchCuser">Ảnh bìa</CFormLabel>
+                                            <ImageUpload
+                                                maxnumber={1}
+                                                images={imagesCover}
+                                                maxW={'100%'}
+                                                height={500}
+                                                title={'Thêm một hình ảnh'}
+                                                desc={'(Kích thước khuyến nghị 1024x768px)'}
+                                                onChange={onChangeCoverImage}
+                                                onSortEnd={onSortEnd}
+                                                idCreateRespon={id}
+                                                urlLocal={imagesCoverURL}
+
+                                            />
+                                        </CCol>
+                                        <CCol md={5} className="form-input img_upload_box">
+                                            <CFormLabel htmlFor="inputSearchCuser">Ảnh thumbnail</CFormLabel>
+                                            <ImageUpload
+                                                maxnumber={1}
+                                                images={imagesthumbnail}
+                                                maxW={'100%'}
+                                                height={500}
+                                                title={'Thêm một hình ảnh'}
+                                                desc={'(Kích thước khuyến nghị 1024x1024px)'}
+                                                onChange={onChangeThumbnail}
+                                                onSortEnd={onSortEnd}
+                                                idCreateRespon={id}
+                                                urlLocal={imagesthumbnailURL}
+
+                                            />
+                                        </CCol>
+                                        <CCol md={12} className="form-input list_album_uploads">
+                                            <CFormLabel htmlFor="inputSearchCuser">Ảnh Album</CFormLabel>
+                                            <ImageUpload
+                                                images={album}
+                                                maxW={'100%'}
+                                                height={150}
+                                                title={'Thêm một hình ảnh'}
+                                                onChange={onChangeAlbum}
+                                                onSortEnd={onSortEnd}
+                                                idCreateRespon={id}
+                                                urlLocal={albumlURL}
+                                                laoding={loading}
+                                                maxnumber={15}
+                                            />
+                                        </CCol>
+                                    </div>
+                                </CForm>
+                            </CAccordionBody>
+                        </CAccordionItem>
+                    </CAccordion>
                     <CAccordion className="accordion-normal">
                         <CAccordionItem itemKey={1}>
                             <CAccordionHeader>
@@ -813,6 +1160,7 @@ const DetailsInvitation = () => {
                                                     name="isPayedSearch"
                                                     onChange={(e) => setSellectGroom(e.target.value)}
                                                 >
+                                                    <option value={value.informationOfGroom.isOldBrotherGroom}>{value.informationOfGroom.isOldBrotherGroom ? 'Vai vế: Trưởng nam': 'Vai vế: Thứ'}</option>
                                                     <option value={true}>Trưởng nam</option>
                                                     <option value={false} >Thứ</option>
                                                 </CFormSelect>
@@ -823,13 +1171,7 @@ const DetailsInvitation = () => {
 
                                             <div className='block_input'>
                                                 <CFormLabel htmlFor="inputSearchCuser">Tên ngân hàng</CFormLabel>
-                                                <CFormInput
-                                                    name="name"
-                                                    type="text"
-                                                    placeholder="Nhập tên ngân hàng"
-                                                    onChange={(e) => handleChangeNameBankGroom(e.target.value)}
-                                                    value={value.informationOfGroom.nameBankOfGroom || ''}
-                                                />
+                                                {renderBank(value.informationOfGroom.nameBankOfGroom, (e) => handleChangeNameBankGroom(e.target.value))}
                                             </div>
                                             <div className='block_input'>
                                                 <CFormLabel htmlFor="inputSearchCuser">Chủ tài khoản</CFormLabel>
@@ -854,8 +1196,19 @@ const DetailsInvitation = () => {
                                         </CCol>
                                         <CCol md={4} className="form-input">
 
-                                            <img src={value.informationOfGroom.qrCodeGroomLink} />
+                                            <ImageUpload
+                                                maxnumber={1}
+                                                images={imagesQrGroom}
+                                                maxW={'100%'}
+                                                height={250}
+                                                title={'Thêm một hình ảnh'}
+                                                desc={'(Kích thước khuyến nghị 1024x768px)'}
+                                                onChange={onChangeBankGroom}
+                                                onSortEnd={onSortEnd}
+                                                idCreateRespon={id}
+                                                urlLocal={value.informationOfGroom.qrCodeGroomLink}
 
+                                            />
 
                                         </CCol>
                                         <hr />
@@ -899,13 +1252,7 @@ const DetailsInvitation = () => {
 
                                             <div className='block_input'>
                                                 <CFormLabel htmlFor="inputSearchCuser">Tên ngân hàng</CFormLabel>
-                                                <CFormInput
-                                                    name="name"
-                                                    type="text"
-                                                    placeholder="Nhập tên ngân hàng"
-                                                    onChange={(e) => handleChangeNameBankFatherGroom(e.target.value)}
-                                                    value={value.informationOfGroom.nameBankOfFatherGroom || ''}
-                                                />
+                                                {renderBank(value.informationOfGroom.nameBankOfFatherGroom, (e) => handleChangeNameBankFatherGroom(e.target.value))}
                                             </div>
                                             <div className='block_input'>
                                                 <CFormLabel htmlFor="inputSearchCuser">Chủ tài khoản</CFormLabel>
@@ -929,7 +1276,19 @@ const DetailsInvitation = () => {
                                             </div>
                                         </CCol>
                                         <CCol md={4} className="form-input">
-                                            <img src={value.informationOfGroom.qrCodeFatherGroomLink} />
+                                            <ImageUpload
+                                                maxnumber={1}
+                                                images={imagesQrGroomFather}
+                                                maxW={'100%'}
+                                                height={250}
+                                                title={'Thêm một hình ảnh'}
+                                                desc={'(Kích thước khuyến nghị 1024x768px)'}
+                                                onChange={onChangeBankFatherGroom}
+                                                onSortEnd={onSortEnd}
+                                                idCreateRespon={id}
+                                                urlLocal={value.informationOfGroom.qrCodeFatherGroomLink}
+
+                                            />
                                         </CCol>
                                         <hr />
                                     </div>
@@ -973,14 +1332,7 @@ const DetailsInvitation = () => {
 
                                             <div className='block_input'>
                                                 <CFormLabel htmlFor="inputSearchCuser">Tên ngân hàng</CFormLabel>
-                                                <CFormInput
-                                                    name="name"
-                                                    type="text"
-                                                    id="inputSearchCuser"
-                                                    placeholder="Nhập tên ngân hàng"
-                                                    onChange={(e) => handleChangeNameBankMotherGroom(e.target.value)}
-                                                    value={value.informationOfGroom.nameBankOfMotherGroom || ''}
-                                                />
+                                                {renderBank(value.informationOfGroom.nameBankOfMotherGroom, (e) => handleChangeNameBankMotherGroom(e.target.value))}
                                             </div>
                                             <div className='block_input'>
                                                 <CFormLabel htmlFor="inputSearchCuser">Chủ tài khoản</CFormLabel>
@@ -1004,7 +1356,19 @@ const DetailsInvitation = () => {
                                             </div>
                                         </CCol>
                                         <CCol md={4} className="form-input">
-                                            <img src={value.informationOfGroom.qrCodeMotherGroomLink} />
+                                            <ImageUpload
+                                                maxnumber={1}
+                                                images={imagesQrGroomMother}
+                                                maxW={'100%'}
+                                                height={250}
+                                                title={'Thêm một hình ảnh'}
+                                                desc={'(Kích thước khuyến nghị 1024x768px)'}
+                                                onChange={onChangeBankMotherGroom}
+                                                onSortEnd={onSortEnd}
+                                                idCreateRespon={id}
+                                                urlLocal={value.informationOfGroom.qrCodeMotherGroomLink}
+
+                                            />
                                         </CCol>
                                         <hr />
                                     </div>
@@ -1049,6 +1413,7 @@ const DetailsInvitation = () => {
                                                     name="isPayedSearch"
                                                     onChange={(e) => setSellectBride(e.target.value)}
                                                 >
+                                                    <option value={value.informationOfBride.isOldBrotherBride}>{value.informationOfBride.isOldBrotherBride ? 'Vai vế: Trưởng nữ': 'Vai vế: Thứ'}</option>
                                                     <option value={true}>Trưởng nữ</option>
                                                     <option value={false} >Thứ</option>
                                                 </CFormSelect>
@@ -1059,13 +1424,7 @@ const DetailsInvitation = () => {
 
                                             <div className='block_input'>
                                                 <CFormLabel htmlFor="inputSearchCuser">Tên ngân hàng</CFormLabel>
-                                                <CFormInput
-                                                    name="name"
-                                                    type="text"
-                                                    placeholder="Nhập tên ngân hàng"
-                                                    onChange={(e) => handleChangeNameBankOfBride(e.target.value)}
-                                                    value={value.informationOfBride.nameBankOfBride || ''}
-                                                />
+                                                {renderBank(value.informationOfBride.nameBankOfBride, (e) => handleChangeNameBankOfBride(e.target.value))}
                                             </div>
                                             <div className='block_input'>
                                                 <CFormLabel htmlFor="inputSearchCuser">Chủ tài khoản</CFormLabel>
@@ -1090,7 +1449,19 @@ const DetailsInvitation = () => {
                                         </CCol>
                                         <CCol md={4} className="form-input">
 
-                                            <img src={value.informationOfBride.qrCodeBrideLink} />
+                                            <ImageUpload
+                                                maxnumber={1}
+                                                images={imagesQrBride}
+                                                maxW={'100%'}
+                                                height={250}
+                                                title={'Thêm một hình ảnh'}
+                                                desc={'(Kích thước khuyến nghị 1024x768px)'}
+                                                onChange={onChangeBankBride}
+                                                onSortEnd={onSortEnd}
+                                                idCreateRespon={id}
+                                                urlLocal={value.informationOfBride.qrCodeBrideLink}
+
+                                            />
 
 
                                         </CCol>
@@ -1135,13 +1506,7 @@ const DetailsInvitation = () => {
 
                                             <div className='block_input'>
                                                 <CFormLabel htmlFor="inputSearchCuser">Tên ngân hàng</CFormLabel>
-                                                <CFormInput
-                                                    name="name"
-                                                    type="text"
-                                                    placeholder="Nhập tên ngân hàng"
-                                                    onChange={(e) => handleChangeNameBankOfFatherBride(e.target.value)}
-                                                    value={value.informationOfBride.nameBankOfFatherBride || ''}
-                                                />
+                                                {renderBank(value.informationOfBride.nameBankOfFatherBride, (e) => handleChangeNameBankOfFatherBride(e.target.value))}
                                             </div>
                                             <div className='block_input'>
                                                 <CFormLabel htmlFor="inputSearchCuser">Chủ tài khoản</CFormLabel>
@@ -1165,7 +1530,19 @@ const DetailsInvitation = () => {
                                             </div>
                                         </CCol>
                                         <CCol md={4} className="form-input">
-                                            <img src={value.informationOfBride.qrCodeFatherBrideLink} />
+                                            <ImageUpload
+                                                maxnumber={1}
+                                                images={imagesQrBrideFather}
+                                                maxW={'100%'}
+                                                height={250}
+                                                title={'Thêm một hình ảnh'}
+                                                desc={'(Kích thước khuyến nghị 1024x768px)'}
+                                                onChange={onChangeBankFatherBride}
+                                                onSortEnd={onSortEnd}
+                                                idCreateRespon={id}
+                                                urlLocal={value.informationOfBride.qrCodeFatherBrideLink}
+
+                                            />
                                         </CCol>
                                         <hr />
                                     </div>
@@ -1209,14 +1586,7 @@ const DetailsInvitation = () => {
 
                                             <div className='block_input'>
                                                 <CFormLabel htmlFor="inputSearchCuser">Tên ngân hàng</CFormLabel>
-                                                <CFormInput
-                                                    name="name"
-                                                    type="text"
-                                                    id="inputSearchCuser"
-                                                    placeholder="Nhập tên ngân hàng"
-                                                    onChange={(e) => handleChangeNameBankOfMotherBride(e.target.value)}
-                                                    value={value.informationOfBride.nameBankOfMotherBride || ''}
-                                                />
+                                                {renderBank(value.informationOfBride.nameBankOfMotherBride, (e) => handleChangeNameBankOfMotherBride(e.target.value))}
                                             </div>
                                             <div className='block_input'>
                                                 <CFormLabel htmlFor="inputSearchCuser">Chủ tài khoản</CFormLabel>
@@ -1240,7 +1610,19 @@ const DetailsInvitation = () => {
                                             </div>
                                         </CCol>
                                         <CCol md={4} className="form-input">
-                                            <img src={value.informationOfBride.qrCodeMotherBrideLink} />
+                                            <ImageUpload
+                                                maxnumber={1}
+                                                images={imagesQrBrideMother}
+                                                maxW={'100%'}
+                                                height={250}
+                                                title={'Thêm một hình ảnh'}
+                                                desc={'(Kích thước khuyến nghị 1024x768px)'}
+                                                onChange={onChangeBankMotherBride}
+                                                onSortEnd={onSortEnd}
+                                                idCreateRespon={id}
+                                                urlLocal={value.informationOfBride.qrCodeMotherBrideLink}
+
+                                            />
                                         </CCol>
                                         <hr />
                                     </div>
@@ -1532,6 +1914,110 @@ const DetailsInvitation = () => {
                                                             onChange={(e) => handleChangeLocationOfInterrogation(e.target.value)}
                                                             value={value.timeAndLocationOfInterrogation?.locationOfInterrogation || ''}
                                                         />
+                                                    </div>
+                                                </CCol>
+                                            </div>
+                                        </CForm>
+                                    </CAccordionBody>
+                                </CAccordionItem>
+                            </CAccordion>
+                            <CAccordion className="accordion-normal">
+                                <CAccordionItem itemKey={1}>
+                                    <CAccordionHeader>
+                                        <h5>Các tính năng khác</h5>
+                                    </CAccordionHeader>
+                                    <CAccordionBody>
+                                        <CForm className=" g-8">
+                                            <div className='row'>
+                                                <CCol md={12}>
+                                                    <div className='block_input'>
+                                                        <CFormLabel htmlFor="inputSearchCuser">Hiển thị video</CFormLabel>
+                                                        <div className='text_box'>
+
+                                                            <input
+                                                                type='checkbox'
+                                                                checked={value.isUseVideo}
+                                                                onChange={(e) => hanldeChangeIsUseVideo(e.target.checked)}
+                                                            />
+
+                                                        </div>
+                                                    </div>
+                                                </CCol>
+                                                <CCol md={8} className="form-input">
+                                                    <div className='block_input'>
+                                                        <CFormLabel htmlFor="inputSearchCuser">Video</CFormLabel>
+                                                        <CFormInput
+                                                            name="name"
+                                                            type="text"
+                                                            placeholder="Nhập video"
+                                                            onChange={(e) => handleChangeVideoLink(e.target.value)}
+                                                            value={value.videoLink || ''}
+                                                        />
+                                                    </div>
+                                                </CCol>
+                                                <CCol md={4} className="form-input">
+                                                    <div className='block_input'>
+                                                        <CFormLabel htmlFor="inputSearchCuser">Âm nhạc</CFormLabel>
+                                                        <select className='form-control'>
+                                                            <option>1212</option>
+                                                        </select>
+                                                    </div>
+                                                </CCol>
+                                                <CCol md={12} className="form-input">
+                                                    <div className='block_input'>
+                                                        <CFormLabel htmlFor="inputSearchCuser">Lưu ý</CFormLabel>
+                                                        <CFormTextarea
+                                                            name="name"
+                                                            type="text"
+                                                            placeholder="Nhập lưu ý"
+                                                            value={value.note || ''}
+                                                            rows={4}
+                                                            onChange={(e) => handleChangeNote(e.target.value)}
+                                                        />
+                                                    </div>
+                                                </CCol>
+                                                <CCol md={6}>
+                                                    <div className='block_input'>
+                                                        <CFormLabel htmlFor="inputSearchCuser">Sử dụng tính năng Xác nhận tham dự</CFormLabel>
+                                                        <div className='text_box'>
+
+                                                            <input
+                                                                type='checkbox'
+                                                                checked={value.isUseConfirm}
+                                                                onChange={(e) => hanldeChangeIsUseConfirm(e.target.checked)}
+                                                            />
+
+                                                        </div>
+                                                    </div>
+                                                </CCol>
+                                                <CCol md={6}>
+                                                    <div className='block_input'>
+                                                        <CFormLabel htmlFor="inputSearchCuser">Sử dụng tính năng lưu bút</CFormLabel>
+                                                        <div className='text_box'>
+
+                                                            <input
+                                                                type='checkbox'
+                                                                checked={value.isUseGuestBook}
+                                                                onChange={(e) => hanldeChangeIsUseGuestBook(e.target.checked)}
+                                                            />
+
+                                                        </div>
+                                                    </div>
+                                                </CCol>
+                                                <CCol md={12}>
+                                                    <div className='block_input'>
+                                                        <CFormLabel htmlFor="inputSearchCuser">Mật khẩu</CFormLabel>
+                                                        <div className='text_box'>
+
+                                                            <CFormInput
+                                                                name="name"
+                                                                type="text"
+                                                                placeholder="Nhập mật khẩu"
+                                                                onChange={(e) => handleChangePassword(e.target.value)}
+                                                                value={value.password || ''}
+                                                            />
+
+                                                        </div>
                                                     </div>
                                                 </CCol>
                                             </div>
