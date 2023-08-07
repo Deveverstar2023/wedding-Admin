@@ -19,6 +19,7 @@ import { useParams } from 'react-router-dom'
 import { UpdateInvitationPage, customFetch, getDetailsInvitations, uploadImage } from 'src/utils/axios'
 import { data, dataLocal } from 'src/common/value'
 import { ImageUpload } from 'src/components/imageUpload'
+import { toast } from 'react-toastify'
 
 const DetailsInvitation = () => {
 
@@ -1051,9 +1052,11 @@ const DetailsInvitation = () => {
             "isUseBanking": value.isUseBanking,
             "totalAmount": value.totalAmount
         }
-
         const resp = await UpdateInvitationPage({ data: jsonData })
-        console.log(resp)
+        if (resp.data.errorCode === 0) {
+            toast.success('Cập nhật thông tin thành công')
+            window.location.reload()
+        }
     }, [isDisplayCountDown, value])
 
     return (
@@ -1160,7 +1163,7 @@ const DetailsInvitation = () => {
                                                     name="isPayedSearch"
                                                     onChange={(e) => setSellectGroom(e.target.value)}
                                                 >
-                                                    <option value={value.informationOfGroom.isOldBrotherGroom}>{value.informationOfGroom.isOldBrotherGroom ? 'Vai vế: Trưởng nam': 'Vai vế: Thứ'}</option>
+                                                    <option value={value.informationOfGroom.isOldBrotherGroom}>{value.informationOfGroom.isOldBrotherGroom ? 'Vai vế: Trưởng nam' : 'Vai vế: Thứ'}</option>
                                                     <option value={true}>Trưởng nam</option>
                                                     <option value={false} >Thứ</option>
                                                 </CFormSelect>
@@ -1413,7 +1416,7 @@ const DetailsInvitation = () => {
                                                     name="isPayedSearch"
                                                     onChange={(e) => setSellectBride(e.target.value)}
                                                 >
-                                                    <option value={value.informationOfBride.isOldBrotherBride}>{value.informationOfBride.isOldBrotherBride ? 'Vai vế: Trưởng nữ': 'Vai vế: Thứ'}</option>
+                                                    <option value={value.informationOfBride.isOldBrotherBride}>{value.informationOfBride.isOldBrotherBride ? 'Vai vế: Trưởng nữ' : 'Vai vế: Thứ'}</option>
                                                     <option value={true}>Trưởng nữ</option>
                                                     <option value={false} >Thứ</option>
                                                 </CFormSelect>
