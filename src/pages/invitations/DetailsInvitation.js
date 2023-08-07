@@ -1054,8 +1054,13 @@ const DetailsInvitation = () => {
         }
         const resp = await UpdateInvitationPage({ data: jsonData })
         if (resp.data.errorCode === 0) {
-            toast.success('Cập nhật thông tin thành công')
-            window.location.reload()
+            toast.success('Cập nhật thông tin thành công', {
+                autoClose: 1500,
+                hideProgressBar: true
+            })
+            setTimeout(() => {
+                window.location.reload()
+            }, 2000);
         }
     }, [isDisplayCountDown, value])
 
