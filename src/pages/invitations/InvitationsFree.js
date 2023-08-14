@@ -28,6 +28,7 @@ import { formatMoney } from 'src/utils/localStorage'
 import fileDownload from 'js-file-download'
 import CIcon from '@coreui/icons-react'
 import { cilPlus } from '@coreui/icons'
+import moment from 'moment'
 // import KolIcon from '../icons/everstarIcon/Kol'
 
 const initialSearchFields = {
@@ -81,6 +82,7 @@ const invitationsFree = () => {
                     pageSize: sizePerPage,
                     page: currentPage,
                 })
+                console.log(resp)
                 // update paginate after data fetching
                 const newPaginate = dataFetchingPaginate(paginate, resp.length)
                 setPaginate(newPaginate)
@@ -207,7 +209,7 @@ const invitationsFree = () => {
                             </CAccordionBody>
                         </CAccordionItem>
                     </CAccordion>
-                    <CTable align="middle " className="mb-0 border" hover responsive>
+                    <CTable align="middle" className="mb-0 border" hover responsive>
                         <CTableHead color="light">
                             <CTableRow>
                                 <CTableHeaderCell>Stt</CTableHeaderCell>
@@ -217,6 +219,8 @@ const invitationsFree = () => {
                                 <CTableHeaderCell className="text-center">Trạng thái</CTableHeaderCell>
                                 <CTableHeaderCell className="text-center">Dịch vụ</CTableHeaderCell>
                                 <CTableHeaderCell className="text-center">Tổng tiền</CTableHeaderCell>
+                                <CTableHeaderCell className="text-center">Ngày tạo</CTableHeaderCell>
+                                <CTableHeaderCell className="text-center">Ngày hết hạn</CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
@@ -236,6 +240,12 @@ const invitationsFree = () => {
                                     </CTableDataCell>
                                     <CTableDataCell className="text-center">
                                         <div>{formatMoney(item.totalAmount)}</div>
+                                    </CTableDataCell>
+                                    <CTableDataCell className="text-center">
+                                        <div>{moment(item.createTime).format("DD-MM-YYYY")}</div>
+                                    </CTableDataCell>
+                                    <CTableDataCell className="text-center">
+                                        <div>{moment(item.createTime).add(7, 'days').format("DD-MM-YYYY")}</div>
                                     </CTableDataCell>
                                 </CTableRow>
                             ))}
