@@ -6,6 +6,7 @@ const Invitations = React.lazy(() => import('./pages/invitations/Invitations'))
 const InvitationsFree = React.lazy(() => import('./pages/invitations/InvitationsFree'))
 const InvitationsPaid = React.lazy(() => import('./pages/invitations/InvitationsPaid'))
 const DetailsInvitation = React.lazy(() => import('./pages/invitations/DetailsInvitation'))
+const ListOder = React.lazy(() => import('./pages/invitations/ListOder'))
 const Packages = React.lazy(() => import('./pages/packages/PackageList'))
 const AnotherProduct = React.lazy(() => import('./pages/packages/AnotherProduct'))
 const SalseCode = React.lazy(() => import('./pages/saleCode/SaleCode'))
@@ -75,6 +76,7 @@ const routes = [
   { path: '/list-invitations-free', name: 'Danh sách thiệp', element: InvitationsFree },
   { path: '/list-invitations-paid', name: 'Danh sách thiệp', element: InvitationsPaid },
   { path: '/details-invitations/:id', name: 'Chi Tiết thiệp', element: DetailsInvitation },
+  { path: '/list-order-address', name: 'Danh sách địa chỉ', element: ListOder },
   { path: '/referral-code', name: 'Tạo mã giới thiệu', element: SalseCode },
   { path: '/list-referral-code', name: 'Mã giới thiệu', element: ListCode },
   { path: '/chi-tiet-ma-giam-gia/:id', name: 'Chi Tiết Mã giới thiệu', element: DetailsCode },

@@ -67,6 +67,11 @@ const _nav = [
         component: CNavItem,
         name: 'Thiệp đang oder',
         to: '/list-invitations-paid',
+      },
+      {
+        component: CNavItem,
+        name: 'Danh sách địa chỉ',
+        to: '/list-order-address',
       }
     ],
   },
