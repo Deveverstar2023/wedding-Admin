@@ -36,6 +36,7 @@ import { cilOptions } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { toast } from 'react-toastify'
 import { formatMoney } from 'src/utils/localStorage'
+import { useNavigate } from 'react-router-dom'
 // import KolIcon from '../icons/everstarIcon/Kol'
 
 const initialSearchFields = {
@@ -81,6 +82,9 @@ const invitationsPaid = () => {
     // handleResetPagination()
     setSearchFields({ ...initialSearchFields })
   }
+
+  const navigate = useNavigate()
+
   // handle fetching data --------------------------------
   useEffect(() => {
     const getUserList = async () => {
@@ -127,6 +131,8 @@ const invitationsPaid = () => {
     else if (value === 6) return 'Đang yêu cầu'
     else return 'Miễn phí'
   }, [])
+
+  const onNavigateDetails = (id) => navigate('/details-invitations/' + id)
 
   return (
     <div>
@@ -213,6 +219,7 @@ const invitationsPaid = () => {
             <CTableHead color="light">
               <CTableRow>
                 <CTableHeaderCell>Stt</CTableHeaderCell>
+                <CTableHeaderCell>Chức năng</CTableHeaderCell>
                 <CTableHeaderCell>Trạng thái</CTableHeaderCell>
                 <CTableHeaderCell>Mã thiệp</CTableHeaderCell>
                 <CTableHeaderCell>Email</CTableHeaderCell>
@@ -227,6 +234,20 @@ const invitationsPaid = () => {
               {usersList?.map((item, index) => (
                 <CTableRow v-for="item in tableItems" key={index}>
                   <CTableDataCell>{index + 1}</CTableDataCell>
+                  <CTableDataCell style={{ cursor: 'pointer' }}>
+                    <CDropdown>
+                      <CDropdownToggle>
+                        <CIcon icon={cilOptions} />
+                      </CDropdownToggle>
+                      <CDropdownMenu>
+                        <CDropdownItem
+                          onClick={() => onNavigateDetails(item?._id)}
+                        >
+                          Chỉnh sửa thiệp
+                        </CDropdownItem>
+                      </CDropdownMenu>
+                    </CDropdown>
+                  </CTableDataCell>
                   <CTableDataCell style={{ cursor: 'pointer' }}>
                     <CDropdown>
                       <CDropdownToggle>

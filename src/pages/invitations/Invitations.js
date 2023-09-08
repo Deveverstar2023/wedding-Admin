@@ -287,7 +287,7 @@ const CUsers = () => {
               {usersList?.map((item, index) => (
                 <CTableRow v-for="item in tableItems" key={index}>
                   <CTableDataCell>{index + 1}</CTableDataCell>
-                    <CTableDataCell style={{ cursor: 'pointer' }}>
+                  <CTableDataCell style={{ cursor: 'pointer' }}>
                     <CDropdown>
                       <CDropdownToggle>
                         <CIcon icon={cilOptions} />
@@ -311,7 +311,7 @@ const CUsers = () => {
                       </CDropdownMenu>
                     </CDropdown>
                   </CTableDataCell>
-                  
+
                   <CTableDataCell>{item._id}</CTableDataCell>
                   <CTableDataCell>
                     <div>{item.email}</div>
@@ -338,7 +338,7 @@ const CUsers = () => {
                   <CTableDataCell className="text-center">
                     <div>{item.OID}</div>
                   </CTableDataCell>
-                
+
                 </CTableRow>
               ))}
             </CTableBody>

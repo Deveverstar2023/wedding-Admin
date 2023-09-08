@@ -20,15 +20,20 @@ import {
     CAccordion,
     CAccordionBody,
     CAccordionHeader,
-    CAccordionItem
+    CAccordionItem,
+    CDropdown,
+    CDropdownToggle,
+    CDropdownMenu,
+    CDropdownItem
 } from '@coreui/react'
 import { ExportInvitation, getInvitations } from 'src/utils/axios'
 import { dataFetchingPaginate } from 'src/utils/dataFetchingPaginate'
 import { formatMoney } from 'src/utils/localStorage'
 import fileDownload from 'js-file-download'
 import CIcon from '@coreui/icons-react'
-import { cilPlus } from '@coreui/icons'
+import { cilOptions, cilPlus } from '@coreui/icons'
 import moment from 'moment'
+import { useNavigate } from 'react-router-dom'
 // import KolIcon from '../icons/everstarIcon/Kol'
 
 const initialSearchFields = {
@@ -72,6 +77,9 @@ const invitationsFree = () => {
         // handleResetPagination()
         setSearchFields({ ...initialSearchFields })
     }
+
+    const navigate = useNavigate()
+
     // handle fetching data --------------------------------
     useEffect(() => {
         const getUserList = async () => {
@@ -116,6 +124,8 @@ const invitationsFree = () => {
         })
         fileDownload(response.data, `Danh sách thiệp.xlsx`)
     }, [paginate])
+
+    const onNavigateDetails = (id) => navigate('/details-invitations/' + id)
 
     return (
         <div>
@@ -213,6 +223,7 @@ const invitationsFree = () => {
                         <CTableHead color="light">
                             <CTableRow>
                                 <CTableHeaderCell>Stt</CTableHeaderCell>
+                                <CTableHeaderCell>Chức năng</CTableHeaderCell>
                                 <CTableHeaderCell>Mã thiệp</CTableHeaderCell>
                                 <CTableHeaderCell>Email</CTableHeaderCell>
                                 <CTableHeaderCell>Số điện thoại</CTableHeaderCell>
@@ -227,6 +238,20 @@ const invitationsFree = () => {
                             {usersList?.map((item, index) => (
                                 <CTableRow v-for="item in tableItems" key={index}>
                                     <CTableDataCell>{index + 1}</CTableDataCell>
+                                    <CTableDataCell style={{ cursor: 'pointer' }}>
+                                        <CDropdown>
+                                            <CDropdownToggle>
+                                                <CIcon icon={cilOptions} />
+                                            </CDropdownToggle>
+                                            <CDropdownMenu>
+                                                <CDropdownItem
+                                                    onClick={() => onNavigateDetails(item?._id)}
+                                                >
+                                                    Chỉnh sửa thiệp
+                                                </CDropdownItem>
+                                            </CDropdownMenu>
+                                        </CDropdown>
+                                    </CTableDataCell>
                                     <CTableDataCell>{item._id}</CTableDataCell>
                                     <CTableDataCell>
                                         <div>{item.email}</div>
