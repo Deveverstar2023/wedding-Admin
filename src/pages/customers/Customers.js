@@ -32,6 +32,7 @@ import { dataFetchingPaginate } from 'src/utils/dataFetchingPaginate'
 import CIcon from '@coreui/icons-react'
 import { cilPlus } from '@coreui/icons'
 import fileDownload from 'js-file-download'
+import moment from 'moment'
 
 const initialSearchFields = {
   nameSearch: '',
@@ -82,6 +83,7 @@ const CUsers = () => {
           page: currentPage,
           keyword: filterName,
         })
+        console.log(resp)
         // update paginate after data fetching
         const newPaginate = dataFetchingPaginate(paginate, resp.length)
         setPaginate(newPaginate)
@@ -199,6 +201,7 @@ const CUsers = () => {
                 <CTableHeaderCell>email</CTableHeaderCell>
                 <CTableHeaderCell>Mã</CTableHeaderCell>
                 <CTableHeaderCell>Số điện thoại</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Ngày kích hoạt</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Trang thái</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
@@ -213,6 +216,7 @@ const CUsers = () => {
                   </CTableDataCell>
                   <CTableDataCell>{item._id}</CTableDataCell>
                   <CTableDataCell>+{item.phoneNumber}</CTableDataCell>
+                  <CTableDataCell className="text-center">{item.createdAt && moment(item.createdAt).format("DD-MM-YYYY")}</CTableDataCell>
                   <CTableDataCell className="text-center">{item.status}</CTableDataCell>
                 </CTableRow>
               ))}
