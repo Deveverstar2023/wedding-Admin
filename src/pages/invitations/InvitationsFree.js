@@ -270,7 +270,7 @@ const invitationsFree = () => {
                                         <div>{moment(item.createTime).format("DD-MM-YYYY")}</div>
                                     </CTableDataCell>
                                     <CTableDataCell className="text-center">
-                                        <div>{moment(item.createTime).add(7, 'days').format("DD-MM-YYYY")}</div>
+                                        <div>{moment(item.createTime).add(21, 'days').format("DD-MM-YYYY")}</div>
                                     </CTableDataCell>
                                 </CTableRow>
                             ))}
