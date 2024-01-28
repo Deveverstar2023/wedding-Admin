@@ -90,12 +90,11 @@ const invitationsFree = () => {
                     pageSize: sizePerPage,
                     page: currentPage,
                 })
-                console.log(resp)
                 // update paginate after data fetching
                 const newPaginate = dataFetchingPaginate(paginate, resp.length)
                 setPaginate(newPaginate)
                 // -------------------------------------
-                setUsersList(resp.filter(item => item.status != 1 && item.status != 6))
+                setUsersList(resp)
                 setIsLoading(false)
             } catch (error) {
                 console.log(error)
