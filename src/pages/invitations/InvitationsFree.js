@@ -89,6 +89,7 @@ const invitationsFree = () => {
                 const resp = await getInvitations({
                     pageSize: sizePerPage,
                     page: currentPage,
+                    notStatus: 1
                 })
                 console.log(resp)
                 // update paginate after data fetching

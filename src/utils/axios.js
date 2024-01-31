@@ -75,10 +75,10 @@ export const getSubPackages = async () => {
   }
 }
 //----------------------------------------------------------------
-export const getInvitations = async ({ keyword, page, pageSize }) => {
+export const getInvitations = async ({ keyword, page, pageSize, notStatus }) => {
   try {
     const resp = await customFetch.get(
-      `admin/list-all-invitation?page=${page}&pageSize=${pageSize}`,
+      `admin/list-all-invitation?page=${page}&pageSize=${pageSize}&notStatus=${notStatus}`,
     )
     return resp.data.data
   } catch (error) {
