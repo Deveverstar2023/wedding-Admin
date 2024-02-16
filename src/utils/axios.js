@@ -3,7 +3,7 @@ import axios from 'axios'
 import { getLocalAccessToken } from './localStorage'
 
 const TIMEOUT_API = 10000;
-const BaseUrl = 'https://api.cuoithoi.com.vn/api'
+const BaseUrl = 'http://localhost:3001/api'
 
 export const customFetch = axios.create({
   baseURL: BaseUrl,
@@ -429,6 +429,18 @@ export const ExtendsDate = async ({ id, extendsDate }) => {
     const resp = await customFetch.post('/extends-date-invitation', {
       _id: id,
       extendsDate: extendsDate
+    })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const editURL = async ({ id, url }) => {
+  try {
+    const resp = await customFetch.post('/set-url-invitation', {
+      _id: id,
+      url: url
     })
     return resp.data.data
   } catch (error) {

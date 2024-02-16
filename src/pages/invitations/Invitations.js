@@ -25,14 +25,11 @@ import {
   CDropdownToggle,
   CDropdown,
   CDropdownMenu,
-  CModal,
-  CModalFooter
-} from '@coreui/react'
-import { ExportInvitation, ExtendsDate, UpdateInvitation, getInvitations } from 'src/utils/axios'
+  CModal} from '@coreui/react'
+import { ExportInvitation, ExtendsDate, UpdateInvitation, editURL, getInvitations } from 'src/utils/axios'
 import { dataFetchingPaginate } from 'src/utils/dataFetchingPaginate'
 import { formatMoney } from 'src/utils/localStorage'
 import moment from "moment";
-import { getSubPackages } from 'src/utils/axios'
 import { cilOptions, cilPlus } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import fileDownload from 'js-file-download'
@@ -60,7 +57,9 @@ const CUsers = () => {
   const [filterName, setFilterName] = useState('')
   const [searchFields, setSearchFields] = useState(initialSearchFields)
   const [isModalActive, setIsModalActive] = useState(false)
+  const [isModalActiveURL, setIsModalActiveURL] = useState(false)
   const [isModalActiveStatus, setIsModalActiveStatus] = useState(false)
+  const [url, setURL] = useState(0)
   const [addCount, setAddCount] = useState(0)
   const [sellectStatus, setSellectStatus] = useState('3')
   const [id, setId] = useState(0)
@@ -138,6 +137,12 @@ const CUsers = () => {
     setId(id)
   }
 
+  const setModalActiveURL = (id, u) => {
+    setIsModalActiveURL(true)
+    setURL(u)
+    setId(id)
+  }
+
   const setModalActiveStatus = (id) => {
     setIsModalActiveStatus(true)
     setId(id)
@@ -150,6 +155,15 @@ const CUsers = () => {
     })
     setIsModalActive(false)
   }
+
+  const handleSubmitURL = async () => {
+    const resp = await editURL({
+      id: id,
+      url: url
+    })
+    setIsModalActiveURL(false)
+  }
+
   const handleChangeStatus = useCallback(async () => {
 
     await UpdateInvitation({
@@ -272,6 +286,7 @@ const CUsers = () => {
                 <CTableHeaderCell>Stt</CTableHeaderCell>
                 <CTableHeaderCell>Chức năng</CTableHeaderCell>
                 <CTableHeaderCell>Invitation Id</CTableHeaderCell>
+                <CTableHeaderCell>URL</CTableHeaderCell>
                 <CTableHeaderCell>Email</CTableHeaderCell>
                 <CTableHeaderCell>Phone number</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Trạng thái</CTableHeaderCell>
@@ -299,6 +314,11 @@ const CUsers = () => {
                           Thêm ngày hoạt động
                         </CDropdownItem>
                         <CDropdownItem
+                          onClick={() => setModalActiveURL(item?._id, item?.url ? item?.url : item?._id)}
+                        >
+                          Chỉnh sửa URL
+                        </CDropdownItem>
+                        <CDropdownItem
                           onClick={() => setModalActiveStatus(item?._id)}
                         >
                           Chỉnh sửa trạng thái
@@ -313,6 +333,7 @@ const CUsers = () => {
                   </CTableDataCell>
 
                   <CTableDataCell>{item._id}</CTableDataCell>
+                  <CTableDataCell>{item.url ? item.url : item._id}</CTableDataCell>
                   <CTableDataCell>
                     <div>{item.email}</div>
                   </CTableDataCell>
@@ -371,6 +392,27 @@ const CUsers = () => {
                 Đóng
               </CButton>
               <CButton color="primary" onClick={handleSubmitProduct}>
+                Thêm
+              </CButton>
+            </div>
+          </form>
+        </CModal>
+        <CModal visible={isModalActiveURL} onClose={() => setIsModalActiveURL(false)} alignment="center">
+          <form className=" p-4" onSubmit={handleSubmitURL}>
+            <CFormLabel className=" font-bold">URL</CFormLabel>
+            <div className='form' style={{ display: 'flex', gap: 10 }}>
+              <CFormInput
+                name="name"
+                placeholder="Nhập URL"
+                aria-label="packageName"
+                value={url}
+                onChange={(e) => setURL(e.target.value)}
+                style={{ flex: 1 }}
+              />
+              <CButton color="secondary" onClick={() => setIsModalActiveURL(false)}>
+                Đóng
+              </CButton>
+              <CButton color="primary" onClick={handleSubmitURL}>
                 Thêm
               </CButton>
             </div>
