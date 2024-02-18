@@ -157,11 +157,23 @@ const CUsers = () => {
   }
 
   const handleSubmitURL = async () => {
-    const resp = await editURL({
+    await editURL({
       id: id,
       url: url
     })
-    setIsModalActiveURL(false)
+    try {
+      setIsModalActiveURL(false)
+      const { sizePerPage, currentPage } = paginate
+      const resp = await getInvitations({
+        pageSize: sizePerPage,
+        page: currentPage,
+      })
+      const newPaginate = dataFetchingPaginate(paginate, resp.length)
+      setPaginate(newPaginate)
+      setUsersList(resp.filter(item => item.status === 1))
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const handleChangeStatus = useCallback(async () => {
