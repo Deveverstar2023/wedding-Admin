@@ -3,7 +3,7 @@ import axios from 'axios'
 import { getLocalAccessToken } from './localStorage'
 
 const TIMEOUT_API = 10000;
-const BaseUrl = 'http://localhost:3001/api'
+const BaseUrl = 'https://api.cuoithoi.com.vn/api'
 
 export const customFetch = axios.create({
   baseURL: BaseUrl,
