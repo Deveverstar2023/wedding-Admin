@@ -78,7 +78,7 @@ export const getSubPackages = async () => {
 export const getInvitations = async ({ keyword, page, pageSize, notStatus }) => {
   try {
     const resp = await customFetch.get(
-      `admin/list-all-invitation?page=${page}&pageSize=${pageSize}&notStatus=${notStatus}`,
+      `admin/list-all-invitation-with-file-stat?page=${page}&pageSize=${pageSize}&notStatus=${notStatus}`,
     )
     return resp.data.data
   } catch (error) {
@@ -441,6 +441,19 @@ export const editURL = async ({ id, url }) => {
     const resp = await customFetch.post('/set-url-invitation', {
       _id: id,
       url: url
+    })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const deleteInvitation = async ({ id }) => {
+  try {
+    const resp = await customFetch.delete('/delete-invitation', {
+      data: {
+        _id: id,
+      },
     })
     return resp.data.data
   } catch (error) {

@@ -26,7 +26,7 @@ import {
   CDropdown,
   CDropdownMenu,
   CModal} from '@coreui/react'
-import { ExportInvitation, ExtendsDate, UpdateInvitation, editURL, getInvitations } from 'src/utils/axios'
+import { ExportInvitation, ExtendsDate, UpdateInvitation, deleteInvitation, editURL, getInvitations } from 'src/utils/axios'
 import { dataFetchingPaginate } from 'src/utils/dataFetchingPaginate'
 import { formatMoney } from 'src/utils/localStorage'
 import moment from "moment";
@@ -58,6 +58,7 @@ const CUsers = () => {
   const [searchFields, setSearchFields] = useState(initialSearchFields)
   const [isModalActive, setIsModalActive] = useState(false)
   const [isModalActiveURL, setIsModalActiveURL] = useState(false)
+  const [isModalActiveDelete, setIsModalActiveDelete] = useState(false)
   const [isModalActiveStatus, setIsModalActiveStatus] = useState(false)
   const [url, setURL] = useState(0)
   const [addCount, setAddCount] = useState(0)
@@ -137,6 +138,11 @@ const CUsers = () => {
     setId(id)
   }
 
+  const setModalActiveDelete = (id) => {
+    setIsModalActiveDelete(true)
+    setId(id)
+  }
+
   const setModalActiveURL = (id, u) => {
     setIsModalActiveURL(true)
     setURL(u)
@@ -163,6 +169,25 @@ const CUsers = () => {
     })
     try {
       setIsModalActiveURL(false)
+      const { sizePerPage, currentPage } = paginate
+      const resp = await getInvitations({
+        pageSize: sizePerPage,
+        page: currentPage,
+      })
+      const newPaginate = dataFetchingPaginate(paginate, resp.length)
+      setPaginate(newPaginate)
+      setUsersList(resp.filter(item => item.status === 1))
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleSubmitDelete = async () => {
+    await deleteInvitation({
+      id: id,
+    })
+    try {
+      setIsModalActiveDelete(false)
       const { sizePerPage, currentPage } = paginate
       const resp = await getInvitations({
         pageSize: sizePerPage,
@@ -308,6 +333,7 @@ const CUsers = () => {
                 <CTableHeaderCell className="text-center">Ngày hết hạn</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Mã giới thiệu</CTableHeaderCell>
                 <CTableHeaderCell className="text-center">Mã giao dịch</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Dung lượng</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -340,6 +366,11 @@ const CUsers = () => {
                         >
                           Chỉnh sửa thiệp
                         </CDropdownItem>
+                        <CDropdownItem
+                          onClick={() => setModalActiveDelete(item?._id)}
+                        >
+                          Xoá thiệp
+                        </CDropdownItem>
                       </CDropdownMenu>
                     </CDropdown>
                   </CTableDataCell>
@@ -371,7 +402,9 @@ const CUsers = () => {
                   <CTableDataCell className="text-center">
                     <div>{item.OID}</div>
                   </CTableDataCell>
-
+                  <CTableDataCell className="text-center">
+                    <div>{(item.fileStat / (1024 * 1024)).toFixed(2)} MB</div>
+                  </CTableDataCell>
                 </CTableRow>
               ))}
             </CTableBody>
@@ -426,6 +459,19 @@ const CUsers = () => {
               </CButton>
               <CButton color="primary" onClick={handleSubmitURL}>
                 Thêm
+              </CButton>
+            </div>
+          </form>
+        </CModal>
+        <CModal visible={isModalActiveDelete} onClose={() => setIsModalActiveDelete(false)} alignment="center">
+          <form className=" p-4" onSubmit={handleSubmitDelete}>
+            <CFormLabel className=" font-bold">Bạn có chắc chắn muốn xoá thiệp cùng toàn bộ ảnh/pdf?</CFormLabel>
+            <div className='form' style={{ display: 'flex', gap: 10 }}>
+              <CButton color="secondary" onClick={() => setIsModalActiveDelete(false)}>
+                Đóng
+              </CButton>
+              <CButton color="primary" onClick={handleSubmitDelete}>
+                Xoá
               </CButton>
             </div>
           </form>
