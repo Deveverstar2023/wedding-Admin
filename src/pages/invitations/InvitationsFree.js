@@ -24,9 +24,10 @@ import {
     CDropdown,
     CDropdownToggle,
     CDropdownMenu,
-    CDropdownItem
+    CDropdownItem,
+    CModal
 } from '@coreui/react'
-import { ExportInvitation, getInvitations } from 'src/utils/axios'
+import { deleteInvitation, ExportInvitation, getInvitations } from 'src/utils/axios'
 import { dataFetchingPaginate } from 'src/utils/dataFetchingPaginate'
 import { formatMoney } from 'src/utils/localStorage'
 import fileDownload from 'js-file-download'
@@ -57,6 +58,8 @@ const invitationsFree = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [filterName, setFilterName] = useState('')
     const [searchFields, setSearchFields] = useState(initialSearchFields)
+    const [isModalActiveDelete, setIsModalActiveDelete] = useState(false)
+    const [id, setId] = useState(0)
     // handle pagination for pagination updates
     const changeCurrentPage = (numPage) => {
         setPaginate((prev) => ({ ...prev, currentPage: numPage }))
@@ -127,6 +130,30 @@ const invitationsFree = () => {
     }, [paginate])
 
     const onNavigateDetails = (id) => navigate('/details-invitations/' + id)
+
+    const setModalActiveDelete = (id) => {
+        setIsModalActiveDelete(true)
+        setId(id)
+    }
+
+    const handleSubmitDelete = async () => {
+        await deleteInvitation({
+            id: id,
+        })
+        try {
+            setIsModalActiveDelete(false)
+            const { sizePerPage, currentPage } = paginate
+            const resp = await getInvitations({
+            pageSize: sizePerPage,
+            page: currentPage,
+            })
+            const newPaginate = dataFetchingPaginate(paginate, resp.length)
+            setPaginate(newPaginate)
+            setUsersList(resp.filter(item => item.status === 1))
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div>
@@ -233,6 +260,7 @@ const invitationsFree = () => {
                                 <CTableHeaderCell className="text-center">Tổng tiền</CTableHeaderCell>
                                 <CTableHeaderCell className="text-center">Ngày tạo</CTableHeaderCell>
                                 <CTableHeaderCell className="text-center">Ngày hết hạn</CTableHeaderCell>
+                                <CTableHeaderCell className="text-center">Dung lượng</CTableHeaderCell>
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
@@ -249,6 +277,11 @@ const invitationsFree = () => {
                                                     onClick={() => onNavigateDetails(item?._id)}
                                                 >
                                                     Chỉnh sửa thiệp
+                                                </CDropdownItem>
+                                                <CDropdownItem
+                                                    onClick={() => setModalActiveDelete(item?._id)}
+                                                >
+                                                    Xoá thiệp
                                                 </CDropdownItem>
                                             </CDropdownMenu>
                                         </CDropdown>
@@ -273,6 +306,9 @@ const invitationsFree = () => {
                                     <CTableDataCell className="text-center">
                                         <div>{moment(item.createTime).add(21, 'days').format("DD-MM-YYYY")}</div>
                                     </CTableDataCell>
+                                    <CTableDataCell className="text-center">
+                                        <div>{(item.fileStat / (1024 * 1024)).toFixed(2)} MB</div>
+                                    </CTableDataCell>
                                 </CTableRow>
                             ))}
                         </CTableBody>
@@ -288,6 +324,19 @@ const invitationsFree = () => {
                         />
                     </div>
                 </CCardBody>
+                <CModal visible={isModalActiveDelete} onClose={() => setIsModalActiveDelete(false)} alignment="center">
+                    <form className=" p-4" onSubmit={handleSubmitDelete}>
+                        <CFormLabel className=" font-bold">Bạn có chắc chắn muốn xoá thiệp cùng toàn bộ ảnh/pdf?</CFormLabel>
+                        <div className='form' style={{ display: 'flex', gap: 10 }}>
+                        <CButton color="secondary" onClick={() => setIsModalActiveDelete(false)}>
+                            Đóng
+                        </CButton>
+                        <CButton color="primary" onClick={handleSubmitDelete}>
+                            Xoá
+                        </CButton>
+                        </div>
+                    </form>
+                </CModal>
             </CCard>
         </div>
     )
