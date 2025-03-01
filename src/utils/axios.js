@@ -244,6 +244,40 @@ export const GetInfomationBase = async () => {
   }
 }
 
+export const GetAds = async () => {
+  try {
+    const resp = await customFetch.get('/get-ads')
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+export const CreateAds = async ({
+  type,
+  url1,
+  url2,
+  description1,
+  description2,
+  image1,
+  image2,
+}) => {
+  try {
+    const resp = await customFetch.post('/create-ads', {
+      type,
+      url1,
+      description1,
+      image1,
+      url2,
+      description2,
+      image2,
+    })
+    return resp.data.data
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
 export const DeleteProductMain = async ({ id }) => {
   try {
     const resp = await customFetch.delete('/delete-product', {
