@@ -11,6 +11,7 @@ import {
   cilApps,
   cilBasket,
   cilClipboard,
+  cibGoogleAds,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -43,6 +44,15 @@ const _nav = [
     name: 'Tài khoản',
     to: '/customers',
     icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
+    badge: {
+      color: 'info',
+    },
+  },
+  {
+    component: CNavItem,
+    name: 'Quảng cáo',
+    to: '/ads',
+    icon: <CIcon icon={cibGoogleAds} customClassName="nav-icon" />,
     badge: {
       color: 'info',
     },

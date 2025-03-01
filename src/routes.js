@@ -18,6 +18,7 @@ const Notification = React.lazy(() => import('./pages/faq/Notification'))
 const Information = React.lazy(() => import('./pages/information/Information'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
+const Ads = React.lazy(() => import('./pages/ads/Ads'))
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -72,6 +73,7 @@ const routes = [
   { path: '/packages', name: 'Tài khoản', element: Packages },
   { path: '/san-pham-khac', name: 'Tài khoản', element: AnotherProduct },
   { path: '/thong-tin-cong-ti', name: 'Mã giới thiệu', element: Information },
+  { path: '/ads', name: 'Quảng cáo', element: Ads },
   { path: '/invitations', name: 'Danh sách thiệp', element: Invitations },
   { path: '/list-invitations-free', name: 'Danh sách thiệp', element: InvitationsFree },
   { path: '/list-invitations-paid', name: 'Danh sách thiệp', element: InvitationsPaid },
