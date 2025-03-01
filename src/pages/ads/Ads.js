@@ -24,10 +24,10 @@ const Information = () => {
         if (resp[0].data.length > 0) {
           setURL(resp[0].data[resp[0].data.length - 1].url1)
           setDescription(resp[0].data[resp[0].data.length - 1].description1)
-          setImageURL(resp.image1)
+          setImageURL(resp[0].data[resp[0].data.length - 1].image1)
           setURL2(resp[0].data[resp[0].data.length - 1].url2)
           setDescription2(resp[0].data[resp[0].data.length - 1].description2)
-          setImageURL2(resp.image2)
+          setImageURL2(resp[0].data[resp[0].data.length - 1].image2)
         }
         setIsLoading(false)
       } catch (error) {
@@ -73,7 +73,6 @@ const Information = () => {
       imageList.slice(-1).map(function (item) {
         return uploadImage(item.file)
           .then((response) => {
-            console.log('response.data.data', response.data.data)
             setImageURL(response.data.data)
           })
           .catch((error) => {
