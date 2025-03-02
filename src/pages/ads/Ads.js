@@ -101,7 +101,21 @@ const Information = () => {
     })
 
     toast.success(resp[0].messaging)
-  }, [url, description, imageURL, url2, description2, imageURL2, sellectType])
+  }, [
+    url,
+    description,
+    imageURL,
+    url2,
+    description2,
+    imageURL2,
+    url3,
+    description3,
+    imageURL3,
+    url4,
+    description4,
+    imageURL4,
+    sellectType,
+  ])
 
   const onChangeImage = (imageList) => {
     setImage(imageList)
