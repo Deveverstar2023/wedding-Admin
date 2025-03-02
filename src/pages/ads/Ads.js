@@ -10,11 +10,19 @@ const Information = () => {
   const [description, setDescription] = useState([])
   const [url2, setURL2] = useState([])
   const [description2, setDescription2] = useState([])
+  const [url3, setURL3] = useState([])
+  const [description3, setDescription3] = useState([])
+  const [url4, setURL4] = useState([])
+  const [description4, setDescription4] = useState([])
   const [image, setImage] = useState([])
   const [image2, setImage2] = useState([])
+  const [image3, setImage3] = useState([])
+  const [image4, setImage4] = useState([])
   const [sellectType, setSellectType] = useState('1')
   const [imageURL, setImageURL] = useState('')
   const [imageURL2, setImageURL2] = useState('')
+  const [imageURL3, setImageURL3] = useState('')
+  const [imageURL4, setImageURL4] = useState('')
 
   useEffect(() => {
     const getInfo = async () => {
@@ -28,6 +36,12 @@ const Information = () => {
           setURL2(resp[0].data[resp[0].data.length - 1].url2)
           setDescription2(resp[0].data[resp[0].data.length - 1].description2)
           setImageURL2(resp[0].data[resp[0].data.length - 1].image2)
+          setURL3(resp[0].data[resp[0].data.length - 1].url3)
+          setDescription3(resp[0].data[resp[0].data.length - 1].description3)
+          setImageURL3(resp[0].data[resp[0].data.length - 1].image3)
+          setURL4(resp[0].data[resp[0].data.length - 1].url4)
+          setDescription4(resp[0].data[resp[0].data.length - 1].description4)
+          setImageURL4(resp[0].data[resp[0].data.length - 1].image4)
         }
         setIsLoading(false)
       } catch (error) {
@@ -53,6 +67,22 @@ const Information = () => {
     setDescription2(e)
   }
 
+  const onChangeURL3 = (e) => {
+    setURL3(e)
+  }
+
+  const onChangeDescription3 = (e) => {
+    setDescription3(e)
+  }
+
+  const onChangeURL4 = (e) => {
+    setURL4(e)
+  }
+
+  const onChangeDescription4 = (e) => {
+    setDescription4(e)
+  }
+
   const onHandleUpdate = useCallback(async () => {
     const resp = await CreateAds({
       url1: url,
@@ -61,6 +91,12 @@ const Information = () => {
       url2: url2,
       description2: description2,
       image2: imageURL2,
+      url3: url3,
+      description3: description3,
+      image3: imageURL3,
+      url4: url4,
+      description4: description4,
+      image4: imageURL4,
       type: sellectType,
     })
 
@@ -89,6 +125,36 @@ const Information = () => {
         return uploadImage(item.file)
           .then((response) => {
             setImageURL2(response.data.data)
+          })
+          .catch((error) => {
+            toast.error(error)
+          })
+      })
+    }
+  }
+
+  const onChangeImage3 = (imageList) => {
+    setImage3(imageList)
+    if (imageList.length > 0) {
+      imageList.slice(-1).map(function (item) {
+        return uploadImage(item.file)
+          .then((response) => {
+            setImageURL3(response.data.data)
+          })
+          .catch((error) => {
+            toast.error(error)
+          })
+      })
+    }
+  }
+
+  const onChangeImage4 = (imageList) => {
+    setImage4(imageList)
+    if (imageList.length > 0) {
+      imageList.slice(-1).map(function (item) {
+        return uploadImage(item.file)
+          .then((response) => {
+            setImageURL4(response.data.data)
           })
           .catch((error) => {
             toast.error(error)
@@ -192,6 +258,78 @@ const Information = () => {
                       desc={'(Kích thước khuyến nghị 1024x1024px)'}
                       onChange={onChangeImage2}
                       urlLocal={imageURL2}
+                    />
+                  </CCol>
+
+                  <CCol md={12} className="form-input">
+                    <CFormLabel htmlFor="inputURL">URL</CFormLabel>
+                    <CFormInput
+                      name="inputURL3"
+                      type="text"
+                      id="inputURL3"
+                      placeholder="Nhập URL"
+                      value={url3}
+                      onChange={(e) => onChangeURL3(e.target.value)}
+                    />
+                  </CCol>
+                  <CCol md={12} className="form-input">
+                    <CFormLabel htmlFor="inputDescription3">Mô tả</CFormLabel>
+                    <CFormInput
+                      name="inputDescription3"
+                      type="text"
+                      id="inputDescription3"
+                      placeholder="Nhập mô tả"
+                      value={description3}
+                      onChange={(e) => onChangeDescription3(e.target.value)}
+                    />
+                  </CCol>
+                  <CCol md={12} className="form-input img_upload_box">
+                    <CFormLabel htmlFor="inputSearchCuser">Ảnh thumbnail</CFormLabel>
+                    <ImageUpload
+                      maxnumber={1}
+                      images={image3}
+                      maxW={'100%'}
+                      height={500}
+                      title={'Thêm một hình ảnh'}
+                      desc={'(Kích thước khuyến nghị 1024x1024px)'}
+                      onChange={onChangeImage3}
+                      urlLocal={imageURL3}
+                    />
+                  </CCol>
+
+                  <CCol md={12} className="form-input">
+                    <CFormLabel htmlFor="inputURL">URL</CFormLabel>
+                    <CFormInput
+                      name="inputURL4"
+                      type="text"
+                      id="inputURL4"
+                      placeholder="Nhập URL"
+                      value={url4}
+                      onChange={(e) => onChangeURL4(e.target.value)}
+                    />
+                  </CCol>
+                  <CCol md={12} className="form-input">
+                    <CFormLabel htmlFor="inputDescription2">Mô tả</CFormLabel>
+                    <CFormInput
+                      name="inputDescription4"
+                      type="text"
+                      id="inputDescription4"
+                      placeholder="Nhập mô tả"
+                      value={description4}
+                      onChange={(e) => onChangeDescription4(e.target.value)}
+                    />
+                  </CCol>
+                  <CCol md={12} className="form-input img_upload_box">
+                    <CFormLabel htmlFor="inputSearchCuser">Ảnh thumbnail</CFormLabel>
+                    <ImageUpload
+                      maxnumber={1}
+                      images={image4}
+                      maxW={'100%'}
+                      height={500}
+                      title={'Thêm một hình ảnh'}
+                      desc={'(Kích thước khuyến nghị 1024x1024px)'}
+                      onChange={onChangeImage4}
+                      urlLocal={imageURL4}
                     />
                   </CCol>
                 </>
