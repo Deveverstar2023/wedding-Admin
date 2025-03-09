@@ -14,6 +14,8 @@ const Information = () => {
   const [url6, setURL6] = useState([])
   const [url7, setURL7] = useState([])
   const [url8, setURL8] = useState([])
+  const [url9, setURL9] = useState([])
+  const [url10, setURL10] = useState([])
   const [image, setImage] = useState([])
   const [image2, setImage2] = useState([])
   const [image3, setImage3] = useState([])
@@ -22,6 +24,8 @@ const Information = () => {
   const [image6, setImage6] = useState([])
   const [image7, setImage7] = useState([])
   const [image8, setImage8] = useState([])
+  const [image9, setImage9] = useState([])
+  const [image10, setImage10] = useState([])
   const [sellectType, setSellectType] = useState('1')
   const [imageURL, setImageURL] = useState('')
   const [imageURL2, setImageURL2] = useState('')
@@ -31,6 +35,8 @@ const Information = () => {
   const [imageURL6, setImageURL6] = useState('')
   const [imageURL7, setImageURL7] = useState('')
   const [imageURL8, setImageURL8] = useState('')
+  const [imageURL9, setImageURL9] = useState('')
+  const [imageURL10, setImageURL10] = useState('')
 
   useEffect(() => {
     const getInfo = async () => {
@@ -54,6 +60,10 @@ const Information = () => {
           setImageURL7(resp[0].data[resp[0].data.length - 1].image7)
           setURL8(resp[0].data[resp[0].data.length - 1].url8)
           setImageURL8(resp[0].data[resp[0].data.length - 1].image8)
+          setURL9(resp[0].data[resp[0].data.length - 1].url9)
+          setImageURL9(resp[0].data[resp[0].data.length - 1].image9)
+          setURL10(resp[0].data[resp[0].data.length - 1].url10)
+          setImageURL10(resp[0].data[resp[0].data.length - 1].image10)
         }
         setIsLoading(false)
       } catch (error) {
@@ -95,6 +105,14 @@ const Information = () => {
     setURL8(e)
   }
 
+  const onChangeURL9 = (e) => {
+    setURL9(e)
+  }
+
+  const onChangeURL10 = (e) => {
+    setURL10(e)
+  }
+
   const onHandleUpdate = useCallback(async () => {
     const resp = await CreateAds({
       url1: url,
@@ -113,6 +131,10 @@ const Information = () => {
       image7: imageURL7,
       url8: url8,
       image8: imageURL8,
+      url9: url9,
+      image9: imageURL9,
+      url10: url10,
+      image10: imageURL10,
       type: sellectType,
     })
 
@@ -134,6 +156,10 @@ const Information = () => {
     imageURL7,
     url8,
     imageURL8,
+    url9,
+    imageURL9,
+    url10,
+    imageURL10,
     sellectType,
   ])
 
@@ -249,6 +275,36 @@ const Information = () => {
         return uploadImage(item.file)
           .then((response) => {
             setImageURL8(response.data.data)
+          })
+          .catch((error) => {
+            toast.error(error)
+          })
+      })
+    }
+  }
+
+  const onChangeImage9 = (imageList) => {
+    setImage9(imageList)
+    if (imageList.length > 0) {
+      imageList.slice(-1).map(function (item) {
+        return uploadImage(item.file)
+          .then((response) => {
+            setImageURL9(response.data.data)
+          })
+          .catch((error) => {
+            toast.error(error)
+          })
+      })
+    }
+  }
+
+  const onChangeImage10 = (imageList) => {
+    setImage10(imageList)
+    if (imageList.length > 0) {
+      imageList.slice(-1).map(function (item) {
+        return uploadImage(item.file)
+          .then((response) => {
+            setImageURL10(response.data.data)
           })
           .catch((error) => {
             toast.error(error)
@@ -488,6 +544,58 @@ const Information = () => {
                       desc={'(Kích thước khuyến nghị 1024x1024px)'}
                       onChange={onChangeImage8}
                       urlLocal={imageURL8}
+                    />
+                  </CCol>
+
+                  <CCol md={12} className="form-input">
+                    <CFormLabel htmlFor="inputURL">URL mobile</CFormLabel>
+                    <CFormInput
+                      name="inputURL9"
+                      type="text"
+                      id="inputURL9"
+                      placeholder="Nhập URL"
+                      value={url9}
+                      onChange={(e) => onChangeURL9(e.target.value)}
+                    />
+                  </CCol>
+
+                  <CCol md={12} className="form-input img_upload_box">
+                    <CFormLabel htmlFor="inputSearchCuser">Ảnh thumbnail mobile</CFormLabel>
+                    <ImageUpload
+                      maxnumber={1}
+                      images={image9}
+                      maxW={'100%'}
+                      height={500}
+                      title={'Thêm một hình ảnh'}
+                      desc={'(Kích thước khuyến nghị 1024x1024px)'}
+                      onChange={onChangeImage9}
+                      urlLocal={imageURL9}
+                    />
+                  </CCol>
+
+                  <CCol md={12} className="form-input">
+                    <CFormLabel htmlFor="inputURL">URL mobile</CFormLabel>
+                    <CFormInput
+                      name="inputURL10"
+                      type="text"
+                      id="inputURL10"
+                      placeholder="Nhập URL"
+                      value={url10}
+                      onChange={(e) => onChangeURL10(e.target.value)}
+                    />
+                  </CCol>
+
+                  <CCol md={12} className="form-input img_upload_box">
+                    <CFormLabel htmlFor="inputSearchCuser">Ảnh thumbnail mobile</CFormLabel>
+                    <ImageUpload
+                      maxnumber={1}
+                      images={image10}
+                      maxW={'100%'}
+                      height={500}
+                      title={'Thêm một hình ảnh'}
+                      desc={'(Kích thước khuyến nghị 1024x1024px)'}
+                      onChange={onChangeImage10}
+                      urlLocal={imageURL10}
                     />
                   </CCol>
                 </>
