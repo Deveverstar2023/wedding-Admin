@@ -265,6 +265,8 @@ export const CreateAds = async ({
   url8,
   url9,
   url10,
+  url11,
+  url12,
   image1,
   image2,
   image3,
@@ -275,6 +277,8 @@ export const CreateAds = async ({
   image8,
   image9,
   image10,
+  image11,
+  image12,
 }) => {
   try {
     const resp = await customFetch.post('/create-ads', {
@@ -299,6 +303,10 @@ export const CreateAds = async ({
       image9,
       url10,
       image10,
+      url11,
+      image11,
+      url12,
+      image12,
     })
     return resp.data.data
   } catch (error) {
